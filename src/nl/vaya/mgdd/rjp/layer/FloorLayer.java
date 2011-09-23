@@ -18,8 +18,8 @@ public class FloorLayer {
 	
 	protected int[] _tilePositionArray;
 	
-	protected float _numTilesWidth = 15; //15
-	protected float _numTilesHeight = 10; //10
+	protected float _numTilesWidth = 5; //15
+	protected float _numTilesHeight = 8; //10
 	
 	protected Bitmap floorTile_sand;
 	protected Bitmap floorTile_water;
@@ -38,6 +38,9 @@ public class FloorLayer {
 	
 	protected int _winWidth;
 	protected int _winHeight;
+	
+	protected int _startX = 0;
+	protected int _startY = 0;
 	
 	public FloorLayer(Context context, int winWith, int winHeight){
 		
@@ -124,11 +127,14 @@ public class FloorLayer {
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 		};
-		
-			for(int i = 0; i< 4; i++){
-			//for(int i = 0; i< _tilePositionArray.length; i++){
+			int test = 0;
+			//for(int i = 0; i< 72; i++){
+			for(int i = 0; i< _tilePositionArray.length; i++){
 				float y = (int)(i/40);
 				float x = (int)i-(y*40);
+				
+				
+				
 				TileObject tile;
 				switch(_tilePositionArray[i]){
 					case 14:
@@ -178,18 +184,34 @@ public class FloorLayer {
 					break;
 				}
 				
-				Log.i(logTag, "winWith:"+_winWidth+" winHeight:"+_winHeight);
+				//Log.i(logTag, "winWith:"+_winWidth+" winHeight:"+_winHeight);
 				
 				
 				
 				tile.setTileSize(_numTilesWidth, _numTilesHeight, _winWidth, _winHeight);
 				Point pos = tile.getPosition(x,y);
 				
-				Rect src = new Rect(0, 0, tile.getTile().getWidth(), tile.getTile().getHeight());
-				Rect dest =  new Rect(pos.x, pos.y, tile.getTile().getWidth(), tile.getTile().getHeight());
+				pos.set(pos.x+_startX, pos.y+_startY);
 				
-				canvas.drawBitmap(tile.getTile(), null, dest, null);
+				if(pos.x+(tile.getTile().getWidth()*tile.getScaleX()) < 0 || pos.y+(tile.getTile().getHeight()*tile.getScaleY()) < 0){
+					//niet tekenen
+					
+				}else if(pos.x > _winWidth || pos.y > _winHeight){
+					//niet tekenen
+				}else{
+					test++;
+					Rect src = new Rect(0, 0, tile.getTile().getWidth(), tile.getTile().getHeight());
+					RectF dest =  new RectF(pos.x, pos.y, pos.x + (tile.getTile().getWidth()*tile.getScaleX()), pos.y + (tile.getTile().getHeight()*tile.getScaleY()));
+				
+				//Matrix matrix = new Matrix();
+				//matrix.
+				//matrix.preScale(tile.getScaleX(), tile.getScaleY());
+				
+					canvas.drawBitmap(tile.getTile(), src, dest, null);
+				}
+				
 			}
+			Log.i(logTag, "hokjes "+test);
 
 	}
 }

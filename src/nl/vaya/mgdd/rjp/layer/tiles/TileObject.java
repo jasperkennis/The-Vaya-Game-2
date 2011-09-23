@@ -84,7 +84,7 @@ public class TileObject {
 		_winHeight = winH;
 		_tileWidth = _winWidth/w;
 		_tileHeight = _winHeight/h;
-		Log.i(logTag, "Size is w="+_tileWidth+" h="+_tileHeight);
+		//Log.i(logTag, "Size is w="+_tileWidth+" h="+_tileHeight);
 	}
 	
 	public float getScaleX(){
@@ -100,7 +100,7 @@ public class TileObject {
 		float yPos = y*_tileHeight;
 		float xPos = x*_tileWidth;
 		Point position = new Point((int)xPos,(int)yPos);
-		Log.i(logTag, "Position is x="+xPos+" y="+yPos);
+		//Log.i(logTag, "Position is x="+xPos+" y="+yPos);
 		return position;
 	}
 }
