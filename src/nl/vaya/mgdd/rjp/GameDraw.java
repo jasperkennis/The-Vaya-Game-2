@@ -16,6 +16,8 @@ public class GameDraw extends View {
 	protected int _winWith;
 	protected int _winHeight;
 	
+	protected ActivitySwipeDetector inputFetcher;
+	
 	public GameDraw(Context context) {
 		super(context);
 		
@@ -26,9 +28,12 @@ public class GameDraw extends View {
 		_winHeight = display.getHeight();
 		
 		
-		//create Layers
+		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
 		
+		// Create input fetcher, used to detect both movement and tapping.
+		inputFetcher = new ActivitySwipeDetector(this);
+		this.setOnTouchListener(inputFetcher);
 	}
 
 	@Override

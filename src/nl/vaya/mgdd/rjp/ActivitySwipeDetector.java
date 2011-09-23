@@ -8,13 +8,14 @@ import android.view.View;
 public class ActivitySwipeDetector implements View.OnTouchListener {
 
 	static final String logTag = "ActivitySwipeDetector";
-	//private DrawView drawView;
+	private GameDraw drawView;
 	static final int MIN_DISTANCE = 100;
 	private float downX, downY, upX, upY;
 
-	//public ActivitySwipeDetector(DrawView drawView){
-	    //this.drawView = drawView;
-	//}
+	public ActivitySwipeDetector(GameDraw drawView){
+		Log.i(logTag, "Initializing input detection.");
+	    this.drawView = drawView;
+	}
 
 	public void onRightToLeftSwipe(){
 	    Log.i(logTag, "RightToLeftSwipe!");
@@ -67,9 +68,10 @@ public class ActivitySwipeDetector implements View.OnTouchListener {
 	                if(deltaY > 0) { this.onBottomToTopSwipe(); return true; }
 	            } else { Log.i(logTag, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + MIN_DISTANCE); }
 	            
-	            //if(Math.abs(deltaX) < MIN_DISTANCE && Math.abs(deltaY) < MIN_DISTANCE && !drawView.pauze()){
+	            if(Math.abs(deltaX) < MIN_DISTANCE && Math.abs(deltaY) < MIN_DISTANCE){
 	            	//drawView.setPauze(true);
-	            //}
+	            	Log.i(logTag, "No movement but a tab.");
+	            }
 	            
 	            return true;
 	        }
