@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
 
 
@@ -32,6 +33,8 @@ public class GameDraw extends SurfaceView implements SurfaceHolder.Callback {
 	public GameDraw(Context context) {
 		super(context);
 		
+		//for the draw to work
+		this.setWillNotDraw(false);
 		
 		Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		
