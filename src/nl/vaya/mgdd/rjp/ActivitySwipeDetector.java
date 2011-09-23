@@ -8,32 +8,32 @@ import android.view.View;
 public class ActivitySwipeDetector implements View.OnTouchListener {
 
 	static final String logTag = "ActivitySwipeDetector";
-	private DrawView drawView;
+	//private DrawView drawView;
 	static final int MIN_DISTANCE = 100;
 	private float downX, downY, upX, upY;
 
-	public ActivitySwipeDetector(DrawView drawView){
-	    this.drawView = drawView;
-	}
+	//public ActivitySwipeDetector(DrawView drawView){
+	    //this.drawView = drawView;
+	//}
 
 	public void onRightToLeftSwipe(){
 	    Log.i(logTag, "RightToLeftSwipe!");
-	    drawView.setDirection(3);
+	    //drawView.setDirection(3);
 	}
 
 	public void onLeftToRightSwipe(){
 	    Log.i(logTag, "LeftToRightSwipe!");
-	    drawView.setDirection(4);
+	    //drawView.setDirection(4);
 	}
 
 	public void onTopToBottomSwipe(){
 	    Log.i(logTag, "onTopToBottomSwipe!");
-	    drawView.setDirection(2);
+	    //drawView.setDirection(2);
 	}
 
 	public void onBottomToTopSwipe(){
 	    Log.i(logTag, "onBottomToTopSwipe!");
-	    drawView.setDirection(1);
+	    //drawView.setDirection(1);
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {
@@ -44,9 +44,9 @@ public class ActivitySwipeDetector implements View.OnTouchListener {
 	            return true;
 	        }
 	        case MotionEvent.ACTION_UP: {
-	        	if(drawView.pauze()){
-	        		drawView.setPauze(false);
-	        	}
+	        	//if(drawView.pauze()){
+	        		//drawView.setPauze(false);
+	        	//}
 	            upX = event.getX();
 	            upY = event.getY();
 
@@ -67,9 +67,9 @@ public class ActivitySwipeDetector implements View.OnTouchListener {
 	                if(deltaY > 0) { this.onBottomToTopSwipe(); return true; }
 	            } else { Log.i(logTag, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + MIN_DISTANCE); }
 	            
-	            if(Math.abs(deltaX) < MIN_DISTANCE && Math.abs(deltaY) < MIN_DISTANCE && !drawView.pauze()){
-	            	drawView.setPauze(true);
-	            }
+	            //if(Math.abs(deltaX) < MIN_DISTANCE && Math.abs(deltaY) < MIN_DISTANCE && !drawView.pauze()){
+	            	//drawView.setPauze(true);
+	            //}
 	            
 	            return true;
 	        }
