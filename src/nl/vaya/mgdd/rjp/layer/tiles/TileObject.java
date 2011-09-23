@@ -87,6 +87,15 @@ public class TileObject {
 		Log.i(logTag, "Size is w="+_tileWidth+" h="+_tileHeight);
 	}
 	
+	public float getScaleX(){
+		
+		return _tileWidth/this.getTile().getWidth();
+	}
+	
+	public float getScaleY(){
+		return _tileHeight/this.getTile().getHeight();
+	}
+	
 	public Point getPosition(float x, float y){
 		float yPos = y*_tileHeight;
 		float xPos = x*_tileWidth;
