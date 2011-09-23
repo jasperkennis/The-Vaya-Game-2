@@ -5,7 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 public class FloorLayer {
@@ -122,8 +125,8 @@ public class FloorLayer {
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 		};
 		
-			//for(int i = 0; i< 72; i++){
-			for(int i = 0; i< _tilePositionArray.length; i++){
+			for(int i = 0; i< 4; i++){
+			//for(int i = 0; i< _tilePositionArray.length; i++){
 				float y = (int)(i/40);
 				float x = (int)i-(y*40);
 				TileObject tile;
@@ -177,11 +180,15 @@ public class FloorLayer {
 				
 				Log.i(logTag, "winWith:"+_winWidth+" winHeight:"+_winHeight);
 				
+				
+				
 				tile.setTileSize(_numTilesWidth, _numTilesHeight, _winWidth, _winHeight);
 				Point pos = tile.getPosition(x,y);
 				
-				canvas.drawBitmap(tile.getTile(), pos.x, pos.y, null);
-
+				Rect src = new Rect(0, 0, tile.getTile().getWidth(), tile.getTile().getHeight());
+				Rect dest =  new Rect(pos.x, pos.y, tile.getTile().getWidth(), tile.getTile().getHeight());
+				
+				canvas.drawBitmap(tile.getTile(), null, dest, null);
 			}
 
 	}
