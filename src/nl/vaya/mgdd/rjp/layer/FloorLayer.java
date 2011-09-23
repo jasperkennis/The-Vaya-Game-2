@@ -128,12 +128,18 @@ public class FloorLayer {
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 		};
 			int test = 0;
+
+			int leftSquares = (int)((_startX * -1)/(_winWidth/_numTilesWidth));
+			int topSquares = (int)((_startY * -1)/(_winHeight/_numTilesHeight));
+			
+			for(int ix = leftSquares; ix<leftSquares+_numTilesWidth; ix++){
+				for(int iy = topSquares; iy<topSquares+_numTilesHeight; iy++){
+					int i = ix+(iy*40);
+					Log.i(logTag, "Hier "+i);
 			//for(int i = 0; i< 72; i++){
-			for(int i = 0; i< _tilePositionArray.length; i++){
+			//for(int i = 0; i< _tilePositionArray.length; i++){
 				float y = (int)(i/40);
 				float x = (int)i-(y*40);
-				
-				
 				
 				TileObject tile;
 				switch(_tilePositionArray[i]){
@@ -203,13 +209,10 @@ public class FloorLayer {
 					Rect src = new Rect(0, 0, tile.getTile().getWidth(), tile.getTile().getHeight());
 					RectF dest =  new RectF(pos.x, pos.y, pos.x + (tile.getTile().getWidth()*tile.getScaleX()), pos.y + (tile.getTile().getHeight()*tile.getScaleY()));
 				
-				//Matrix matrix = new Matrix();
-				//matrix.
-				//matrix.preScale(tile.getScaleX(), tile.getScaleY());
-				
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
 				}
 				
+			}
 			}
 			Log.i(logTag, "hokjes "+test);
 
