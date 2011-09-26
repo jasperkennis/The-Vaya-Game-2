@@ -194,18 +194,14 @@ public class FloorLayer {
 				pos.set(pos.x+_startX, pos.y+_startY);
 				
 				if(pos.x+(tile.getTile().getWidth()*tile.getScaleX()) < 0 || pos.y+(tile.getTile().getHeight()*tile.getScaleY()) < 0){
-					//niet tekenen
+					return;
 					
 				}else if(pos.x > _winWidth || pos.y > _winHeight){
-					//niet tekenen
+					return;
 				}else{
 					test++;
 					Rect src = new Rect(0, 0, tile.getTile().getWidth(), tile.getTile().getHeight());
 					RectF dest =  new RectF(pos.x, pos.y, pos.x + (tile.getTile().getWidth()*tile.getScaleX()), pos.y + (tile.getTile().getHeight()*tile.getScaleY()));
-				
-				//Matrix matrix = new Matrix();
-				//matrix.
-				//matrix.preScale(tile.getScaleX(), tile.getScaleY());
 				
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
 				}

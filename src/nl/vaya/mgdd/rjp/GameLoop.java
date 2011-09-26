@@ -27,8 +27,7 @@ public class GameLoop extends Thread {
 	public final static int RUNNING = 1;
 	public final static int PAUSED = 2;
 
-	public GameLoop(SurfaceHolder surfaceHolder, Context context,
-			Handler handler, GameEngine gEngineS) {
+	public GameLoop(SurfaceHolder surfaceHolder, Context context, Handler handler, GameEngine gEngineS) {
 
 		// data about the screen
 		mSurfaceHolder = surfaceHolder;
