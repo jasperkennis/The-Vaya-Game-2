@@ -6,9 +6,16 @@ import android.util.Log;
 
 public class GameEngine {
 
-	void Update(){}
-	void Draw(Canvas c){
-		Log.i("testert","the game is DRAWING");
+	void Update(){
+		
 	}
+	
+	void Draw(Canvas c){
+	}
+	
+	void Clear(Canvas c){
+		
+	}
+	
 	void Init(Resources r){}
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameLoop extends Thread {
@@ -27,10 +28,9 @@ public class GameLoop extends Thread {
 	public final static int RUNNING = 1;
 	public final static int PAUSED = 2;
 
-	public GameLoop(SurfaceHolder surfaceHolder, Context context, Handler handler, GameEngine gEngineS) {
+	public GameLoop(Context context, Handler handler, GameEngine gEngineS) {
 
 		// data about the screen
-		mSurfaceHolder = surfaceHolder;
 		this.mHandler = handler;
 		this.mContext = context;
 
@@ -62,14 +62,14 @@ public class GameLoop extends Thread {
 
 			// DRAW
 			Canvas c = null;
-			try {
+			/*try {
 				// lock canvas so nothing else can use it
-				c = mSurfaceHolder.lockCanvas(null);
-				synchronized (mSurfaceHolder) {
+				//c = mSurfaceHolder.lockCanvas(null);
+				//synchronized (mSurfaceHolder) {
 					// clear the screen with the black painter.
-					c.drawRect(0, 0, c.getWidth(), c.getHeight(), blackPaint);
+				//	c.drawRect(0, 0, c.getWidth(), c.getHeight(), blackPaint);
 					// This is where we draw the game engine.
-					gEngine.Draw(c);
+				//	gEngine.Draw(c);
 				}
 			} finally {
 				// do this in a finally so that if an exception is thrown
@@ -78,7 +78,7 @@ public class GameLoop extends Thread {
 				if (c != null) {
 					mSurfaceHolder.unlockCanvasAndPost(c);
 				}
-			}
+			}*/
 
 			// SLEEP
 			// Sleep time. Time required to sleep to keep game consistent

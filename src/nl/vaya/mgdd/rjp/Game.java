@@ -14,8 +14,6 @@ public class Game extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        XmlPullParser parser = resources.getXml(myResouce);
-        attributeSet = new AttributeSet();
         
         gameDraw = new GameDraw(this);
         setContentView(gameDraw);
