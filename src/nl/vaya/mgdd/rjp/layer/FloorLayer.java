@@ -39,7 +39,7 @@ public class FloorLayer {
 	protected int _winWidth;
 	protected int _winHeight;
 	
-	protected int _startX = -440;
+	protected int _startX = -240;
 	protected int _startY = -40;
 	
 	public FloorLayer(Context context, int winWith, int winHeight){
