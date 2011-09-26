@@ -39,8 +39,8 @@ public class FloorLayer {
 	protected int _winWidth;
 	protected int _winHeight;
 	
-	protected int _startX = 0;
-	protected int _startY = 0;
+	protected int _startX = -240;
+	protected int _startY = -40;
 	
 	public FloorLayer(Context context, int winWith, int winHeight){
 		
@@ -128,12 +128,18 @@ public class FloorLayer {
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 		};
 			int test = 0;
+
+			int leftSquares = (int)((_startX * -1)/(_winWidth/_numTilesWidth));
+			int topSquares = (int)((_startY * -1)/(_winHeight/_numTilesHeight));
+			
+			for(int ix = leftSquares; ix<leftSquares+_numTilesWidth+1; ix++){
+				for(int iy = topSquares; iy<topSquares+_numTilesHeight+1; iy++){
+					int i = ix+(iy*40);
+					Log.i(logTag, "Hier "+i);
 			//for(int i = 0; i< 72; i++){
-			for(int i = 0; i< _tilePositionArray.length; i++){
+			//for(int i = 0; i< _tilePositionArray.length; i++){
 				float y = (int)(i/40);
 				float x = (int)i-(y*40);
-				
-				
 				
 				TileObject tile;
 				switch(_tilePositionArray[i]){
@@ -206,6 +212,7 @@ public class FloorLayer {
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
 				}
 				
+			}
 			}
 			Log.i(logTag, "hokjes "+test);
 
