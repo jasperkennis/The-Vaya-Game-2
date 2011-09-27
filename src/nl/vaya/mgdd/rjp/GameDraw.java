@@ -5,44 +5,37 @@ import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 
 
-public class GameDraw extends View {
+public class GameDraw extends View implements OnTouchListener {
 
 	protected FloorLayer floor;
 	protected ObjectLayer objects;
 
 	protected int _winWith;
 	protected int _winHeight;
-
-	protected long lastUpdate = 0;
-	protected long sleepTime = 0;
-
-	//protected SurfaceHolder surfaceHolder;
-	protected Context context;
-	protected Handler handler;
-
-	// Game engine
-	protected GameEngine gEngine;
-
 	
-	protected OnTouchListener inputHandler;
+	protected Context context;
 	
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
 	protected int motionDetectionArea = 25;
 
-	private void InitView(Context contexts) {
-		
-		// for the draw to work
-		this.setWillNotDraw(false);
+	
+	public GameDraw(Context context) {
+		super(context);
 
+		setWillNotDraw(false);
+		setOnTouchListener(this);
+		setFocusable(true);
+		setFocusableInTouchMode(true);
+		
 		Display display = ((WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
@@ -51,56 +44,33 @@ public class GameDraw extends View {
 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
-		objects = new ObjectLayer(context, _winWith, _winHeight);
-
-		// Create input fetcher, used to detect both movement and tapping.
-		//inputFetcher = new ActivitySwipeDetector(this);
-		// this.setOnTouchListener(inputFetcher);
-		//this.setOnClickListener(inputFetcher);
-
-		setFocusable(true);
-		
-		inputHandler = new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch(event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					Log.i("pointmove", "start detection");
-					initialTouchXDisposition = event.getX();
-					initialTouchYDisposition = event.getY();
-					return true;
-				case MotionEvent.ACTION_CANCEL:
-					initialTouchXDisposition = 0.0f;
-					initialTouchYDisposition = 0.0f;
-					return false;
-				default:
-					float x = event.getX() - initialTouchXDisposition;
-					float y = event.getY() - initialTouchYDisposition;
-					Log.i("pointmove", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
-					floor.moveFloor((int)Math.ceil(x/motionDetectionArea), (int)Math.ceil(y/motionDetectionArea));
-					return true;
-				}
-			}
-		};
-		this.setOnTouchListener(inputHandler);
-	}
-
-	public GameDraw(Context contextS) {
-		super(contextS);
-		context = contextS;
-		InitView(contextS);
-		
-		setFocusable(true);
-		setFocusableInTouchMode(true);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
-		Log.i("log_tag", "drawing");
 		floor.createFloor(canvas);
 		objects.createObjects(canvas);
 		invalidate();
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			Log.i("pointmove", "start detection");
+			initialTouchXDisposition = event.getX();
+			initialTouchYDisposition = event.getY();
+			return true;
+		case MotionEvent.ACTION_CANCEL:
+			initialTouchXDisposition = 0.0f;
+			initialTouchYDisposition = 0.0f;
+			return false;
+		default:
+			float x = event.getX() - initialTouchXDisposition;
+			float y = event.getY() - initialTouchYDisposition;
+			Log.i("pointmove", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
+			return true;
+		}
 	}	
 }
