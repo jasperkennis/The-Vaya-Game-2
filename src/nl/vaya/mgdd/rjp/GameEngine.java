@@ -25,7 +25,7 @@ public class GameEngine {
 	}
 	
 	void Draw(Canvas c){
-		_gameDraw.onDraw(c);
+
 	}
 	
 	void Clear(Canvas c){
