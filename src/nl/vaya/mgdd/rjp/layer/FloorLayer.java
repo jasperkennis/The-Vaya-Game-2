@@ -9,7 +9,6 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 public class FloorLayer {
 	
@@ -129,7 +128,6 @@ public class FloorLayer {
 	public void moveFloor(float x, float y){
 		this._startX = (int) (this._startX+x);
 		this._startY = (int) (this._startY+y);
-		Log.i(logTag, "x="+x+" y="+y+" startx y"+_startX+" "+_startY);
 	}
 	
 	public void createFloor(Canvas canvas){
@@ -197,7 +195,6 @@ public class FloorLayer {
 					break;
 				}
 				
-				//Log.i(logTag, "winWith:"+_winWidth+" winHeight:"+_winHeight);
 				
 				
 				
@@ -217,12 +214,10 @@ public class FloorLayer {
 					RectF dest =  new RectF(pos.x, pos.y, pos.x + (tile.getTile().getWidth()*tile.getScaleX()), pos.y + (tile.getTile().getHeight()*tile.getScaleY()));
 				
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
-					Log.i(logTag, "draw");
 				}
 				
 			}
-			}
-			Log.i(logTag, "hokjes "+test);
+		}
 
 	}
 }

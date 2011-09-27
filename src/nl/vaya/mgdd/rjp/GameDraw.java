@@ -4,7 +4,6 @@ import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -55,7 +54,6 @@ public class GameDraw extends View implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
-			Log.i("pointmove", "start detection");
 			initialTouchXDisposition = event.getX();
 			initialTouchYDisposition = event.getY();
 			return true;
@@ -66,7 +64,6 @@ public class GameDraw extends View implements OnTouchListener {
 		default:
 			float x = event.getX() - initialTouchXDisposition;
 			float y = event.getY() - initialTouchYDisposition;
-			Log.i("pointmove", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
 			return true;
 		}
 	}	
