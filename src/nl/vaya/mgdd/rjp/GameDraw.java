@@ -19,16 +19,8 @@ public class GameDraw extends View {
 
 	protected int _winWith;
 	protected int _winHeight;
-
-	protected long lastUpdate = 0;
-	protected long sleepTime = 0;
-
-	//protected SurfaceHolder surfaceHolder;
+	
 	protected Context context;
-	protected Handler handler;
-
-	// Game engine
-	protected GameEngine gEngine;
 
 	
 	protected OnTouchListener inputHandler;
@@ -39,7 +31,6 @@ public class GameDraw extends View {
 
 	private void InitView(Context contexts) {
 		
-		// for the draw to work
 		this.setWillNotDraw(false);
 
 		Display display = ((WindowManager) context
@@ -50,11 +41,6 @@ public class GameDraw extends View {
 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
-
-		// Create input fetcher, used to detect both movement and tapping.
-		//inputFetcher = new ActivitySwipeDetector(this);
-		// this.setOnTouchListener(inputFetcher);
-		//this.setOnClickListener(inputFetcher);
 
 		setFocusable(true);
 		
