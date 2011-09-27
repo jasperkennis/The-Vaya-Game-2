@@ -4,18 +4,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 public class GameLoop extends Thread {
 	private SurfaceHolder mSurfaceHolder;
 	private Handler mHandler;
 	private Context mContext;
-	private Paint mLinePaint;
-	private Paint blackPaint;
+	private View mView;
 	GameEngine gEngine;
 
 	// for consistent rendering
@@ -28,20 +27,14 @@ public class GameLoop extends Thread {
 	public final static int RUNNING = 1;
 	public final static int PAUSED = 2;
 
-	public GameLoop(Context context, Handler handler, GameEngine gEngineS) {
+	public GameLoop(Context context, Handler handler, GameEngine gEngineS, View tView) {
 
 		// data about the screen
 		this.mHandler = handler;
 		this.mContext = context;
 
-		// standard game painter. Used to draw on the canvas
-		mLinePaint = new Paint();
-		mLinePaint.setARGB(255, 0, 255, 0);
-		// black painter below to clear the screen before the game is rendered
-		blackPaint = new Paint();
-		blackPaint.setARGB(255, 0, 0, 0);
-		// mLinePaint.setAntiAlias(true);
-
+		this.mView = tView;
+		
 		gEngine = gEngineS;
 	}
 
@@ -59,9 +52,13 @@ public class GameLoop extends Thread {
 			long beforeTime = System.nanoTime();
 			// This is where we update the game engine
 			gEngine.Update();
+			
+			if(mView.isPressed()){
+				Log.i("pointmove", mView.isPressed() + "");
+			}
 
 			// DRAW
-			Canvas c = null;
+			//Canvas c = null;
 			/*try {
 				// lock canvas so nothing else can use it
 				//c = mSurfaceHolder.lockCanvas(null);

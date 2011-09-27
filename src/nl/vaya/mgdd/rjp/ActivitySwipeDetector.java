@@ -18,7 +18,7 @@ public class ActivitySwipeDetector implements View.OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
-		Log.i(logTag, "Starting registration of touch.");
+		Log.i(logTag, "Ended registration of touch.");
 	}
 	
 	public float getDownDisplacementX(){

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.View.OnTouchListener;
+
 
 public class GameDraw extends View {
 
@@ -29,7 +31,7 @@ public class GameDraw extends View {
 	// our Thread class which houses the game loop
 	private GameLoop thread;
 
-	protected ActivitySwipeDetector inputFetcher;
+	static ActivitySwipeDetector inputFetcher;
 
 	private void InitView(Context contexts) {
 
@@ -58,7 +60,7 @@ public class GameDraw extends View {
 		
 		handler = new Handler();
 		
-		thread = new GameLoop(contexts, handler, gEngine);
+		thread = new GameLoop(contexts, handler, gEngine, this);
 		thread.start();
 	}
 

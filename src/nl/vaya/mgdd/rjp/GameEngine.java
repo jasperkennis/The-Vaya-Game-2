@@ -11,6 +11,7 @@ public class GameEngine {
 	}
 	
 	void Draw(Canvas c){
+
 	}
 	
 	void Clear(Canvas c){
