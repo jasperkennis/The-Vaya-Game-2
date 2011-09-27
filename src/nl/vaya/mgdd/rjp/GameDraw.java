@@ -5,7 +5,6 @@ import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,7 +59,6 @@ public class GameDraw extends View implements OnTouchListener {
 		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight());
 		this._startX = objects.getYou().getStartX(_winWith);
 		this._startY = objects.getYou().getStartY(_winHeight);
-		Log.i("log_tag", "Angle"+_angle);
 		floor.setStartX(this._startX, this._startY);
 		objects.setStartX(this._startX, this._startY);
 		canvas.drawColor(Color.BLACK);
@@ -75,7 +73,6 @@ public class GameDraw extends View implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
-			Log.i("pointmove", "start detection");
 			initialTouchXDisposition = event.getX();
 			initialTouchYDisposition = event.getY();
 			return true;
@@ -88,7 +85,6 @@ public class GameDraw extends View implements OnTouchListener {
 		default:
 			float x = event.getX() - initialTouchXDisposition;
 			float y = event.getY() - initialTouchYDisposition;
-			Log.i("log_tag", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
 			this._moveX = (int)Math.ceil(x/motionDetectionArea);
 			this._moveY = (int)Math.ceil(y/motionDetectionArea);
 			//this._angle = Math.atan2(initialTouchYDisposition - event.getY(), initialTouchXDisposition - event.getX());

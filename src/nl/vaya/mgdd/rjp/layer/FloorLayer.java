@@ -9,7 +9,6 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 public class FloorLayer {
 	
@@ -215,7 +214,6 @@ public class FloorLayer {
 					break;
 				}
 				
-				//Log.i(logTag, "winWith:"+_winWidth+" winHeight:"+_winHeight);
 				
 				
 				
@@ -237,12 +235,10 @@ public class FloorLayer {
 					this.tileScaleY = tile.getScaleY();
 					
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
-					//Log.i(logTag, "draw");
 				}
 				
 			}
-			}
-			//Log.i(logTag, "hokjes "+test);
+		}
 
 	}
 }
