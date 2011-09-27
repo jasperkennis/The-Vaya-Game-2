@@ -80,11 +80,7 @@ public class FloorLayer {
 				context.getResources().getIdentifier("drawable/zandrechtrechts", "drawable", context.getPackageName()), opts);
 		floorTile_zandrechtlinks = BitmapFactory.decodeResource(context.getResources(),
 				context.getResources().getIdentifier("drawable/zandrechtlinks", "drawable", context.getPackageName()), opts);
-
-	}
-	
-	
-	public void createFloor(Canvas canvas){
+		
 		_tilePositionArray = new int[] {
 				13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
@@ -127,6 +123,17 @@ public class FloorLayer {
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 		};
+		
+	}
+	
+	public void moveFloor(float x, float y){
+		this._startX = (int) (this._startX+x);
+		this._startY = (int) (this._startY+y);
+		Log.i(logTag, "x="+x+" y="+y+" startx y"+_startX+" "+_startY);
+	}
+	
+	public void createFloor(Canvas canvas){
+		
 			int test = 0;
 
 			int leftSquares = (int)((_startX * -1)/(_winWidth/_numTilesWidth));
@@ -135,7 +142,7 @@ public class FloorLayer {
 			for(int ix = leftSquares; ix<leftSquares+_numTilesWidth+1; ix++){
 				for(int iy = topSquares; iy<topSquares+_numTilesHeight+1; iy++){
 					int i = ix+(iy*40);
-					Log.i(logTag, "Hier "+i);
+					//Log.i(logTag, "Hier "+i);
 			//for(int i = 0; i< 72; i++){
 			//for(int i = 0; i< _tilePositionArray.length; i++){
 				float y = (int)(i/40);
@@ -210,6 +217,7 @@ public class FloorLayer {
 					RectF dest =  new RectF(pos.x, pos.y, pos.x + (tile.getTile().getWidth()*tile.getScaleX()), pos.y + (tile.getTile().getHeight()*tile.getScaleY()));
 				
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
+					Log.i(logTag, "draw");
 				}
 				
 			}

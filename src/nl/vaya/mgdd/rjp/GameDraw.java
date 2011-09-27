@@ -3,6 +3,7 @@ package nl.vaya.mgdd.rjp;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
@@ -26,16 +27,13 @@ public class GameDraw extends View {
 	// Game engine
 	protected GameEngine gEngine;
 
-	// our Thread class which houses the game loop
-	private GameLoop thread;
 
 	protected ActivitySwipeDetector inputFetcher;
+	
+	protected Boolean firstCall = true;
 
 	private void InitView(Context contexts) {
-
-		gEngine = new GameEngine();
-		gEngine.Init(context.getResources());
-
+		
 		// for the draw to work
 		this.setWillNotDraw(false);
 
@@ -53,25 +51,25 @@ public class GameDraw extends View {
 		// this.setOnTouchListener(inputFetcher);
 		this.setOnClickListener(inputFetcher);
 
-		//thread = new GameLoop(holder, context, new Handler(), gEngine);
 		setFocusable(true);
-		
-		handler = new Handler();
-		
-		thread = new GameLoop(contexts, handler, gEngine);
-		thread.start();
 	}
 
 	public GameDraw(Context contextS) {
 		super(contextS);
 		context = contextS;
 		InitView(contextS);
+		
+		setFocusable(true);
+		setFocusableInTouchMode(true);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		Log.i("ActivitySwipeDetector", "drawing");
+		canvas.drawColor(Color.BLACK);
+        
+		Log.i("log_tag", "drawing");
+		floor.moveFloor(-1, -1);
 		floor.createFloor(canvas);
-		// canvas.drawBitmap(floor.getBitmapTest(), new Matrix(), new Paint());
+		invalidate();
 	}	
 }

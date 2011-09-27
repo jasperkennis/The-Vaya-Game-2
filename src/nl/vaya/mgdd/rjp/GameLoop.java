@@ -21,7 +21,7 @@ public class GameLoop extends Thread {
 	// for consistent rendering
 	private long sleepTime;
 	// amount of time to sleep for (in milliseconds)
-	private long delay = 70;
+	private long delay = 700;
 
 	// state of game (Running or Paused).
 	int state = 1;
