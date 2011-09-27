@@ -81,9 +81,6 @@ public class GameDraw extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
-        
-		Log.i("log_tag", "drawing");
-		floor.moveFloor(-1, -1);
 		floor.createFloor(canvas);
 		invalidate();
 	}	
