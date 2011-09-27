@@ -33,8 +33,10 @@ public class GameDraw extends View {
 	private GameLoop thread;
 	
 	protected OnTouchListener inputHandler;
-
-	//static ActivitySwipeDetector inputFetcher;
+	
+	protected float initialTouchXDisposition = 0;
+	protected float initialTouchYDisposition = 0;
+	protected int motionDetectionArea = 25;
 
 	private void InitView(Context contexts) {
 
@@ -70,11 +72,26 @@ public class GameDraw extends View {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				float x = event.getX();
-				Log.i("pointmove", x + "");
-				return false;
+				switch(event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					Log.i("pointmove", "start detection");
+					initialTouchXDisposition = event.getX();
+					initialTouchYDisposition = event.getY();
+					return true;
+				case MotionEvent.ACTION_CANCEL:
+					initialTouchXDisposition = 0.0f;
+					initialTouchYDisposition = 0.0f;
+					return false;
+				default:
+					float x = event.getX() - initialTouchXDisposition;
+					float y = event.getY() - initialTouchYDisposition;
+					Log.i("pointmove", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
+					return true;
+				}
 			}
 		};
+		
+		this.setOnTouchListener(inputHandler);
 	}
 
 	public GameDraw(Context contextS) {
