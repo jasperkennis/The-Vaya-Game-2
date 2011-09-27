@@ -26,6 +26,14 @@ public class GameDraw extends View implements OnTouchListener {
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
 	protected int motionDetectionArea = 25;
+	
+	protected int _moveX = 0;
+	protected int _moveY = 0;
+	
+	protected float _angle = 0;
+	
+	protected int _startX = -240;
+	protected int _startY = -40;
 
 	
 	public GameDraw(Context context) {
@@ -44,12 +52,21 @@ public class GameDraw extends View implements OnTouchListener {
 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
+		objects = new ObjectLayer(context, _winWith, _winHeight);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight());
+		this._startX = objects.getYou().getStartX(_winWith);
+		this._startY = objects.getYou().getStartY(_winHeight);
+		Log.i("log_tag", "Angle"+_angle);
+		floor.setStartX(this._startX, this._startY);
+		objects.setStartX(this._startX, this._startY);
 		canvas.drawColor(Color.BLACK);
 		floor.createFloor(canvas);
+		objects.setTileScaleX(floor.getTileScaleX());
+		objects.setTileScaleY(floor.getTileScaleY());
 		objects.createObjects(canvas);
 		invalidate();
 	}
@@ -65,11 +82,29 @@ public class GameDraw extends View implements OnTouchListener {
 		case MotionEvent.ACTION_CANCEL:
 			initialTouchXDisposition = 0.0f;
 			initialTouchYDisposition = 0.0f;
+			this._moveX = 0;
+			this._moveY = 0;
 			return false;
 		default:
 			float x = event.getX() - initialTouchXDisposition;
 			float y = event.getY() - initialTouchYDisposition;
-			Log.i("pointmove", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
+			Log.i("log_tag", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
+			this._moveX = (int)Math.ceil(x/motionDetectionArea);
+			this._moveY = (int)Math.ceil(y/motionDetectionArea);
+			//this._angle = Math.atan2(initialTouchYDisposition - event.getY(), initialTouchXDisposition - event.getX());
+			
+			float x0 = (float)event.getY();
+			float y0 = (float)event.getX();
+			float x1 = (float)initialTouchXDisposition;
+			float y1 = (float)initialTouchYDisposition;
+			   
+			  // op = m sin(theta)
+			  // ip = m cos(theta), where m = |P0| * |P1|
+			float op = x1*y0-x0*y1;
+			float ip = x0*x1+y0*y1;  
+			 
+			this._angle = (float)Math.atan2(op,ip);
+			
 			return true;
 		}
 	}	

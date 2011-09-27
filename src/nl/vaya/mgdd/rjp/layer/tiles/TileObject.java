@@ -88,7 +88,6 @@ public class TileObject {
 	}
 	
 	public float getScaleX(){
-		
 		return _tileWidth/this.getTile().getWidth();
 	}
 	

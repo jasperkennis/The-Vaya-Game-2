@@ -1,6 +1,7 @@
 package nl.vaya.mgdd.rjp;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 public class Game extends Activity {
@@ -10,7 +11,7 @@ public class Game extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  
         setContentView(new GameDraw(this));
     }
 }

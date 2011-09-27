@@ -18,8 +18,8 @@ public class FloorLayer {
 	
 	protected int[] _tilePositionArray;
 	
-	protected float _numTilesWidth = 5; //15
-	protected float _numTilesHeight = 8; //10
+	protected int _numTilesWidth = 8; //15
+	protected int _numTilesHeight = 5; //10
 	
 	protected Bitmap floorTile_sand;
 	protected Bitmap floorTile_water;
@@ -39,8 +39,11 @@ public class FloorLayer {
 	protected int _winWidth;
 	protected int _winHeight;
 	
-	protected int _startX = -240;
-	protected int _startY = -40;
+	protected int _startX;
+	protected int _startY;
+	
+	protected float tileScaleX;
+	protected float tileScaleY;
 	
 	public FloorLayer(Context context, int winWith, int winHeight){
 		
@@ -126,10 +129,25 @@ public class FloorLayer {
 		
 	}
 	
-	public void moveFloor(float x, float y){
-		this._startX = (int) (this._startX+x);
-		this._startY = (int) (this._startY+y);
-		Log.i(logTag, "x="+x+" y="+y+" startx y"+_startX+" "+_startY);
+	public int getNumTilesWidth(){
+		return _numTilesWidth;
+	}
+	public int getNumTilesHeight(){
+		return _numTilesHeight;
+	}
+	
+	public float getTileScaleX(){
+		return tileScaleX;
+	}
+	public float getTileScaleY(){
+		return tileScaleY;
+	}
+	
+	public void setStartX(int x, int y){
+		if(x <= 0 && x > (((_winWidth/_numTilesWidth)*40)-_winWidth)*-1)
+			this._startX = x;
+		if(y <= 0 && y > (((_winHeight/_numTilesHeight)*40)-_winHeight)*-1)
+			this._startY = y;
 	}
 	
 	public void createFloor(Canvas canvas){
@@ -215,14 +233,16 @@ public class FloorLayer {
 					test++;
 					Rect src = new Rect(0, 0, tile.getTile().getWidth(), tile.getTile().getHeight());
 					RectF dest =  new RectF(pos.x, pos.y, pos.x + (tile.getTile().getWidth()*tile.getScaleX()), pos.y + (tile.getTile().getHeight()*tile.getScaleY()));
-				
+					this.tileScaleX = tile.getScaleX();
+					this.tileScaleY = tile.getScaleY();
+					
 					canvas.drawBitmap(tile.getTile(), src, dest, null);
-					Log.i(logTag, "draw");
+					//Log.i(logTag, "draw");
 				}
 				
 			}
 			}
-			Log.i(logTag, "hokjes "+test);
+			//Log.i(logTag, "hokjes "+test);
 
 	}
 }
