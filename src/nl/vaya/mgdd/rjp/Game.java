@@ -11,7 +11,6 @@ public class Game extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        gameDraw = new GameDraw(this);
-        setContentView(gameDraw);
+        setContentView(new GameDraw(this));
     }
 }
