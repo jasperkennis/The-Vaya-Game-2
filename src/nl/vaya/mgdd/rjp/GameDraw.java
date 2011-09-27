@@ -1,6 +1,7 @@
 package nl.vaya.mgdd.rjp;
 
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
+import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,12 +11,12 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.View.OnTouchListener;
 
 
 public class GameDraw extends View {
 
 	protected FloorLayer floor;
+	protected ObjectLayer objects;
 
 	protected int _winWith;
 	protected int _winHeight;
@@ -50,6 +51,7 @@ public class GameDraw extends View {
 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
+		objects = new ObjectLayer(context, _winWith, _winHeight);
 
 		// Create input fetcher, used to detect both movement and tapping.
 		//inputFetcher = new ActivitySwipeDetector(this);
@@ -76,6 +78,7 @@ public class GameDraw extends View {
 					float x = event.getX() - initialTouchXDisposition;
 					float y = event.getY() - initialTouchYDisposition;
 					Log.i("pointmove", "x: " + Math.ceil(x/motionDetectionArea) + ", y: " + Math.ceil(y/motionDetectionArea));
+					floor.moveFloor((int)Math.ceil(x/motionDetectionArea), (int)Math.ceil(y/motionDetectionArea));
 					return true;
 				}
 			}
@@ -95,10 +98,9 @@ public class GameDraw extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
-        
 		Log.i("log_tag", "drawing");
-		floor.moveFloor(-1, -1);
 		floor.createFloor(canvas);
+		objects.createObjects(canvas);
 		invalidate();
 	}	
 }
