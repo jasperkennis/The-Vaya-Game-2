@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
@@ -30,8 +31,10 @@ public class GameDraw extends View {
 
 	// our Thread class which houses the game loop
 	private GameLoop thread;
+	
+	protected OnTouchListener inputHandler;
 
-	static ActivitySwipeDetector inputFetcher;
+	//static ActivitySwipeDetector inputFetcher;
 
 	private void InitView(Context contexts) {
 
@@ -51,9 +54,9 @@ public class GameDraw extends View {
 		floor = new FloorLayer(context, _winWith, _winHeight);
 
 		// Create input fetcher, used to detect both movement and tapping.
-		inputFetcher = new ActivitySwipeDetector(this);
+		//inputFetcher = new ActivitySwipeDetector(this);
 		// this.setOnTouchListener(inputFetcher);
-		this.setOnClickListener(inputFetcher);
+		//this.setOnClickListener(inputFetcher);
 
 		//thread = new GameLoop(holder, context, new Handler(), gEngine);
 		setFocusable(true);
@@ -62,6 +65,16 @@ public class GameDraw extends View {
 		
 		thread = new GameLoop(contexts, handler, gEngine, this);
 		thread.start();
+		
+		inputHandler = new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				float x = event.getX();
+				Log.i("pointmove", x + "");
+				return false;
+			}
+		};
 	}
 
 	public GameDraw(Context contextS) {
