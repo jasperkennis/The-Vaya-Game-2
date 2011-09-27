@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import nl.vaya.mgdd.rjp.objects.Player;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 public class ObjectLayer {
 
@@ -47,8 +48,20 @@ public class ObjectLayer {
 		
 		Rect src = new Rect(0, 0, _you.getImage().getWidth(), _you.getImage().getHeight());
 		RectF dest =  new RectF(_you.getScreenX(_startX, _winWidth)-((_you.getImage().getWidth()*tileScaleX)/2), _you.getScreenY(_startY, _winHeight)-((_you.getImage().getHeight()*tileScaleY)/2), _you.getScreenX(_startX, _winWidth) + ((_you.getImage().getWidth()*tileScaleX)/2), _you.getScreenY(_startY, _winHeight) + ((_you.getImage().getHeight()*tileScaleY)/2));
-	
-		canvas.drawBitmap(_you.getImage(), src, dest, null);
+		//canvas.save();
+		//canvas.rotate(this._you.getAngle());
+		
+        // createa matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // rotate the Bitmap
+        matrix.postRotate(this._you.getAngle());
+ 
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(_you.getImage(), 0, 0,
+        		_you.getImage().getWidth(), _you.getImage().getHeight(), matrix, true); 
+		canvas.drawBitmap(resizedBitmap, src, dest, null);
+		
+		//canvas.restore();
 	}
 	
 	public Player getYou(){

@@ -5,6 +5,7 @@ import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,7 +57,8 @@ public class GameDraw extends View implements OnTouchListener {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight());
+		Log.i("log_tag", "Angle: "+this._angle);
+		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight(), _angle);
 		this._startX = objects.getYou().getStartX(_winWith);
 		this._startY = objects.getYou().getStartY(_winHeight);
 		floor.setStartX(this._startX, this._startY);
@@ -89,17 +91,13 @@ public class GameDraw extends View implements OnTouchListener {
 			this._moveY = (int)Math.ceil(y/motionDetectionArea);
 			//this._angle = Math.atan2(initialTouchYDisposition - event.getY(), initialTouchXDisposition - event.getX());
 			
-			float x0 = (float)event.getY();
-			float y0 = (float)event.getX();
-			float x1 = (float)initialTouchXDisposition;
-			float y1 = (float)initialTouchYDisposition;
-			   
-			  // op = m sin(theta)
-			  // ip = m cos(theta), where m = |P0| * |P1|
-			float op = x1*y0-x0*y1;
-			float ip = x0*x1+y0*y1;  
+			float x0 = event.getY();
+			float y0 = event.getX();
+			float x1 = initialTouchXDisposition;
+			float y1 = initialTouchYDisposition;
+			     
 			 
-			this._angle = (float)Math.atan2(op,ip);
+			this._angle = (float) Math.toDegrees( Math.atan2( y0-y1, x0-x1 ) )+180;
 			
 			return true;
 		}

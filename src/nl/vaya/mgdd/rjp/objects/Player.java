@@ -9,6 +9,7 @@ public class Player {
 	
 	protected int _xPos;
 	protected int _yPos;
+	protected float _angle = 0;
 	
 	protected int _screenTilesX;
 	protected int _screenTilesY;
@@ -47,6 +48,7 @@ public class Player {
 		//Set bitmap options
 		BitmapFactory.Options opts = new BitmapFactory.Options();
 		opts.inScaled = false;
+		
 		//Create bitmaps (tiles)
 		char_blue_1 = BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue", "drawable", _context.getPackageName()), opts);
@@ -56,7 +58,8 @@ public class Player {
 				_context.getResources().getIdentifier("drawable/char_blue_loop1", "drawable", _context.getPackageName()), opts);
 	}
 	
-	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY){
+	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float angle){
+			this._angle = angle;
 		
 			this._xPos = this._xPos+x;
 			this._yPos = this._yPos+y;
@@ -89,6 +92,10 @@ public class Player {
 			return 0;
 		else
 			return (_yPos-(winHeight/2))*-1;
+	}
+	
+	public float getAngle(){
+		return _angle;
 	}
 	
 	public Bitmap getImage(){
