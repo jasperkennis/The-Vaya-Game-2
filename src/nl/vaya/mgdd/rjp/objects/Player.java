@@ -1,9 +1,10 @@
 package nl.vaya.mgdd.rjp.objects;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 public class Player {
 	
@@ -17,9 +18,14 @@ public class Player {
 	protected int _type;
 	protected String _name;
 	
+	
+	protected int state = 0;
+	protected int loopState = 0;
+	protected Bitmap current;
 	protected Bitmap char_blue_1;
-	protected Bitmap char_blue_2;
-	protected Bitmap char_blue_3;
+	protected ArrayList<Bitmap> _walking = new ArrayList<Bitmap>();
+	
+	
 	
 	protected Context _context;
 	
@@ -50,16 +56,28 @@ public class Player {
 		opts.inScaled = false;
 		
 		//Create bitmaps (tiles)
+		//still
 		char_blue_1 = BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue", "drawable", _context.getPackageName()), opts);
-		char_blue_2 = BitmapFactory.decodeResource(_context.getResources(),
-				_context.getResources().getIdentifier("drawable/char_blue_loop1", "drawable", _context.getPackageName()), opts);
-		char_blue_3 = BitmapFactory.decodeResource(_context.getResources(),
-				_context.getResources().getIdentifier("drawable/char_blue_loop1", "drawable", _context.getPackageName()), opts);
+		
+		//walking
+		_walking.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_loop1", "drawable", _context.getPackageName()), opts));
+		_walking.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_loop2", "drawable", _context.getPackageName()), opts));
+		
+		
+		
 	}
 	
-	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float angle){
-			this._angle = angle;
+	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY){
+		
+			if(x < 2 && y < 2){
+				this.state = 0;
+				x = 0; y = 0;
+			}else{
+				this.state = 1;
+			}
 		
 			this._xPos = this._xPos+x;
 			this._yPos = this._yPos+y;
@@ -77,7 +95,8 @@ public class Player {
 			if(_yPos > ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY))
 				_yPos = ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY);
 		
-		Log.i("log_tag", "Player pos = x:"+_xPos+" y:"+_yPos);
+			this._angle = (float) Math.toDegrees( Math.atan2( this.getScreenX(this.getStartX(winWidth), winWidth)-touchX, this.getScreenY(this.getStartY(winHeight), winHeight)-touchY ) )+180;
+			
 	}
 	
 	public int getStartX(int winWidth){
@@ -99,15 +118,27 @@ public class Player {
 	}
 	
 	public Bitmap getImage(){
-		return char_blue_1;
+		loopState ++;
+		switch(this.state){
+			case 1:
+				if(loopState >= _walking.size())
+					loopState = 0;
+				this.current = _walking.get(loopState);
+			break;
+			default:
+				this.current = char_blue_1;
+			break;
+		}
+		return this.current;
+		
 	}
 	
 	public int getScreenX(int startX, int winWidth){
 		if(startX >= 0){
-			Log.i("log_tag", "Links scherm");
+			//Log.i("log_tag", "Links scherm");
 			return _xPos-startX;
 		}else if(startX <= (((winWidth/_screenTilesX)*40)-winWidth)*-1){
-			Log.i("log_tag", "Rechts scherm");
+			//Log.i("log_tag", "Rechts scherm");
 			return _xPos+startX-(startX-((((winWidth/_screenTilesX)*40)-winWidth)*-1));
 		}else{
 			return winWidth/2;

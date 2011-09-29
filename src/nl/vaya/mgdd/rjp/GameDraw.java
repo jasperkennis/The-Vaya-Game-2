@@ -30,7 +30,9 @@ public class GameDraw extends View implements OnTouchListener {
 	protected int _moveX = 0;
 	protected int _moveY = 0;
 	
-	protected float _angle = 0;
+	//protected float _angle = 0;
+	protected float _touchX = 0;
+	protected float _touchY = 0;
 	
 	protected int _startX = -240;
 	protected int _startY = -40;
@@ -57,8 +59,7 @@ public class GameDraw extends View implements OnTouchListener {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		Log.i("log_tag", "Angle: "+this._angle);
-		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight(), _angle);
+		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight(), this._touchX, this._touchY);
 		this._startX = objects.getYou().getStartX(_winWith);
 		this._startY = objects.getYou().getStartY(_winHeight);
 		floor.setStartX(this._startX, this._startY);
@@ -89,16 +90,10 @@ public class GameDraw extends View implements OnTouchListener {
 			float y = event.getY() - initialTouchYDisposition;
 			this._moveX = (int)Math.ceil(x/motionDetectionArea);
 			this._moveY = (int)Math.ceil(y/motionDetectionArea);
-			//this._angle = Math.atan2(initialTouchYDisposition - event.getY(), initialTouchXDisposition - event.getX());
 			
-			float x0 = event.getY();
-			float y0 = event.getX();
-			float x1 = initialTouchXDisposition;
-			float y1 = initialTouchYDisposition;
-			     
-			 
-			this._angle = (float) Math.toDegrees( Math.atan2( y0-y1, x0-x1 ) )+180;
-			
+			this._touchX = event.getX();
+			this._touchY = event.getY();
+
 			return true;
 		}
 	}	
