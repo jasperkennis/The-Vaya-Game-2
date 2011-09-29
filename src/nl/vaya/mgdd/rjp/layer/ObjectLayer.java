@@ -51,17 +51,22 @@ public class ObjectLayer {
 		//canvas.save();
 		//canvas.rotate(this._you.getAngle());
 		
+		canvas.save();
+		
         // createa matrix for the manipulation
         Matrix matrix = new Matrix();
         // rotate the Bitmap
-        matrix.postRotate(this._you.getAngle());
- 
+        matrix.postRotate(this._you.getAngle(), _you.getScreenX(_startX, _winWidth), _you.getScreenY(_startY, _winHeight));
+        
+        canvas.setMatrix(matrix);
+        
         // recreate the new Bitmap
-        Bitmap resizedBitmap = Bitmap.createBitmap(_you.getImage(), 0, 0,
-        		_you.getImage().getWidth(), _you.getImage().getHeight(), matrix, true); 
-		canvas.drawBitmap(resizedBitmap, src, dest, null);
+        //Bitmap resizedBitmap = Bitmap.createBitmap(_you.getImage(), 0, 0,
+        		//_you.getImage().getWidth(), _you.getImage().getHeight(), matrix, true); 
+		//canvas.drawBitmap(resizedBitmap, src, dest, null);
+		canvas.drawBitmap(_you.getImage(), src, dest, null);
 		
-		//canvas.restore();
+		canvas.restore();
 	}
 	
 	public Player getYou(){
