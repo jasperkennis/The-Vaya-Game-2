@@ -25,7 +25,7 @@ public class GameDraw extends View implements OnTouchListener {
 	
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 25;
+	protected int motionDetectionArea = 7;
 	
 	protected int _moveX = 0;
 	protected int _moveY = 0;
@@ -59,7 +59,9 @@ public class GameDraw extends View implements OnTouchListener {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight(), this._touchX, this._touchY);
+		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight(), this._touchX, this._touchY, initialTouchXDisposition, initialTouchYDisposition);
+		objects.getYou().giveSubGround(floor.getSubGround(objects.getYou().getXPos(), objects.getYou().getYPos()));
+		
 		this._startX = objects.getYou().getStartX(_winWith);
 		this._startY = objects.getYou().getStartY(_winHeight);
 		floor.setStartX(this._startX, this._startY);
@@ -79,7 +81,7 @@ public class GameDraw extends View implements OnTouchListener {
 			initialTouchXDisposition = event.getX();
 			initialTouchYDisposition = event.getY();
 			return true;
-		case MotionEvent.ACTION_CANCEL:
+		case MotionEvent.ACTION_UP:
 			initialTouchXDisposition = 0.0f;
 			initialTouchYDisposition = 0.0f;
 			this._moveX = 0;

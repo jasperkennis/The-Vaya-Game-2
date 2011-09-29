@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -147,6 +146,13 @@ public class FloorLayer {
 			this._startX = x;
 		if(y <= 0 && y > (((_winHeight/_numTilesHeight)*40)-_winHeight)*-1)
 			this._startY = y;
+	}
+	
+	public int getSubGround(int x, int y){
+		int xHokje = (int)(x/(this.tileScaleX*32));
+		int yHokje = (int)(y/(this.tileScaleY*32));
+		
+		return _tilePositionArray[(yHokje*40)+xHokje];
 	}
 	
 	public void createFloor(Canvas canvas){

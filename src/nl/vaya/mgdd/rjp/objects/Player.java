@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class Player {
 	
@@ -24,6 +25,7 @@ public class Player {
 	protected Bitmap current;
 	protected Bitmap char_blue_1;
 	protected ArrayList<Bitmap> _walking = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _swimming = new ArrayList<Bitmap>();
 	
 	
 	
@@ -66,13 +68,20 @@ public class Player {
 		_walking.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_loop2", "drawable", _context.getPackageName()), opts));
 		
+		//swimming
+		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_swim1", "drawable", _context.getPackageName()), opts));
+		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_swim2", "drawable", _context.getPackageName()), opts));
+		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_swim3", "drawable", _context.getPackageName()), opts));
 		
 		
 	}
 	
-	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY){
+	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
 		
-			if(x < 2 && y < 2){
+			if(x == 0 && y == 0 && this.state != 2){
 				this.state = 0;
 				x = 0; y = 0;
 			}else{
@@ -95,7 +104,8 @@ public class Player {
 			if(_yPos > ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY))
 				_yPos = ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY);
 		
-			this._angle = (float) Math.toDegrees( Math.atan2( this.getScreenX(this.getStartX(winWidth), winWidth)-touchX, this.getScreenY(this.getStartY(winHeight), winHeight)-touchY ) )+180;
+			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
+			//this._angle = (float) Math.toDegrees( Math.atan2( this.getScreenX(this.getStartX(winWidth), winWidth)-touchX, this.getScreenY(this.getStartY(winHeight), winHeight)-touchY ) )+180;
 			
 	}
 	
@@ -125,6 +135,11 @@ public class Player {
 					loopState = 0;
 				this.current = _walking.get(loopState);
 			break;
+			case 2:
+				if(loopState >= _swimming.size())
+					loopState = 0;
+				this.current = _swimming.get(loopState);
+			break;
 			default:
 				this.current = char_blue_1;
 			break;
@@ -152,6 +167,20 @@ public class Player {
 			return _yPos+startY-(startY-((((winHeight/_screenTilesY)*40)-winHeight)*-1));
 		else
 			return winHeight/2;
+	}
+	
+	public void giveSubGround(int floorState){
+		if(floorState == 13){
+			this.state = 2; //swimming
+		}
+	}
+	
+	public int getXPos(){
+		return this._xPos;
+	}
+	
+	public int getYPos(){
+		return this._yPos;
 	}
 	
 }
