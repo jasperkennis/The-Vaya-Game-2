@@ -54,12 +54,12 @@ public class ObjectLayer {
 		canvas.save();
 		
         // createa matrix for the manipulation
-        Matrix matrix = new Matrix();
+        //Matrix matrix = new Matrix();
         // rotate the Bitmap
-        matrix.postRotate(this._you.getAngle(), _you.getScreenX(_startX, _winWidth), _you.getScreenY(_startY, _winHeight));
+       // matrix.postRotate(this._you.getAngle(), _you.getScreenX(_startX, _winWidth), _you.getScreenY(_startY, _winHeight));
         
-        canvas.setMatrix(matrix);
-        
+        //canvas.setMatrix(matrix);
+        canvas.rotate(180-this._you.getAngle(), _you.getScreenX(_startX, _winWidth), _you.getScreenY(_startY, _winHeight));
         // recreate the new Bitmap
         //Bitmap resizedBitmap = Bitmap.createBitmap(_you.getImage(), 0, 0,
         		//_you.getImage().getWidth(), _you.getImage().getHeight(), matrix, true); 
