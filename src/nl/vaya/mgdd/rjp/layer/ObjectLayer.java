@@ -28,9 +28,16 @@ public class ObjectLayer {
 	protected int _winHeight;
 	
 	protected int[] _objectPositionArray;
+	protected Bitmap[] _bitmapArray;
 	protected ArrayList<int[]> _objectItemBuildArray;
 	
 	protected Bitmap palmboom;
+	protected Bitmap parasol1;
+	protected Bitmap parasol2;
+	protected Bitmap steen1;
+	protected Bitmap steen2;
+	protected Bitmap handdoek;
+	protected Bitmap building1;
 	
 	public ObjectLayer(Context context, int winWidth, int winHeight){
 		_objects = new ArrayList<GameObject>();
@@ -47,14 +54,14 @@ public class ObjectLayer {
 				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-				0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,1,0,0,0,5,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -89,6 +96,12 @@ public class ObjectLayer {
 		_objectItemBuildArray = new ArrayList<int[]>();
 		_objectItemBuildArray.add(new int[]{1}); // Null Object
 		_objectItemBuildArray.add(new int[]{1}); // Palm Object
+		_objectItemBuildArray.add(new int[]{1}); // Handdoek Object
+		_objectItemBuildArray.add(new int[]{1}); // Parasol 1 Object 
+		_objectItemBuildArray.add(new int[]{1}); // Parasol 2 Object
+		_objectItemBuildArray.add(new int[]{1}); // Steen 1 Object
+		_objectItemBuildArray.add(new int[]{1}); // Steen 2 Object
+		_objectItemBuildArray.add(new int[]{1,2,3,42,43}); // Huis Object
 		
 		//Set bitmap options
 		BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -97,11 +110,29 @@ public class ObjectLayer {
 		//create game objects
 		palmboom = BitmapFactory.decodeResource(context.getResources(),
 				context.getResources().getIdentifier("drawable/palmboom", "drawable", context.getPackageName()), opts);
+		parasol1 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/parasol", "drawable", context.getPackageName()), opts);
+		parasol2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/parasol2", "drawable", context.getPackageName()), opts);
+		steen1 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/steen1", "drawable", context.getPackageName()), opts);
+		steen2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/steen2", "drawable", context.getPackageName()), opts);
+		handdoek = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/handdoek", "drawable", context.getPackageName()), opts);
+		building1 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/building1", "drawable", context.getPackageName()), opts);
 		
 		
 		for(int i = 0; i<_objectPositionArray.length; i++){
 			if(_objectPositionArray[i] !=0){
+				if(_objectPositionArray[i] == 1)
 				_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]),i,1,1,false,palmboom));
+				if(_objectPositionArray[i] == 2)
+					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]),i,1,1,false,parasol1));
+				if(_objectPositionArray[i] == 7)
+					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]),i,3,2,false,building1));
+				
 			}
 		}
 		
