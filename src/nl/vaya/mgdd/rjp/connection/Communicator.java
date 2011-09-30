@@ -12,38 +12,55 @@ import android.util.Log;
 
 public class Communicator {
 	
-	protected String host = "0.0.0.0";
+	protected String host = "ve.qtssrgkb.vesrv.com";
 	protected int port = 1337;
 	protected Socket socket;
+	protected String log_tag = "game_server";
+	protected BufferedReader receiver;
+	protected PrintWriter sender;
+	protected int linesPerTick = 5;
 	
 	public Communicator(){
-		Log.i("log_tag", "Starting connection.");
+		Log.i(log_tag, "Starting connection.");
 		try {
-			Log.i("log_tag", "Connecting");
-	        Socket s = new Socket(host,port);
-	       
-	        //outgoing stream redirect to socket
-	        OutputStream out = s.getOutputStream();
-	       
-	        PrintWriter output = new PrintWriter(out);
-	        Log.i("log_tag", "Hello Android!");
-	        output.println("Hello Android!");
-	        BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
-	       
-	        //read line(s)
-	        String st = input.readLine();
-	        Log.i("log_tag", st);
-	        //Close connection
-	        s.close();
-	       
+	        socket = new Socket(host,port);
+	        Log.i(log_tag, "Connected!");
+	        
+	        //Create an outgoing stream pointing at the socket:
+	        OutputStream out = socket.getOutputStream();
+	        sender = new PrintWriter(out);
+	        
+	        // Create a stream for incomming messages:
+	        receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	        
+	        
+	        this.recieveMessages();
+	        this.recieveMessages();
+	        
 		} catch (UnknownHostException e) {
-			Log.i("log_tag", "Fail 1");
-	        // TODO Auto-generated catch block
+			Log.i(log_tag, "Connection failed; unknow host.");
 	        e.printStackTrace();
 		} catch (IOException e) {
-			Log.i("log_tag", "Fail 2");
-	        // TODO Auto-generated catch block
+			Log.i(log_tag, "Connection failed. See stack for more data.");
 	        e.printStackTrace();
+		}
+	}
+	
+	public void sendMessage(String message){
+		sender.println(message);
+	}
+	
+	public void recieveMessages() {
+		for(int i = 0; i < linesPerTick; i++){
+			Log.i(log_tag, "Reading.");
+	        String st = "no messages";
+			try {
+				st = receiver.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        Log.i(log_tag, st);
 		}
 	}
 }
