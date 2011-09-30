@@ -18,6 +18,8 @@ public class TileObject {
 	
 	protected int _winWidth;
 	protected int _winHeight;
+
+	protected Point _mapPos;
 	
 	/**
 	 * Accepts an array of sprites and stores them in the array list of sprites
@@ -99,7 +101,11 @@ public class TileObject {
 		float yPos = y*_tileHeight;
 		float xPos = x*_tileWidth;
 		Point position = new Point((int)xPos,(int)yPos);
-		//Log.i(logTag, "Position is x="+xPos+" y="+yPos);
+		this._mapPos = position;
 		return position;
+	}
+	
+	public Point getMapPos(){
+		return _mapPos;
 	}
 }

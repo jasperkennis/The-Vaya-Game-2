@@ -2,6 +2,7 @@ package nl.vaya.mgdd.rjp;
 
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
+import nl.vaya.mgdd.rjp.objects.GameObject;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -61,6 +62,15 @@ public class GameDraw extends View implements OnTouchListener {
 	protected void onDraw(Canvas canvas) {
 		objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight(), this._touchX, this._touchY, initialTouchXDisposition, initialTouchYDisposition);
 		objects.getYou().giveSubGround(floor.getSubGround(objects.getYou().getXPos(), objects.getYou().getYPos()));
+		
+		int youPos = (int) ((int)Math.floor(objects.getYou().getXPos()/(32*floor.getTileScaleX()))+(Math.floor(objects.getYou().getYPos()/(32*floor.getTileScaleY()))*40));
+		
+		//check collision
+		for(GameObject o :objects.getObjects()){
+			if(o.findTile(youPos) && !o.canWalkTrough()){
+				objects.getYou().setBack();
+			}
+		}
 		
 		this._startX = objects.getYou().getStartX(_winWith);
 		this._startY = objects.getYou().getStartY(_winHeight);

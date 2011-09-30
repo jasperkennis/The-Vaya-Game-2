@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.util.Log;
 
 public class Player {
@@ -26,8 +27,9 @@ public class Player {
 	protected Bitmap char_blue_1;
 	protected ArrayList<Bitmap> _walking = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _swimming = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _running = new ArrayList<Bitmap>();
 	
-	
+	protected Point _prevPoint = new Point();
 	
 	protected Context _context;
 	
@@ -68,6 +70,12 @@ public class Player {
 		_walking.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_loop2", "drawable", _context.getPackageName()), opts));
 		
+		//running
+		_running.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_run1", "drawable", _context.getPackageName()), opts));
+		_running.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_run2", "drawable", _context.getPackageName()), opts));
+		
 		//swimming
 		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_swim1", "drawable", _context.getPackageName()), opts));
@@ -81,9 +89,14 @@ public class Player {
 	
 	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
 		
+			_prevPoint.x = this._xPos;
+			_prevPoint.y = this._yPos;
+			
 			if(x == 0 && y == 0 && this.state != 2){
 				this.state = 0;
 				x = 0; y = 0;
+			}else if(x > 5 || y > 5 || x < -5 || y < -5){
+				this.state = 3;
 			}else{
 				this.state = 1;
 			}
@@ -107,6 +120,16 @@ public class Player {
 			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
 			//this._angle = (float) Math.toDegrees( Math.atan2( this.getScreenX(this.getStartX(winWidth), winWidth)-touchX, this.getScreenY(this.getStartY(winHeight), winHeight)-touchY ) )+180;
 			
+	}
+	
+	public Point getScreenTiles(){
+		return new Point(_screenTilesX, _screenTilesY);
+	}
+	
+	public void setBack(){
+		this._xPos = this._prevPoint.x;
+		this._yPos = this._prevPoint.y;
+		Log.i("log_tag", "HIT HIT HIT HIT");
 	}
 	
 	public int getStartX(int winWidth){
@@ -139,6 +162,11 @@ public class Player {
 				if(loopState >= _swimming.size())
 					loopState = 0;
 				this.current = _swimming.get(loopState);
+			break;
+			case 3:
+				if(loopState >= _running.size())
+					loopState = 0;
+				this.current = _running.get(loopState);
 			break;
 			default:
 				this.current = char_blue_1;

@@ -2,17 +2,21 @@ package nl.vaya.mgdd.rjp.layer;
 
 import java.util.ArrayList;
 
+import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.Player;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class ObjectLayer {
 
 	protected ArrayList<Player> _enemys;
+	protected ArrayList<GameObject> _objects;
+	
 	protected Player _you;
 	protected int _startX;
 	protected int _startY;
@@ -23,10 +27,84 @@ public class ObjectLayer {
 	protected int _winWidth;
 	protected int _winHeight;
 	
+	protected int[] _objectPositionArray;
+	protected ArrayList<int[]> _objectItemBuildArray;
+	
+	protected Bitmap palmboom;
+	
 	public ObjectLayer(Context context, int winWidth, int winHeight){
+		_objects = new ArrayList<GameObject>();
 		_winWidth = winWidth;
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1);
+		makeObjects(context);
+	}
+	
+	
+	public void makeObjects(Context context){
+		
+		_objectPositionArray = new int[] {
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		};
+		
+		_objectItemBuildArray = new ArrayList<int[]>();
+		_objectItemBuildArray.add(new int[]{1}); // Null Object
+		_objectItemBuildArray.add(new int[]{1}); // Palm Object
+		
+		//Set bitmap options
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inScaled = false;
+		
+		//create game objects
+		palmboom = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/palmboom", "drawable", context.getPackageName()), opts);
+		
+		
+		for(int i = 0; i<_objectPositionArray.length; i++){
+			if(_objectPositionArray[i] !=0){
+				_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]),i,1,1,false,palmboom));
+			}
+		}
+		
 	}
 	
 	public void setTileScaleX(float xScale){
@@ -48,25 +126,25 @@ public class ObjectLayer {
 		
 		Rect src = new Rect(0, 0, _you.getImage().getWidth(), _you.getImage().getHeight());
 		RectF dest =  new RectF(_you.getScreenX(_startX, _winWidth)-((_you.getImage().getWidth()*tileScaleX)/2), _you.getScreenY(_startY, _winHeight)-((_you.getImage().getHeight()*tileScaleY)/2), _you.getScreenX(_startX, _winWidth) + ((_you.getImage().getWidth()*tileScaleX)/2), _you.getScreenY(_startY, _winHeight) + ((_you.getImage().getHeight()*tileScaleY)/2));
-		//canvas.save();
-		//canvas.rotate(this._you.getAngle());
 		
 		canvas.save();
-		
-        // createa matrix for the manipulation
-        //Matrix matrix = new Matrix();
-        // rotate the Bitmap
-       // matrix.postRotate(this._you.getAngle(), _you.getScreenX(_startX, _winWidth), _you.getScreenY(_startY, _winHeight));
-        
-        //canvas.setMatrix(matrix);
         canvas.rotate(180-this._you.getAngle(), _you.getScreenX(_startX, _winWidth), _you.getScreenY(_startY, _winHeight));
-        // recreate the new Bitmap
-        //Bitmap resizedBitmap = Bitmap.createBitmap(_you.getImage(), 0, 0,
-        		//_you.getImage().getWidth(), _you.getImage().getHeight(), matrix, true); 
-		//canvas.drawBitmap(resizedBitmap, src, dest, null);
 		canvas.drawBitmap(_you.getImage(), src, dest, null);
-		
 		canvas.restore();
+		
+		//int test = 0;
+		
+		for(GameObject o:_objects){
+			//test++;
+			//if(o.isInScreen((int) Math.floor((_startX*-1/(32*tileScaleX))-1), (int) Math.floor((_startY*-1/(32*tileScaleY))-1), (int) Math.floor((_startX*-1/(32*tileScaleX))+_you.getScreenTiles().x+2), (int) Math.floor((_startY*-1/(32*tileScaleY))+_you.getScreenTiles().y+2))){
+			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
+			//		Log.i("log_tag", "test "+test);
+			//}
+		}
+	}
+	
+	public ArrayList<GameObject> getObjects(){
+		return _objects;
 	}
 	
 	public Player getYou(){
