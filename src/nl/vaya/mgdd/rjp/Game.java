@@ -15,7 +15,6 @@ public class Game extends Activity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  
         
-        communicator = new Communicator();
         setContentView(new GameDraw(this));
     }
 }

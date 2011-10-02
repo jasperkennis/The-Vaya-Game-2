@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 
 import android.util.Log;
 
-public class Communicator {
+public class Communicator implements MessageResponder {
 	
 	protected String host = "ve.qtssrgkb.vesrv.com";
 	protected int port = 1337;
@@ -33,9 +33,7 @@ public class Communicator {
 	        // Create a stream for incomming messages:
 	        receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	        
-	        
-	        this.recieveMessages();
-	        this.recieveMessages();
+	        //	this.recieveMessages(this);
 	        
 		} catch (UnknownHostException e) {
 			Log.i(log_tag, "Connection failed; unknow host.");
@@ -50,17 +48,32 @@ public class Communicator {
 		sender.println(message);
 	}
 	
-	public void recieveMessages() {
+	public String[] recieveMessages(MessageResponder callack) {
+		String[] _return = new String[this.linesPerTick];
 		for(int i = 0; i < linesPerTick; i++){
-			Log.i(log_tag, "Reading.");
-	        String st = "no messages";
 			try {
-				st = receiver.readLine();
+				String incomming = receiver.readLine();
+				if(incomming.length() > 0){
+					callack.respond( incomming );
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	        Log.i(log_tag, st);
 		}
+		return _return;
+	}
+	
+	public void setEventListener(MessageResponder response){
+		
+	}
+
+	/*
+	 * This message gets called upon every found response.
+	 * @see nl.vaya.mgdd.rjp.connection.MessageResponder#respond(java.lang.String)
+	 */
+	@Override
+	public void respond(String message) {
+		Log.i(log_tag, message);
 	}
 }
