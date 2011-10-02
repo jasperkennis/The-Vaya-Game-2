@@ -31,7 +31,7 @@ public class Communicator implements MessageResponder {
 	        sender = new PrintWriter(out);
 	        
 	        // Create a stream for incomming messages:
-	        receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	        receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()), 8 * 1024);
 	        
 	        //	this.recieveMessages(this);
 	        
@@ -48,20 +48,23 @@ public class Communicator implements MessageResponder {
 		sender.println(message);
 	}
 	
-	public String[] recieveMessages(MessageResponder callack) {
-		String[] _return = new String[this.linesPerTick];
-		for(int i = 0; i < linesPerTick; i++){
+	public void recieveMessages(MessageResponder callback) throws IOException {
+		/*for(int i = 0; i < linesPerTick; i++){
 			try {
-				String incomming = receiver.readLine();
-				if(incomming.length() > 0){
+				if(receiver.ready()){
+					String incomming = receiver.readLine();
 					callack.respond( incomming );
+				} else {
+					Log.i(log_tag, "Unable to read.");
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		return _return;
+		}*/
+		String nextLine = null;
+		while ((nextLine = receiver.readLine()) != null) {
+			  callback.respond( nextLine);
+			}
 	}
 	
 	public void setEventListener(MessageResponder response){
