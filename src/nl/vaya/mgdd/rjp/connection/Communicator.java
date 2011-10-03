@@ -48,23 +48,23 @@ public class Communicator implements MessageResponder {
 		sender.println(message);
 	}
 	
-	public void recieveMessages(MessageResponder callback) throws IOException {
-		/*for(int i = 0; i < linesPerTick; i++){
-			try {
-				if(receiver.ready()){
-					String incomming = receiver.readLine();
-					callack.respond( incomming );
-				} else {
-					Log.i(log_tag, "Unable to read.");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public void recieveMessages(MessageResponder callback) {
 		String nextLine = null;
+
 		while ((nextLine = receiver.readLine()) != null) {
 			  callback.respond( nextLine);
-			}*/
+			}
+		try {
+			while ((nextLine = receiver.readLine()) != null) {
+				if( receiver.ready() ) {
+					Log.i(log_tag, "Receiving line with ready state = " + receiver.ready());
+					callback.respond(nextLine);
+				}
+			}
+		} catch (IOException e) {
+			Log.i(log_tag, "Not receiving line.");
+			e.printStackTrace();
+		}
 	}
 	
 	public void setEventListener(MessageResponder response){
@@ -79,4 +79,5 @@ public class Communicator implements MessageResponder {
 	public void respond(String message) {
 		Log.i(log_tag, message);
 	}
+
 }
