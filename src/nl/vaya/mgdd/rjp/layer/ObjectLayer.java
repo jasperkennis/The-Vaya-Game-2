@@ -47,7 +47,7 @@ public class ObjectLayer {
 		_winWidth = winWidth;
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1);
-		_enemys.add(new Enemy(context, "sjaak", 2));
+		//_enemys.add(new Enemy(context, "sjaak", 2));
 		
 		makeObjects(context);
 	}

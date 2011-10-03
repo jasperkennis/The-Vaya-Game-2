@@ -95,14 +95,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 					floor.getSubGround(objects.getYou().getXPos(), objects
 							.getYou().getYPos()));
 			
-			for(Enemy enemy:objects.getEnemy()){
-				enemy.setPlayerPos(100, 200, 180.0f, 1, floor.getNumTilesWidth(), floor.getNumTilesHeight());
-			}
-
 			int youPos = (int) ((int) Math.floor(objects.getYou().getXPos()
 					/ (32 * floor.getTileScaleX())) + (Math.floor(objects
 					.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
-			Log.i("log_tag", "hier 3.");
+			
+			for(Enemy enemy:objects.getEnemy()){
+				enemy.setPlayerPos(100, 200, 180.0f, 1, floor.getNumTilesWidth(), floor.getNumTilesHeight());
+				if(enemy.checkCollision(youPos)){
+					objects.getYou().setBack();
+				}
+			}
+
 			// check collision
 			for (GameObject o : objects.getObjects()) {
 				if (o.findTile(youPos) && !o.canWalkTrough()) {
@@ -110,19 +113,15 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				}
 			}
 			
-			Log.i("log_tag", "hier 4.");
-			
 			this._startX = objects.getYou().getStartX(_winWith);
 			this._startY = objects.getYou().getStartY(_winHeight);
 			floor.setStartX(this._startX, this._startY);
 			objects.setStartX(this._startX, this._startY);
 			canvas.drawColor(Color.BLACK);
 			floor.createFloor(canvas);
-			Log.i("log_tag", "hier 5.");
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
-			Log.i("log_tag", "hier 6.");
 		}
 		
 		/*
