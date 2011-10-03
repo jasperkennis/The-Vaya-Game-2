@@ -71,13 +71,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		//Log.i("game_server", "Running updates as expected!" );
 		
 		final GameDraw _self = this;
 		
+		/*
+		 * Get messages from the server. Do this in a thread to
+		 * prevent blocking the other processes.
+		 */
 		communicatorThread =  new Thread(new Runnable() {
 		    public void run() {
-		    	Log.i("game_server", "Running thread." );
+		    	Log.i("game_server", "Running thread requesting data from server." );
 		        _self.communicator.recieveMessages(_self);
 		      }
 		    });
@@ -113,6 +116,24 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
 		}
+		
+		/*
+		 * Send position and orientation back to server, in
+		 * a separate tread to prevent blocking the loop
+		 */
+		communicatorThread =  new Thread(new Runnable() {
+		    public void run() {
+		    	Log.i("game_server", "Running thread pushing data to server." );
+		    	String my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+		    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+		    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+		    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
+		    	my_position_json += "}}";
+		        _self.communicator.sendMessage(my_position_json);
+		      }
+		    });
+		communicatorThread.start();
+		
 		invalidate();
 	}
 

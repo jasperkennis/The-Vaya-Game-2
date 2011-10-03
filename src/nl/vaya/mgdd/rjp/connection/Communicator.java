@@ -50,18 +50,6 @@ public class Communicator implements MessageResponder {
 	}
 	
 	public void recieveMessages(MessageResponder callback) {
-		/*for(int i = 0; i < linesPerTick; i++){
-			try {
-				if(receiver.ready()){
-					String incomming = receiver.readLine();
-					callack.respond( incomming );
-				} else {
-					Log.i(log_tag, "Unable to read.");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}*/
 		String nextLine = null;
 		try {
 			while ((nextLine = receiver.readLine()) != null) {
