@@ -8,10 +8,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.util.Log;
 
-public class Player {
+public class Enemy {
 	
-	protected int _xPos;
-	protected int _yPos;
+	protected int _xPos = 0;
+	protected int _yPos = 0;
 	protected float _angle = 0;
 	
 	protected int _screenTilesX;
@@ -33,21 +33,21 @@ public class Player {
 	
 	protected Context _context;
 	
-	public Player(Context context){
+	public Enemy(Context context){
 		_context = context;
 		this._type = 0;
 		this._name = "Unknow";
 		createBodyImages();
 	}
 	
-	public Player(Context context,String name){
+	public Enemy(Context context,String name){
 		_context = context;
 		this._type = 0;
 		this._name = name;
 		createBodyImages();
 	}
 	
-	public Player(Context context,String name, int type){
+	public Enemy(Context context,String name, int type){
 		_context = context;
 		this._type = type;
 		this._name = name;
@@ -87,40 +87,22 @@ public class Player {
 		
 	}
 	
-	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
+	public void setPlayerPos(int x, int y, float angle, int s, int tilesX, int tilesY){
 		
-			Log.i("log_tag", "x:"+x+" y:"+y);
-		
-			_prevPoint.x = this._xPos;
-			_prevPoint.y = this._yPos;
-			
-			if(x == 0 && y == 0 && this.state != 2){
-				this.state = 0;
-				x = 0; y = 0;
-			}else if(x > 5 || y > 5 || x < -5 || y < -5){
-				this.state = 3;
-			}else{
-				this.state = 1;
-			}
-		
-			this._xPos = this._xPos+x;
-			this._yPos = this._yPos+y;
+		_prevPoint.x = this._xPos;
+		_prevPoint.y = this._yPos;
 
-			this._screenTilesX = tilesX;
-			this._screenTilesY = tilesY;
-			
-			if(_xPos < 0)
-				_xPos = 0;
-			if(_xPos > ((winWidth/_screenTilesX)*40))
-				_xPos = ((winWidth/_screenTilesX)*40);
-			
-			if(_yPos < 0)
-				_yPos = 0;
-			if(_yPos > ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY))
-				_yPos = ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY);
+		this.state = s;
 		
-			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
-	}
+		this._screenTilesX = tilesX;
+		this._screenTilesY = tilesY;
+
+		this._xPos = x;
+		this._yPos = y;
+	
+		this._angle = angle;
+		
+}
 	
 	
 	public Point getScreenTiles(){
@@ -131,20 +113,6 @@ public class Player {
 		this._xPos = this._prevPoint.x;
 		this._yPos = this._prevPoint.y;
 		Log.i("log_tag", "HIT HIT HIT HIT");
-	}
-	
-	public int getStartX(int winWidth){
-		if(_xPos < winWidth/2)
-			return 0;
-		else
-			return (_xPos-(winWidth/2))*-1;
-	}
-	
-	public int getStartY(int winHeight){
-		if(_yPos < winHeight/2)
-			return 0;
-		else
-			return (_yPos-(winHeight/2))*-1;
 	}
 	
 	public float getAngle(){
@@ -177,25 +145,12 @@ public class Player {
 		
 	}
 	
-	public int getScreenX(int startX, int winWidth){
-		if(startX >= 0){
-			//Log.i("log_tag", "Links scherm");
-			return _xPos-startX;
-		}else if(startX <= (((winWidth/_screenTilesX)*40)-winWidth)*-1){
-			//Log.i("log_tag", "Rechts scherm");
-			return _xPos+startX-(startX-((((winWidth/_screenTilesX)*40)-winWidth)*-1));
-		}else{
-			return winWidth/2;
-		}
+	public int getScreenX(int startX){
+		return _xPos+startX;
 	}
 	
-	public int getScreenY(int startY, int winHeight){
-		if(startY >= 0)
-			return _yPos-startY;
-		else if( startY <= (((winHeight/_screenTilesY)*40)-winHeight)*-1)
-			return _yPos+startY-(startY-((((winHeight/_screenTilesY)*40)-winHeight)*-1));
-		else
-			return winHeight/2;
+	public int getScreenY(int startY){
+		return _yPos+startY;
 	}
 	
 	public void giveSubGround(int floorState){

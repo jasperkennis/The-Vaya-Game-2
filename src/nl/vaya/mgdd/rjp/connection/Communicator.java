@@ -60,11 +60,11 @@ public class Communicator implements MessageResponder {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 		String nextLine = null;
 		while ((nextLine = receiver.readLine()) != null) {
 			  callback.respond( nextLine);
-			}
+			}*/
 	}
 	
 	public void setEventListener(MessageResponder response){
