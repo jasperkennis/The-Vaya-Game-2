@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -48,7 +49,7 @@ public class Communicator implements MessageResponder {
 		sender.println(message);
 	}
 	
-	public void recieveMessages(MessageResponder callback) throws IOException {
+	public void recieveMessages(MessageResponder callback) {
 		/*for(int i = 0; i < linesPerTick; i++){
 			try {
 				if(receiver.ready()){
@@ -62,9 +63,17 @@ public class Communicator implements MessageResponder {
 			}
 		}*/
 		String nextLine = null;
-		while ((nextLine = receiver.readLine()) != null) {
-			  callback.respond( nextLine);
+		try {
+			while ((nextLine = receiver.readLine()) != null) {
+				if( receiver.ready() ) {
+					Log.i(log_tag, "Receiving line with ready state = " + receiver.ready());
+					callback.respond(nextLine);
+				}
 			}
+		} catch (IOException e) {
+			Log.i(log_tag, "Not receiving line.");
+			e.printStackTrace();
+		}
 	}
 	
 	public void setEventListener(MessageResponder response){
@@ -79,4 +88,5 @@ public class Communicator implements MessageResponder {
 	public void respond(String message) {
 		Log.i(log_tag, message);
 	}
+
 }

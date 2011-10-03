@@ -1,7 +1,5 @@
 package nl.vaya.mgdd.rjp;
 
-import java.io.IOException;
-
 import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
@@ -42,6 +40,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected int _startY = -40;
 
 	protected Communicator communicator;
+	protected Thread communicatorThread;
 	
 	protected String log_tag = "game_server";
 
@@ -72,12 +71,18 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		Log.i("game_server", "Running updates as expected!" );
-		try {
-			communicator.recieveMessages(this);
-		} catch (IOException e) {
-			Log.i("game_server", "not reading..." );
-		}
+		//Log.i("game_server", "Running updates as expected!" );
+		
+		final GameDraw _self = this;
+		
+		communicatorThread =  new Thread(new Runnable() {
+		    public void run() {
+		    	Log.i("game_server", "Running thread." );
+		        _self.communicator.recieveMessages(_self);
+		      }
+		    });
+		communicatorThread.start();
+		
 		if (gameReady) {
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
