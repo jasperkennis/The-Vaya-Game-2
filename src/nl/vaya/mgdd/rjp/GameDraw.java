@@ -81,7 +81,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 */
 		communicatorThread =  new Thread(new Runnable() {
 		    public void run() {
-		    	Log.i("game_server", "Running thread requesting data from server." );
 		        _self.communicator.recieveMessages(_self);
 		      }
 		    });
@@ -102,7 +101,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			int youPos = (int) ((int) Math.floor(objects.getYou().getXPos()
 					/ (32 * floor.getTileScaleX())) + (Math.floor(objects
 					.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
-			Log.i("log_tag", "hier 3.");
 			// check collision
 			for (GameObject o : objects.getObjects()) {
 				if (o.findTile(youPos) && !o.canWalkTrough()) {
@@ -110,19 +108,15 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				}
 			}
 			
-			Log.i("log_tag", "hier 4.");
-			
 			this._startX = objects.getYou().getStartX(_winWith);
 			this._startY = objects.getYou().getStartY(_winHeight);
 			floor.setStartX(this._startX, this._startY);
 			objects.setStartX(this._startX, this._startY);
 			canvas.drawColor(Color.BLACK);
 			floor.createFloor(canvas);
-			Log.i("log_tag", "hier 5.");
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
-			Log.i("log_tag", "hier 6.");
 		}
 		
 		/*
@@ -131,7 +125,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 */
 		communicatorThread =  new Thread(new Runnable() {
 		    public void run() {
-		    	Log.i("game_server", "Running thread pushing data to server." );
 		    	String my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
 		    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
 		    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
