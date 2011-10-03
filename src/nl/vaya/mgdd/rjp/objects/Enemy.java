@@ -104,6 +104,9 @@ public class Enemy {
 		
 }
 	
+	public boolean checkCollision(int youPos){
+		return true;
+	}
 	
 	public Point getScreenTiles(){
 		return new Point(_screenTilesX, _screenTilesY);

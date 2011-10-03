@@ -94,13 +94,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 					floor.getSubGround(objects.getYou().getXPos(), objects
 							.getYou().getYPos()));
 			
-			for(Enemy enemy:objects.getEnemy()){
-				enemy.setPlayerPos(100, 200, 180.0f, 1, floor.getNumTilesWidth(), floor.getNumTilesHeight());
-			}
-
 			int youPos = (int) ((int) Math.floor(objects.getYou().getXPos()
 					/ (32 * floor.getTileScaleX())) + (Math.floor(objects
 					.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
+			
+			for(Enemy enemy:objects.getEnemy()){
+				enemy.setPlayerPos(100, 200, 180.0f, 1, floor.getNumTilesWidth(), floor.getNumTilesHeight());
+				if(enemy.checkCollision(youPos)){
+					objects.getYou().setBack();
+				}
+			}
+
 			// check collision
 			for (GameObject o : objects.getObjects()) {
 				if (o.findTile(youPos) && !o.canWalkTrough()) {
