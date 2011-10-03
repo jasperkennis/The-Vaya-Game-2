@@ -4,6 +4,7 @@ import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
+import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -44,7 +45,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	protected String log_tag = "game_server";
 
-	protected boolean gameReady = false;
+	protected boolean gameReady = true;
 
 	public GameDraw(Context context) {
 		super(context);
@@ -85,7 +86,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		      }
 		    });
 		communicatorThread.start();
-		
 		if (gameReady) {
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
@@ -94,27 +94,35 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.getYou().giveSubGround(
 					floor.getSubGround(objects.getYou().getXPos(), objects
 							.getYou().getYPos()));
+			
+			for(Enemy enemy:objects.getEnemy()){
+				enemy.setPlayerPos(100, 200, 180.0f, 1, floor.getNumTilesWidth(), floor.getNumTilesHeight());
+			}
 
 			int youPos = (int) ((int) Math.floor(objects.getYou().getXPos()
 					/ (32 * floor.getTileScaleX())) + (Math.floor(objects
 					.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
-
+			Log.i("log_tag", "hier 3.");
 			// check collision
 			for (GameObject o : objects.getObjects()) {
 				if (o.findTile(youPos) && !o.canWalkTrough()) {
 					objects.getYou().setBack();
 				}
 			}
-
+			
+			Log.i("log_tag", "hier 4.");
+			
 			this._startX = objects.getYou().getStartX(_winWith);
 			this._startY = objects.getYou().getStartY(_winHeight);
 			floor.setStartX(this._startX, this._startY);
 			objects.setStartX(this._startX, this._startY);
 			canvas.drawColor(Color.BLACK);
 			floor.createFloor(canvas);
+			Log.i("log_tag", "hier 5.");
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
+			Log.i("log_tag", "hier 6.");
 		}
 		
 		/*
