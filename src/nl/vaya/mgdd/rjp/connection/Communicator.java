@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Reader;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -20,8 +20,13 @@ public class Communicator implements MessageResponder {
 	protected BufferedReader receiver;
 	protected PrintWriter sender;
 	protected int linesPerTick = 5;
+	protected String nextLine = null;
+	protected Object oldReceiver;
+	
+	protected ServerSocket newSocket;
 	
 	public Communicator(){
+		
 		Log.i(log_tag, "Starting connection.");
 		try {
 	        socket = new Socket(host,port);
@@ -29,13 +34,11 @@ public class Communicator implements MessageResponder {
 	        
 	        //Create an outgoing stream pointing at the socket:
 	        OutputStream out = socket.getOutputStream();
-	        sender = new PrintWriter(out, true);
-	        //sender.pr
+	        sender = new PrintWriter(out, true); // True for autoflush.
 	        
 	        // Create a stream for incomming messages:
 	        receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()), 8 * 1024);
-	        
-	        //	this.recieveMessages(this);
+
 	        
 		} catch (UnknownHostException e) {
 			Log.i(log_tag, "Connection failed; unknow host.");
@@ -51,22 +54,17 @@ public class Communicator implements MessageResponder {
 	}
 	
 	public void recieveMessages(MessageResponder callback) {
-		String nextLine = null;
 		try {
-			while ((nextLine = receiver.readLine()) != null) {
-				if( receiver.ready() ) {
-					Log.i(log_tag, "Receiving line with ready state = " + receiver.ready());
-					callback.respond(nextLine);
-				}
+			while((nextLine = receiver.readLine()) != null) {
+				Log.i(log_tag, nextLine);
+				//callback.respond(nextLine);
 			}
 		} catch (IOException e) {
 			Log.i(log_tag, "Not receiving line.");
 			e.printStackTrace();
+		} finally {
+			Log.i(log_tag, "Failed to read, ignoring that.");
 		}
-	}
-	
-	public void setEventListener(MessageResponder response){
-		
 	}
 
 	/*

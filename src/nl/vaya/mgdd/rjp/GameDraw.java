@@ -9,8 +9,6 @@ import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 
-import org.apache.http.util.EncodingUtils;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -52,7 +50,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	protected String log_tag = "game_server";
 
-	protected boolean gameReady = true;
+	protected boolean gameReady = false;
 
 	public GameDraw(Context context) {
 		super(context);
@@ -80,16 +78,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		final GameDraw _self = this;
 		
 		/*
-		 * Get messages from the server. Do this in a thread to
-		 * prevent blocking the other processes.
-		 */
-		communicatorReceiveThread =  new Thread(new Runnable() {
-		    public void run() {
-		        _self.communicator.recieveMessages(_self);
-		      }
-		    });
-		
-		/*
 		 * Send position and orientation back to server, in
 		 * a separate tread to prevent blocking the loop
 		 */
@@ -99,20 +87,25 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		        _self.communicator.sendMessage(my_position_json);
 		      }
 		    });
-		//communicatorReceiveThread.start();
-		//communicatorSendThread.start();
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
-    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
-    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
-    	my_position_json += "}}";
-    	//my_position_json = "{\"type\":\"position_update\", \"position\":\"Hallo\"}";
-		communicatorSendThread.run(my_position_json);
+		
+		try {
+			communicator.recieveMessages(this);
+		}finally{ /* If for any reason reading the stream fails, just skip forward. */ }
+		
 		if (gameReady) {
+			
+			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
+	    	my_position_json += "}}";
+	    	
+			communicatorSendThread.run(my_position_json);
+			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
 					this._touchX, this._touchY, initialTouchXDisposition,
@@ -149,10 +142,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
 		}
-		
-		//communicatorReceiveThread.stop();
-		//communicatorSendThread.stop();
-		
 		invalidate();
 	}
 
@@ -190,5 +179,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	public void respond(String message) {
 		Log.i("game_server", message );
+		if(message == "START"){
+			gameReady = true;
+		}
 	}
 }
