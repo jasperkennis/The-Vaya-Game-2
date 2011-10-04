@@ -41,7 +41,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected int _startY = -40;
 
 	protected Communicator communicator;
-	protected Thread communicatorThread;
+	protected Thread communicatorReceiveThread;
+	protected Thread communicatorSendThread;
 	
 	protected String log_tag = "game_server";
 
@@ -68,10 +69,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
 		objects = new ObjectLayer(context, _winWith, _winHeight);
-	}
 
-	@Override
-	protected void onDraw(Canvas canvas) {
 		
 		final GameDraw _self = this;
 		
@@ -79,12 +77,32 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 * Get messages from the server. Do this in a thread to
 		 * prevent blocking the other processes.
 		 */
-		communicatorThread =  new Thread(new Runnable() {
+		communicatorReceiveThread =  new Thread(new Runnable() {
 		    public void run() {
 		        _self.communicator.recieveMessages(_self);
 		      }
 		    });
-		communicatorThread.start();
+		
+		/*
+		 * Send position and orientation back to server, in
+		 * a separate tread to prevent blocking the loop
+		 */
+		communicatorSendThread =  new Thread(new Runnable() {
+		    public void run() {
+		    	String my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+		    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+		    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+		    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
+		    	my_position_json += "}}";
+		        _self.communicator.sendMessage(my_position_json);
+		      }
+		    });
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		//communicatorReceiveThread.start();
+		//communicatorSendThread.start();
 		if (gameReady) {
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
@@ -123,21 +141,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.createObjects(canvas);
 		}
 		
-		/*
-		 * Send position and orientation back to server, in
-		 * a separate tread to prevent blocking the loop
-		 */
-		communicatorThread =  new Thread(new Runnable() {
-		    public void run() {
-		    	String my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-		    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
-		    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
-		    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
-		    	my_position_json += "}}";
-		        _self.communicator.sendMessage(my_position_json);
-		      }
-		    });
-		communicatorThread.start();
+		//communicatorReceiveThread.stop();
+		//communicatorSendThread.stop();
 		
 		invalidate();
 	}
