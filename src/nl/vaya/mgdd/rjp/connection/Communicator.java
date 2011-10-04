@@ -21,9 +21,6 @@ public class Communicator implements MessageResponder {
 	protected PrintWriter sender;
 	protected int linesPerTick = 5;
 	protected String nextLine = null;
-	protected Object oldReceiver;
-	
-	protected ServerSocket newSocket;
 	
 	public Communicator(){
 		
@@ -55,8 +52,9 @@ public class Communicator implements MessageResponder {
 	
 	public void recieveMessages(MessageResponder callback) {
 		try {
-			while((nextLine = receiver.readLine()) != null) {
+			while((nextLine = receiver.readLine()) != null && receiver.ready()) {
 				Log.i(log_tag, nextLine);
+				nextLine = null;
 				//callback.respond(nextLine);
 			}
 		} catch (IOException e) {

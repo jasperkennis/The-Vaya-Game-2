@@ -50,7 +50,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	protected String log_tag = "game_server";
 
-	protected boolean gameReady = false;
+	protected boolean gameReady = true;
 
 	public GameDraw(Context context) {
 		super(context);
@@ -87,14 +87,19 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		        _self.communicator.sendMessage(my_position_json);
 		      }
 		    });
+		
+		communicatorReceiveThread = new Thread(new Runnable(){
+			@Override
+			public void run(){
+				_self.communicator.recieveMessages(_self);
+			}
+		});
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		
-		try {
-			communicator.recieveMessages(this);
-		}finally{ /* If for any reason reading the stream fails, just skip forward. */ }
+		Log.i("game_server", "The draw loop is running." );
 		
 		if (gameReady) {
 			
@@ -104,7 +109,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
 	    	my_position_json += "}}";
 	    	
-			communicatorSendThread.run(my_position_json);
+			//communicatorSendThread.run(my_position_json);
 			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
@@ -142,6 +147,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
 		}
+		
+		try {
+			communicatorReceiveThread.run();
+		}finally{ /* If for any reason reading the stream fails, just skip forward. */ }
+		
 		invalidate();
 	}
 
