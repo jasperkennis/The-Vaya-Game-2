@@ -31,6 +31,8 @@ public class Player {
 	
 	protected Point _prevPoint = new Point();
 	
+	protected ThrowingObject army = null;
+	
 	protected Context _context;
 	
 	public Player(Context context){
@@ -88,7 +90,6 @@ public class Player {
 	}
 	
 	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
-		
 			_prevPoint.x = this._xPos;
 			_prevPoint.y = this._yPos;
 			
@@ -208,6 +209,21 @@ public class Player {
 	
 	public int getYPos(){
 		return this._yPos;
+	}
+	
+	public void addPickThrow(int x,int y, ArrayList<ThrowingObject> objects){
+		if(army == null){
+			for(ThrowingObject to:objects){
+				if(to.onPos(x,y)){
+					Log.i("log_tag", "HIT ON OBJECT");
+					army = to;
+				}
+			}
+		}else{
+			army.MoveTo(x, y);
+			Log.i("log_tag", "MOVE TO X Y");
+			army = null;
+		}
 	}
 	
 }

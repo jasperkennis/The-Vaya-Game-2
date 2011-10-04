@@ -41,6 +41,11 @@ public class GameObject {
 	}
 	
 	public RectF getDestRect(float scaleX,float scaleY, int startX, int startY){
+		if(startX<-3200)
+			startX = -3200;
+		if(startY<-3200)
+			startY = -3200;
+		Log.i("log_tag", "startX:"+startX+" startY:"+startY);
 		RectF dest =  new RectF(getMostLeft()*32*scaleX+startX, getMostTop()*32*scaleY+startY, (getMostLeft()*32*scaleX)+(_squaresWidth*32*scaleX)+startX, getMostTop()*32*scaleY+(_squaresHeight*32*scaleY)+startY);
 		return dest;
 	}

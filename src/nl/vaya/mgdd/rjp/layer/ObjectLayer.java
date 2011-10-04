@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.Player;
+import nl.vaya.mgdd.rjp.objects.ThrowingObject;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ public class ObjectLayer {
 	protected ArrayList<Enemy> _enemys;
 	protected ArrayList<GameObject> _objects;
 	protected ArrayList<GameObject> _floorObjects;
+	protected ArrayList<ThrowingObject> _throwingObjects;
 	
 	protected Player _you;
 	protected int _startX;
@@ -43,11 +45,13 @@ public class ObjectLayer {
 	public ObjectLayer(Context context, int winWidth, int winHeight){
 		_objects = new ArrayList<GameObject>();
 		_floorObjects = new ArrayList<GameObject>();
+		_throwingObjects = new ArrayList<ThrowingObject>();
 		_enemys = new ArrayList<Enemy>();
 		_winWidth = winWidth;
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1);
 		//_enemys.add(new Enemy(context, "sjaak", 2));
+		_throwingObjects.add(new ThrowingObject(context,10,10));
 		
 		makeObjects(context);
 	}
@@ -173,6 +177,11 @@ public class ObjectLayer {
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
 		
+		for(ThrowingObject o:_throwingObjects){
+			canvas.drawBitmap(o.getImage(), o.getSrc(), o.getDest(tileScaleX,tileScaleY, _startX, _startY), null);
+		}
+		
+		
 		Rect src = new Rect(0, 0, _you.getImage().getWidth(), _you.getImage().getHeight());
 		RectF dest =  new RectF(_you.getScreenX(_startX, _winWidth)-((_you.getImage().getWidth()*tileScaleX)/2), _you.getScreenY(_startY, _winHeight)-((_you.getImage().getHeight()*tileScaleY)/2), _you.getScreenX(_startX, _winWidth) + ((_you.getImage().getWidth()*tileScaleX)/2), _you.getScreenY(_startY, _winHeight) + ((_you.getImage().getHeight()*tileScaleY)/2));
 		
@@ -207,5 +216,9 @@ public class ObjectLayer {
 	
 	public ArrayList<Enemy> getEnemy(){
 		return _enemys;
+	}
+	
+	public ArrayList<ThrowingObject> getThrowingObjects(){
+		return _throwingObjects;
 	}
 }
