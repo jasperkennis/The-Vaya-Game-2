@@ -2,10 +2,15 @@ package nl.vaya.mgdd.rjp;
 
 import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
+import nl.vaya.mgdd.rjp.connection.SenderRunnable;
+import nl.vaya.mgdd.rjp.connection.SenderThread;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
+
+import org.apache.http.util.EncodingUtils;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -42,7 +47,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected Communicator communicator;
 	protected Thread communicatorReceiveThread;
-	protected Thread communicatorSendThread;
+	protected SenderThread communicatorSendThread;
+	protected String my_position_json;
 	
 	protected String log_tag = "game_server";
 
@@ -87,22 +93,25 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 * Send position and orientation back to server, in
 		 * a separate tread to prevent blocking the loop
 		 */
-		communicatorSendThread =  new Thread(new Runnable() {
-		    public void run() {
-		    	String my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-		    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
-		    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
-		    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
-		    	my_position_json += "}}";
+		communicatorSendThread =  new SenderThread(new SenderRunnable() {
+			@Override
+			public void run(String my_position_json) {
 		        _self.communicator.sendMessage(my_position_json);
 		      }
 		    });
+		//communicatorReceiveThread.start();
+		//communicatorSendThread.start();
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		//communicatorReceiveThread.start();
-		//communicatorSendThread.start();
+		/* my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
+    	my_position_json += "}}";*/
+    	my_position_json = "{\"type\":\"position_update\", \"position\":\"Hallo\"}";
+		communicatorSendThread.run(my_position_json);
 		if (gameReady) {
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
