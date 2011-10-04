@@ -89,8 +89,6 @@ public class Player {
 	
 	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
 		
-			Log.i("log_tag", "x:"+x+" y:"+y);
-		
 			_prevPoint.x = this._xPos;
 			_prevPoint.y = this._yPos;
 			
