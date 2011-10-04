@@ -105,12 +105,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		/* my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+		my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
     	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
     	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
     	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
-    	my_position_json += "}}";*/
-    	my_position_json = "{\"type\":\"position_update\", \"position\":\"Hallo\"}";
+    	my_position_json += "}}";
+    	//my_position_json = "{\"type\":\"position_update\", \"position\":\"Hallo\"}";
 		communicatorSendThread.run(my_position_json);
 		if (gameReady) {
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
