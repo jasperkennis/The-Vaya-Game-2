@@ -1,23 +1,17 @@
 package nl.vaya.mgdd.rjp;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
+import nl.vaya.mgdd.rjp.connection.SenderRunnable;
 import nl.vaya.mgdd.rjp.connection.SenderThread;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
-<<<<<<< HEAD
 
-=======
->>>>>>> d05af8071ac3ca7b73ca113ff01006985b3dcdd8
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -61,9 +55,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	public GameDraw(Context context) {
 		super(context);
 		
-		//Log.i(log_tag, "Constructing communicator now");
-		//communicator = new Communicator();
-		//Log.i(log_tag, "Past construction, beginning game object inizialization.");
+		Log.i(log_tag, "Constructing communicator now");
+		communicator = new Communicator();
+		Log.i(log_tag, "Past construction, beginning game object inizialization.");
 
 		setWillNotDraw(false);
 		setOnTouchListener(this);
@@ -81,31 +75,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		objects = new ObjectLayer(context, _winWith, _winHeight);
 
 		
-		 final GameDraw _self = this;
+		final GameDraw _self = this;
 		
 		/*
-<<<<<<< HEAD
-=======
-		 * Get messages from the server. Do this in a thread to
-		 * prevent blocking the other processes.
-		 */
-		/*communicatorReceiveThread =  new Thread(new Runnable() {
-		    public void run() {
-		        _self.communicator.recieveMessages(_self);
-		      }
-		    });*/
-		
-		/*
->>>>>>> d05af8071ac3ca7b73ca113ff01006985b3dcdd8
 		 * Send position and orientation back to server, in
 		 * a separate tread to prevent blocking the loop
 		 */
-		/*communicatorSendThread =  new SenderThread(new SenderRunnable() {
+		communicatorSendThread =  new SenderThread(new SenderRunnable() {
 			@Override
 			public void run(String my_position_json) {
 		        _self.communicator.sendMessage(my_position_json);
 		      }
-<<<<<<< HEAD
 		    });
 		
 		communicatorReceiveThread = new Thread(new Runnable(){
@@ -114,11 +94,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				_self.communicator.recieveMessages(_self);
 			}
 		});
-=======
-		    });*/
-		//communicatorReceiveThread.start();
-		//communicatorSendThread.start();
->>>>>>> d05af8071ac3ca7b73ca113ff01006985b3dcdd8
 	}
 
 	@Override
@@ -181,15 +156,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	}
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {	
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			initialTouchXDisposition = event.getX(0);
-			initialTouchYDisposition = event.getY(0);
-			return true;
-		case MotionEvent.ACTION_POINTER_2_DOWN:
-			//pick item on location event.getX(1) en event.getY(1)
-			objects.getYou().addPickThrow((int)event.getX(1),(int)event.getY(1), objects.getThrowingObjects());
+			initialTouchXDisposition = event.getX();
+			initialTouchYDisposition = event.getY();
 			return true;
 		case MotionEvent.ACTION_UP:
 			initialTouchXDisposition = 0.0f;
@@ -203,13 +174,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			this._moveX = (int) Math.ceil(x / motionDetectionArea);
 			this._moveY = (int) Math.ceil(y / motionDetectionArea);
 
-			this._touchX = event.getX(0);
-			this._touchY = event.getY(0);
+			this._touchX = event.getX();
+			this._touchY = event.getY();
 
 			return true;
 		}
 	}
-	
 
 	/*
 	 * This method gets called whenever a message is registered
