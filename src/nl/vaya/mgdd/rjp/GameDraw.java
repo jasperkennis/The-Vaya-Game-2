@@ -33,7 +33,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 7;
+	protected int motionDetectionArea = 3;
 
 	protected int _moveX = 0;
 	protected int _moveY = 0;
