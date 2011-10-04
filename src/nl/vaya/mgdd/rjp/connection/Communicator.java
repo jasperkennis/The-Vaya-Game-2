@@ -29,7 +29,8 @@ public class Communicator implements MessageResponder {
 	        
 	        //Create an outgoing stream pointing at the socket:
 	        OutputStream out = socket.getOutputStream();
-	        sender = new PrintWriter(out);
+	        sender = new PrintWriter(out, true);
+	        //sender.pr
 	        
 	        // Create a stream for incomming messages:
 	        receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()), 8 * 1024);
