@@ -156,11 +156,15 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	}
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
+	public boolean onTouch(View v, MotionEvent event) {	
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			initialTouchXDisposition = event.getX();
-			initialTouchYDisposition = event.getY();
+			initialTouchXDisposition = event.getX(0);
+			initialTouchYDisposition = event.getY(0);
+			return true;
+		case MotionEvent.ACTION_POINTER_2_DOWN:
+			//pick item on location event.getX(1) en event.getY(1)
+			objects.getYou().addPickThrow((int)event.getX(1),(int)event.getY(1), objects.getThrowingObjects());
 			return true;
 		case MotionEvent.ACTION_UP:
 			initialTouchXDisposition = 0.0f;
@@ -174,8 +178,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			this._moveX = (int) Math.ceil(x / motionDetectionArea);
 			this._moveY = (int) Math.ceil(y / motionDetectionArea);
 
-			this._touchX = event.getX();
-			this._touchY = event.getY();
+			this._touchX = event.getX(0);
+			this._touchY = event.getY(0);
 
 			return true;
 		}
