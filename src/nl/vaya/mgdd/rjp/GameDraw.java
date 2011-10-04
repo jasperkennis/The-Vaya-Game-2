@@ -130,7 +130,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 */
 		communicatorThread =  new Thread(new Runnable() {
 		    public void run() {
-		    	Log.i("game_server", "Running thread pushing data to server." );
+		    	//Log.i("game_server", "Running thread pushing data to server." );
 		    	String my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
 		    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
 		    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
@@ -139,8 +139,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		        _self.communicator.sendMessage(my_position_json);
 		      }
 		    });
-		communicatorThread.start();
 		
+		communicatorThread.start();
 		invalidate();
 	}
 
