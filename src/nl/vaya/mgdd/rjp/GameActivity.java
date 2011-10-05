@@ -1,29 +1,25 @@
 package nl.vaya.mgdd.rjp;
 
+import nl.vaya.mgdd.rjp.connection.Communicator;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 
-public class Game extends Activity implements OnClickListener {
+public class GameActivity extends Activity {
     /** Called when the activity is first created. */
+	protected GameDraw gameDraw;
+	protected Communicator communicator;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  
         
-        setContentView(R.layout.main);
-        
-        View nextscreenButton = findViewById(R.id.nextscreenButton);
-        nextscreenButton.setOnClickListener(this);
+        setContentView(new GameDraw(this));
     }
-    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -42,15 +38,4 @@ public class Game extends Activity implements OnClickListener {
     	}
     	return false;
     }
-    
-    @Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()) {
-			case R.id.nextscreenButton:
-				Intent i = new Intent(this, GameActivity.class);
-				startActivity(i);
-			break;
-		}
-	}
 }

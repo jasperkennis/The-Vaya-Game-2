@@ -9,4 +9,6 @@
     android:layout_height="wrap_content" 
     android:text="@string/hello"
     />
+    
+<Button android:layout_width="fill_parent" android:id="@+id/nextscreenButton" android:layout_height="wrap_content" android:text="@string/nextButton" android:layout_marginTop="30dip"></Button>
 </LinearLayout>

@@ -1,5 +1,7 @@
 package nl.vaya.mgdd.rjp;
 
+import java.util.ArrayList;
+
 import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
 import nl.vaya.mgdd.rjp.connection.SenderRunnable;
@@ -15,6 +17,8 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -61,11 +65,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	protected String playerId;
 	
-	
+	protected ArrayList<String> logText;
 
 	public GameDraw(Context context) {
 		super(context);
-
+		
+		logText = new ArrayList<String>();
+		logText.add("Loading the game...");
+		
 		createCommunicator();
 		
 		setWillNotDraw(false);
@@ -154,6 +161,20 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
+		}else{
+			Paint paint = new Paint();
+			paint.setColor(Color.WHITE);
+			paint.setStyle(Style.FILL);
+			canvas.drawPaint(paint);
+
+			paint.setColor(android.R.color.black);
+			paint.setTextSize(20);
+			int i = 0;
+			for(String t:this.logText){
+				canvas.drawText(t, 10, (25*(this.logText.size()-i)), paint);
+				i++;
+			}
+			
 		}
 		
 		invalidate();
@@ -223,6 +244,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			// Handle messages
 			if(incommingParser.getString("type").equals("message")){
 				Log.i("game_server", incommingParser.getString("message") );
+				this.logText.add(incommingParser.getString("message"));
 			}
 			
 			/*

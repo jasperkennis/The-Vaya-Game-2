@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Game!</string>
-    <string name="app_name">VayaTheMobileGame</string>
+    <string name="hello">Welkom bij Vaya the mobile game. Voor dit spel is een internetverbinding vereist. Klik op de onderstaande button om het spel te starten.</string>
+    <string name="app_name">Vaya the mobile game!</string>
+    <string name="nextButton">Start het spel</string>
+    <string name="exit_title">Exit</string>
 </resources>
