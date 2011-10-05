@@ -144,12 +144,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			floor.createFloor(canvas);
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
-			objects.createObjects(canvas);
+			//objects.createObjects(canvas);
 		}
-		
-		try {
-			communicatorReceiveThread.run();
-		}finally{ /* If for any reason reading the stream fails, just skip forward. */ }
 		
 		invalidate();
 	}
