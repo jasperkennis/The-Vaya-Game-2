@@ -230,12 +230,7 @@ public class Player {
 			Log.i("log_tag", "MOVE TO X Y");
 			army = null;
 			// Tell the server at which coord an item has been dropped.
-			String throwable_position_json = "{\"type\" : \"player_dropped_obj\", \"position\" : {";
-			throwable_position_json += "\"x\": " + x + ",";
-			throwable_position_json += "\"y\": " + y + ",";
-			throwable_position_json += "}}";
-	    	
-			GameDraw.getCommunicator().sendMessage(throwable_position_json);
+			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + x + ",\"y\": " + y + "}");
 		}
 	}
 	
