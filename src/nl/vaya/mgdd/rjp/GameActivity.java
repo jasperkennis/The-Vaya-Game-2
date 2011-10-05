@@ -1,23 +1,22 @@
 package nl.vaya.mgdd.rjp;
 
-import nl.vaya.mgdd.rjp.connection.Communicator;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class GameActivity extends Activity {
-    /** Called when the activity is first created. */
-	protected GameDraw gameDraw;
-	protected Communicator communicator;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  
         
+        //setContentView(R.layout.help);
+        Log.i("log_tag", "Scherm 2 start.");
         setContentView(new GameDraw(this));
     }
     

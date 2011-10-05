@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,8 +49,11 @@ public class Game extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 			case R.id.nextscreenButton:
+				Log.i("log_tag","1 hier");
 				Intent i = new Intent(this, GameActivity.class);
+				Log.i("log_tag","2 hier");
 				startActivity(i);
+				Log.i("log_tag","3 hier");
 			break;
 		}
 	}

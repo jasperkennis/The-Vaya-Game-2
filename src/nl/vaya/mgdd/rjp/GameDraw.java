@@ -72,8 +72,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		
 		logText = new ArrayList<String>();
 		logText.add("Loading the game...");
+		logText.add("Dit kan even duren..");
 		
-		createCommunicator();
+		//createCommunicator();
 		
 		setWillNotDraw(false);
 		setOnTouchListener(this);
@@ -96,7 +97,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 * Send position and orientation back to server, in
 		 * a separate tread to prevent blocking the loop
 		 */
-		communicatorSendThread =  new SenderThread(new SenderRunnable() {
+		/*communicatorSendThread =  new SenderThread(new SenderRunnable() {
 			@Override
 			public void run(String my_position_json) {
 		        GameDraw.getCommunicator().sendMessage(my_position_json);
@@ -110,7 +111,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			}
 		});
 		communicatorReceiveThread.start();
-		
+		*/
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
 	    	my_position_json += "}}";
 	    	
-			communicatorSendThread.run(my_position_json);
+			//communicatorSendThread.run(my_position_json);
 			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
@@ -163,12 +164,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.createObjects(canvas);
 		}else{
 			Paint paint = new Paint();
-			paint.setColor(Color.WHITE);
+			paint.setColor(Color.BLACK);
 			paint.setStyle(Style.FILL);
 			canvas.drawPaint(paint);
 
-			paint.setColor(android.R.color.black);
-			paint.setTextSize(20);
+			paint.setColor(Color.WHITE);
+			paint.setTextSize(12);
 			int i = 0;
 			for(String t:this.logText){
 				canvas.drawText(t, 10, (25*(this.logText.size()-i)), paint);

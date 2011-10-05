@@ -4,4 +4,5 @@
     <string name="app_name">Vaya the mobile game!</string>
     <string name="nextButton">Start het spel</string>
     <string name="exit_title">Exit</string>
+    <string name="help">Vaya the game werkt als volgt: Je loopt, zwemt, valt en staat weer op ;-).</string>
 </resources>
