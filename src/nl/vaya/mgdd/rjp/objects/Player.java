@@ -215,18 +215,27 @@ public class Player {
 	
 	public void addPickThrow(int x,int y, ArrayList<ThrowingObject> objects){
 		if(army == null){
-			for(ThrowingObject to:objects){
-				if(to.onPos(x,y)){
+			for( int i = 0 ; i < objects.size() ; i++) {
+			//for(ThrowingObject to:objects){
+				if(objects.get(i).onPos(x,y)){
 					Log.i("log_tag", "HIT ON OBJECT");
-					army = to;
-					GameDraw.getCommunicator().sendMessage("Picked up this or that."); // Should send json
+					army = objects.get(i);
+					
+					// Tell the server at which index the item has been fetched.
+					GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
 				}
 			}
 		}else{
 			army.MoveTo(x, y);
 			Log.i("log_tag", "MOVE TO X Y");
 			army = null;
-			GameDraw.getCommunicator().sendMessage("Placed back this or that."); // Should send json
+			// Tell the server at which coord an item has been dropped.
+			String throwable_position_json = "{\"type\" : \"player_dropped_obj\", \"position\" : {";
+			throwable_position_json += "\"x\": " + x + ",";
+			throwable_position_json += "\"y\": " + y + ",";
+			throwable_position_json += "}}";
+	    	
+			GameDraw.getCommunicator().sendMessage(throwable_position_json);
 		}
 	}
 	
