@@ -1,19 +1,20 @@
 package nl.vaya.mgdd.rjp;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
+import nl.vaya.mgdd.rjp.connection.SenderRunnable;
 import nl.vaya.mgdd.rjp.connection.SenderThread;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -33,7 +34,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 7;
+	protected int motionDetectionArea = 3;
 
 	protected int _moveX = 0;
 	protected int _moveY = 0;
@@ -45,22 +46,26 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected int _startX = -240;
 	protected int _startY = -40;
 
-	protected Communicator communicator;
+	protected static Communicator communicator = null;
 	protected Thread communicatorReceiveThread;
 	protected SenderThread communicatorSendThread;
 	protected String my_position_json;
 	
+	protected JSONObject incommingParser;
+	
 	protected String log_tag = "game_server";
 
-	protected boolean gameReady = true;
+	protected boolean gameReady = false;
+	
+	protected String playerId;
+	
+	
 
 	public GameDraw(Context context) {
 		super(context);
-		
-		//Log.i(log_tag, "Constructing communicator now");
-		//communicator = new Communicator();
-		//Log.i(log_tag, "Past construction, beginning game object inizialization.");
 
+		createCommunicator();
+		
 		setWillNotDraw(false);
 		setOnTouchListener(this);
 		setFocusable(true);
@@ -75,32 +80,27 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
 		objects = new ObjectLayer(context, _winWith, _winHeight);
-
 		
-		 final GameDraw _self = this;
-		
-		/*
-		 * Get messages from the server. Do this in a thread to
-		 * prevent blocking the other processes.
-		 */
-		/*communicatorReceiveThread =  new Thread(new Runnable() {
-		    public void run() {
-		        _self.communicator.recieveMessages(_self);
-		      }
-		    });*/
+		final GameDraw _self = this;
 		
 		/*
 		 * Send position and orientation back to server, in
 		 * a separate tread to prevent blocking the loop
 		 */
-		/*communicatorSendThread =  new SenderThread(new SenderRunnable() {
+		communicatorSendThread =  new SenderThread(new SenderRunnable() {
 			@Override
 			public void run(String my_position_json) {
-		        _self.communicator.sendMessage(my_position_json);
+		        GameDraw.getCommunicator().sendMessage(my_position_json);
 		      }
-		    });*/
-		//communicatorReceiveThread.start();
-		//communicatorSendThread.start();
+		    });
+		
+		communicatorReceiveThread = new Thread(new Runnable(){
+			@Override
+			public void run(){
+				GameDraw.getCommunicator().recieveMessages(_self);
+			}
+		});
+		communicatorReceiveThread.start();
 	}
 
 	@Override
@@ -112,7 +112,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
     	my_position_json += "}}";
     	//my_position_json = "{\"type\":\"position_update\", \"position\":\"Hallo\"}";
 		//communicatorSendThread.run(my_position_json);
+
 		if (gameReady) {
+			
+			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
+	    	my_position_json += "}}";
+	    	
+			communicatorSendThread.run(my_position_json);
+			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
 					this._touchX, this._touchY, initialTouchXDisposition,
@@ -150,9 +160,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.createObjects(canvas);
 		}
 		
-		//communicatorReceiveThread.stop();
-		//communicatorSendThread.stop();
-		
 		invalidate();
 	}
 
@@ -185,7 +192,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			return true;
 		}
 	}
-	
 
 	/*
 	 * This method gets called whenever a message is registered
@@ -194,6 +200,47 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		Log.i("game_server", message );
+		try {
+			Log.i("game_server", message );
+			
+			incommingParser = new JSONObject(message);
+			
+			// Handle directives
+			if(incommingParser.getString("type").equals("directive")){
+				if(incommingParser.getString("directive").equals("start")){
+					Log.i("game_server", "Starting the game!" );
+					gameReady = true;
+				}
+			}
+			
+			// Handle player id
+			if(incommingParser.getString("type").equals("player_id")){
+				playerId = incommingParser.getString("id");
+				Log.i("game_server", "Player id has been set to: " + playerId  + "." );
+			}
+			
+			// Handle messages
+			if(incommingParser.getString("type").equals("message")){
+				Log.i("game_server", incommingParser.getString("message") );
+			}
+		} catch (JSONException e) {
+			Log.i("game_server", "Incomming message not parsable json. It was:" );
+			Log.i("game_server", message );
+		}
+	}
+	
+	private static void createCommunicator(){
+		//Log.i(log_tag, "Constructing communicator now");
+		communicator = new Communicator();
+		//Log.i(log_tag, "Past construction, beginning game object inizialization.");
+	}
+	
+	
+	static Communicator getCommunicator(){
+		if(communicator.equals(null)){
+			createCommunicator();
+			return communicator;
+		}
+		return communicator;
 	}
 }
