@@ -9,6 +9,9 @@ import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -48,9 +51,13 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected SenderThread communicatorSendThread;
 	protected String my_position_json;
 	
+	protected JSONObject incommingParser;
+	
 	protected String log_tag = "game_server";
 
 	protected boolean gameReady = false;
+	
+	protected String playerId;
 	
 	
 
@@ -102,8 +109,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		
-		Log.i("game_server", "Running draw!" );
-		
 		if (gameReady) {
 			
 			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
@@ -148,7 +153,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			floor.createFloor(canvas);
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
-			//objects.createObjects(canvas);
+			objects.createObjects(canvas);
 		}
 		
 		invalidate();
@@ -191,11 +196,32 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		Log.i("game_server", "Callback responding." );
-		Log.i("game_server", message );
-		if(message.equals("START")){
-			Log.i("game_server", "Starting the game!" );
-			gameReady = true;
+		try {
+			Log.i("game_server", message );
+			
+			incommingParser = new JSONObject(message);
+			
+			// Handle directives
+			if(incommingParser.getString("type").equals("directive")){
+				if(incommingParser.getString("directive").equals("start")){
+					Log.i("game_server", "Starting the game!" );
+					gameReady = true;
+				}
+			}
+			
+			// Handle player id
+			if(incommingParser.getString("type").equals("player_id")){
+				playerId = incommingParser.getString("id");
+				Log.i("game_server", "Player id has been set to: " + playerId  + "." );
+			}
+			
+			// Handle messages
+			if(incommingParser.getString("type").equals("message")){
+				Log.i("game_server", incommingParser.getString("message") );
+			}
+		} catch (JSONException e) {
+			Log.i("game_server", "Incomming message not parsable json. It was:" );
+			Log.i("game_server", message );
 		}
 	}
 }
