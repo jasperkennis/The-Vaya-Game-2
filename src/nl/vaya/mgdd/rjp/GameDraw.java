@@ -51,6 +51,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected String log_tag = "game_server";
 
 	protected boolean gameReady = false;
+	
+	
 
 	public GameDraw(Context context) {
 		super(context);
@@ -99,6 +101,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		
+		Log.i("game_server", "Running draw!" );
 		
 		if (gameReady) {
 			
@@ -189,7 +193,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	public void respond(String message) {
 		Log.i("game_server", "Callback responding." );
 		Log.i("game_server", message );
-		if(message == "START"){
+		if(message.equals("START")){
+			Log.i("game_server", "Starting the game!" );
 			gameReady = true;
 		}
 	}
