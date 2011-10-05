@@ -46,7 +46,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected int _startX = -240;
 	protected int _startY = -40;
 
-	protected Communicator communicator;
+	protected static Communicator communicator = null;
 	protected Thread communicatorReceiveThread;
 	protected SenderThread communicatorSendThread;
 	protected String my_position_json;
@@ -63,11 +63,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	public GameDraw(Context context) {
 		super(context);
-		
-		Log.i(log_tag, "Constructing communicator now");
-		communicator = new Communicator();
-		Log.i(log_tag, "Past construction, beginning game object inizialization.");
 
+		createCommunicator();
+		
 		setWillNotDraw(false);
 		setOnTouchListener(this);
 		setFocusable(true);
@@ -82,7 +80,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
 		objects = new ObjectLayer(context, _winWith, _winHeight);
-
 		
 		final GameDraw _self = this;
 		
@@ -93,14 +90,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		communicatorSendThread =  new SenderThread(new SenderRunnable() {
 			@Override
 			public void run(String my_position_json) {
-		        _self.communicator.sendMessage(my_position_json);
+		        GameDraw.getCommunicator().sendMessage(my_position_json);
 		      }
 		    });
 		
 		communicatorReceiveThread = new Thread(new Runnable(){
 			@Override
 			public void run(){
-				_self.communicator.recieveMessages(_self);
+				GameDraw.getCommunicator().recieveMessages(_self);
 			}
 		});
 		communicatorReceiveThread.start();
@@ -223,5 +220,20 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			Log.i("game_server", "Incomming message not parsable json. It was:" );
 			Log.i("game_server", message );
 		}
+	}
+	
+	private static void createCommunicator(){
+		//Log.i(log_tag, "Constructing communicator now");
+		communicator = new Communicator();
+		//Log.i(log_tag, "Past construction, beginning game object inizialization.");
+	}
+	
+	
+	static Communicator getCommunicator(){
+		if(communicator.equals(null)){
+			createCommunicator();
+			return communicator;
+		}
+		return communicator;
 	}
 }
