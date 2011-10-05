@@ -2,6 +2,8 @@ package nl.vaya.mgdd.rjp.objects;
 
 import java.util.ArrayList;
 
+import nl.vaya.mgdd.rjp.GameDraw;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -217,12 +219,14 @@ public class Player {
 				if(to.onPos(x,y)){
 					Log.i("log_tag", "HIT ON OBJECT");
 					army = to;
+					GameDraw.getCommunicator().sendMessage("Picked up this or that."); // Should send json
 				}
 			}
 		}else{
 			army.MoveTo(x, y);
 			Log.i("log_tag", "MOVE TO X Y");
 			army = null;
+			GameDraw.getCommunicator().sendMessage("Placed back this or that."); // Should send json
 		}
 	}
 	
