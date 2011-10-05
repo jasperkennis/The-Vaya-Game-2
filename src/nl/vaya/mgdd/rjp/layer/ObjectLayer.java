@@ -42,7 +42,10 @@ public class ObjectLayer {
 	protected Bitmap handdoek;
 	protected Bitmap building1;
 	
+	protected Context context;
+	
 	public ObjectLayer(Context context, int winWidth, int winHeight){
+		context = context;
 		_objects = new ArrayList<GameObject>();
 		_floorObjects = new ArrayList<GameObject>();
 		_throwingObjects = new ArrayList<ThrowingObject>();
@@ -220,5 +223,14 @@ public class ObjectLayer {
 	
 	public ArrayList<ThrowingObject> getThrowingObjects(){
 		return _throwingObjects;
+	}
+	
+	public void removeThrowable(int i){
+		_throwingObjects.remove(i);
+	}
+	
+	public void addThrowable(int x, int y){
+		ThrowingObject _throwable = new ThrowingObject(context, x, y);
+		_throwingObjects.add(_throwable);
 	}
 }
