@@ -51,16 +51,16 @@ public class Communicator implements MessageResponder {
 	
 	public void recieveMessages(MessageResponder callback) {
 		try {
-			while((nextLine = receiver.readLine()) != null && receiver.ready()) {
+			while((nextLine = receiver.readLine()) != null) {
 				Log.i(log_tag, nextLine);
+				callback.respond(nextLine);
 				nextLine = null;
-				//callback.respond(nextLine);
 			}
 		} catch (IOException e) {
 			Log.i(log_tag, "Not receiving line.");
 			e.printStackTrace();
 		} finally {
-			Log.i(log_tag, "Failed to read, ignoring that.");
+			Log.i(log_tag, "Failed to read, ignoring that if possible.");
 		}
 	}
 
