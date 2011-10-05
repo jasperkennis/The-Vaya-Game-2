@@ -50,7 +50,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	protected String log_tag = "game_server";
 
-	protected boolean gameReady = true;
+	protected boolean gameReady = false;
 
 	public GameDraw(Context context) {
 		super(context);
