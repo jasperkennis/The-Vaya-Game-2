@@ -94,12 +94,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				_self.communicator.recieveMessages(_self);
 			}
 		});
+		communicatorReceiveThread.start();
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		
-		Log.i("game_server", "The draw loop is running." );
 		
 		if (gameReady) {
 			
@@ -109,7 +108,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
 	    	my_position_json += "}}";
 	    	
-			//communicatorSendThread.run(my_position_json);
+			communicatorSendThread.run(my_position_json);
 			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
