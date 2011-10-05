@@ -52,7 +52,6 @@ public class Communicator implements MessageResponder {
 	public void recieveMessages(MessageResponder callback) {
 		try {
 			while((nextLine = receiver.readLine()) != null) {
-				Log.i(log_tag, nextLine);
 				callback.respond(nextLine);
 				nextLine = null;
 			}
