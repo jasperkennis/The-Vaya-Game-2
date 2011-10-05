@@ -2,6 +2,8 @@ package nl.vaya.mgdd.rjp.objects;
 
 import java.util.ArrayList;
 
+import nl.vaya.mgdd.rjp.GameDraw;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -213,16 +215,22 @@ public class Player {
 	
 	public void addPickThrow(int x,int y, ArrayList<ThrowingObject> objects){
 		if(army == null){
-			for(ThrowingObject to:objects){
-				if(to.onPos(x,y)){
+			for( int i = 0 ; i < objects.size() ; i++) {
+			//for(ThrowingObject to:objects){
+				if(objects.get(i).onPos(x,y)){
 					Log.i("log_tag", "HIT ON OBJECT");
-					army = to;
+					army = objects.get(i);
+					
+					// Tell the server at which index the item has been fetched.
+					GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
 				}
 			}
 		}else{
 			army.MoveTo(x, y);
 			Log.i("log_tag", "MOVE TO X Y");
 			army = null;
+			// Tell the server at which coord an item has been dropped.
+			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + x + ",\"y\": " + y + "}");
 		}
 	}
 	

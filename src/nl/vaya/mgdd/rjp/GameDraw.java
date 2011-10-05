@@ -224,6 +224,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			if(incommingParser.getString("type").equals("message")){
 				Log.i("game_server", incommingParser.getString("message") );
 			}
+			
+			/*
+			 *  Handle throwable object displacement
+			 */
+			if(incommingParser.getString("type").equals("player_dropped_obj")){
+				objects.addThrowable(incommingParser.getInt("x"), incommingParser.getInt("y"));
+			}
+			
+			if(incommingParser.getString("type").equals("player_got_obj")){
+				objects.removeThrowable(incommingParser.getInt("index"));
+			}
 		} catch (JSONException e) {
 			Log.i("game_server", "Incomming message not parsable json. It was:" );
 			Log.i("game_server", message );
@@ -237,7 +248,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	}
 	
 	
-	static Communicator getCommunicator(){
+	public static Communicator getCommunicator(){
 		if(communicator.equals(null)){
 			createCommunicator();
 			return communicator;
