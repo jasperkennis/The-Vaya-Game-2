@@ -1,5 +1,7 @@
 package nl.vaya.mgdd.rjp.layer;
 
+import java.util.ArrayList;
+
 import nl.vaya.mgdd.rjp.layer.tiles.TileObject;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -34,6 +36,20 @@ public class FloorLayer {
 	protected Bitmap floorTile_zandrechtrechts;
 	protected Bitmap floorTile_zandrechtlinks;
 	
+	protected Bitmap floorTile_water2;
+	protected Bitmap floorTile_zandrechtonder2;
+	protected Bitmap floorTile_zandrechtboven2;
+	protected Bitmap floorTile_hoekrechtsonder2;
+	protected Bitmap floorTile_hoeklinksonder2;
+	protected Bitmap floorTile_hoekrechtsboven2;
+	protected Bitmap floorTile_hoeklinksboven2;
+	protected Bitmap floorTile_binnenhoeklinksboven2;
+	protected Bitmap floorTile_binnenhoekrechtsboven2;
+	protected Bitmap floorTile_binnenhoeklinksonder2;
+	protected Bitmap floorTile_binnenhoekrechtsonder2;
+	protected Bitmap floorTile_zandrechtrechts2;
+	protected Bitmap floorTile_zandrechtlinks2;
+	
 	protected int _winWidth;
 	protected int _winHeight;
 	
@@ -42,6 +58,10 @@ public class FloorLayer {
 	
 	protected float tileScaleX;
 	protected float tileScaleY;
+	
+	public int _updateDelay = 0;
+	
+	protected TileObject[] _tiles;
 	
 	public FloorLayer(Context context, int winWith, int winHeight){
 		
@@ -81,6 +101,33 @@ public class FloorLayer {
 				context.getResources().getIdentifier("drawable/zandrechtrechts", "drawable", context.getPackageName()), opts);
 		floorTile_zandrechtlinks = BitmapFactory.decodeResource(context.getResources(),
 				context.getResources().getIdentifier("drawable/zandrechtlinks", "drawable", context.getPackageName()), opts);
+		
+		floorTile_water2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/water2", "drawable", context.getPackageName()), opts);
+		floorTile_zandrechtonder2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/zandrechtonder2", "drawable", context.getPackageName()), opts);
+		floorTile_zandrechtboven2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/zandrechtboven2", "drawable", context.getPackageName()), opts);
+		floorTile_hoekrechtsonder2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/hoekrechtsonder2", "drawable", context.getPackageName()), opts);
+		floorTile_hoeklinksonder2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/hoeklinksonder2", "drawable", context.getPackageName()), opts);
+		floorTile_hoekrechtsboven2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/hoekrechtsboven2", "drawable", context.getPackageName()), opts);
+		floorTile_hoeklinksboven2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/hoeklinksboven2", "drawable", context.getPackageName()), opts);
+		floorTile_binnenhoeklinksboven2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/binnenhoeklinksboven2", "drawable", context.getPackageName()), opts);
+		floorTile_binnenhoekrechtsboven2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/binnenhoekrechtsboven2", "drawable", context.getPackageName()), opts);
+		floorTile_binnenhoeklinksonder2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/binnenhoeklinksonder2", "drawable", context.getPackageName()), opts);
+		floorTile_binnenhoekrechtsonder2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/binnenhoekrechtsonder2", "drawable", context.getPackageName()), opts);
+		floorTile_zandrechtrechts2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/zandrechtrechts2", "drawable", context.getPackageName()), opts);
+		floorTile_zandrechtlinks2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/zandrechtlinks2", "drawable", context.getPackageName()), opts);
 		
 		_tilePositionArray = new int[] {
 				13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
@@ -125,6 +172,23 @@ public class FloorLayer {
 		        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 		};
 		
+		_tiles = new TileObject[15];
+		_tiles[0] = new TileObject(floorTile_sand);
+		_tiles[14] = new TileObject(floorTile_sand);
+		_tiles[13] = new TileObject(new Bitmap[]{floorTile_water, floorTile_water2});
+		_tiles[11] = new TileObject(new Bitmap[]{floorTile_zandrechtonder, floorTile_zandrechtonder2});
+		_tiles[9] = new TileObject(new Bitmap[]{floorTile_zandrechtboven, floorTile_zandrechtboven2});
+		_tiles[7] = new TileObject(new Bitmap[]{floorTile_hoekrechtsonder, floorTile_hoekrechtsonder2});
+		_tiles[5] = new TileObject(new Bitmap[]{floorTile_hoeklinksonder, floorTile_hoeklinksonder2});
+		_tiles[6] = new TileObject(new Bitmap[]{floorTile_hoekrechtsboven, floorTile_hoekrechtsboven2});
+		_tiles[8] = new TileObject(new Bitmap[]{floorTile_hoeklinksboven, floorTile_hoeklinksboven2});
+		_tiles[1] = new TileObject(new Bitmap[]{floorTile_binnenhoeklinksboven, floorTile_binnenhoeklinksboven2});
+		_tiles[3] = new TileObject(new Bitmap[]{floorTile_binnenhoekrechtsboven, floorTile_binnenhoekrechtsboven2});
+		_tiles[2] = new TileObject(new Bitmap[]{floorTile_binnenhoeklinksonder, floorTile_binnenhoeklinksonder2});
+		_tiles[4] = new TileObject(new Bitmap[]{floorTile_binnenhoekrechtsonder, floorTile_binnenhoekrechtsonder2});
+		_tiles[12] = new TileObject(new Bitmap[]{floorTile_zandrechtrechts, floorTile_zandrechtrechts2});
+		_tiles[10] = new TileObject(new Bitmap[]{floorTile_zandrechtlinks, floorTile_zandrechtlinks2});
+
 	}
 	
 	public int getNumTilesWidth(){
@@ -156,6 +220,13 @@ public class FloorLayer {
 	}
 	
 	public void createFloor(Canvas canvas){
+		_updateDelay++;
+		if(_updateDelay == 5){
+			for(int i = 0; i < _tiles.length; i++){
+				_tiles[i].update();
+			}
+			_updateDelay = 0;
+		}
 		
 			int test = 0;
 
@@ -165,63 +236,10 @@ public class FloorLayer {
 			for(int ix = leftSquares; ix<leftSquares+_numTilesWidth+1; ix++){
 				for(int iy = topSquares; iy<topSquares+_numTilesHeight+1; iy++){
 					int i = ix+(iy*40);
-					//Log.i(logTag, "Hier "+i);
-			//for(int i = 0; i< 72; i++){
-			//for(int i = 0; i< _tilePositionArray.length; i++){
-				float y = (int)(i/40);
-				float x = (int)i-(y*40);
+					float y = (int)(i/40);
+					float x = (int)i-(y*40);
 				
-				TileObject tile;
-				switch(_tilePositionArray[i]){
-					case 14:
-						tile = new TileObject(floorTile_sand);
-					break;
-					case 13:
-						tile = new TileObject(floorTile_water);
-					break;
-					case 11:
-						tile = new TileObject(floorTile_zandrechtonder);
-					break;
-					case 9:
-						tile = new TileObject(floorTile_zandrechtboven);
-					break;
-					case 7:
-						tile = new TileObject(floorTile_hoekrechtsonder);
-					break;
-					case 5:
-						tile = new TileObject(floorTile_hoeklinksonder);
-					break;
-					case 6:
-						tile = new TileObject(floorTile_hoekrechtsboven);
-					break;
-					case 8:
-						tile = new TileObject(floorTile_hoeklinksboven);
-					break;
-					case 1:
-						tile = new TileObject(floorTile_binnenhoeklinksboven);
-					break;
-					case 3:
-						tile = new TileObject(floorTile_binnenhoekrechtsboven);
-					break;
-					case 2:
-						tile = new TileObject(floorTile_binnenhoeklinksonder);
-					break;
-					case 4:
-						tile = new TileObject(floorTile_binnenhoekrechtsonder);
-					break;
-					case 12:
-						tile = new TileObject(floorTile_zandrechtrechts);
-					break;
-					case 10:
-						tile = new TileObject(floorTile_zandrechtlinks);
-					break;
-					default:
-						tile = new TileObject(floorTile_sand);	
-					break;
-				}
-				
-				
-				
+				TileObject tile = _tiles[_tilePositionArray[i]];
 				
 				tile.setTileSize(_numTilesWidth, _numTilesHeight, _winWidth, _winHeight);
 				Point pos = tile.getPosition(x,y);
