@@ -111,7 +111,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
     	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
     	my_position_json += "}}";
     	//my_position_json = "{\"type\":\"position_update\", \"position\":\"Hallo\"}";
-		communicatorSendThread.run(my_position_json);
+		//communicatorSendThread.run(my_position_json);
 		if (gameReady) {
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
