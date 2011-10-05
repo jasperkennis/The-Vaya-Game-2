@@ -45,6 +45,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected int _startX = -240;
 	protected int _startY = -40;
+	
+	protected int _downTime = 0;
 
 	protected static Communicator communicator = null;
 	protected Thread communicatorReceiveThread;
@@ -101,11 +103,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			}
 		});
 		communicatorReceiveThread.start();
+		
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		
+
 		if (gameReady) {
 			
 			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
@@ -162,12 +165,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		case MotionEvent.ACTION_DOWN:
 			initialTouchXDisposition = event.getX(0);
 			initialTouchYDisposition = event.getY(0);
+			_downTime++;
 			return true;
 		case MotionEvent.ACTION_POINTER_2_DOWN:
 			//pick item on location event.getX(1) en event.getY(1)
 			objects.getYou().addPickThrow((int)event.getX(1),(int)event.getY(1), objects.getThrowingObjects());
 			return true;
 		case MotionEvent.ACTION_UP:
+			if(_downTime < 5){
+				objects.getYou().addPickThrow((int)event.getX(0),(int)event.getY(0), objects.getThrowingObjects());
+			}
+			_downTime = 0;
 			initialTouchXDisposition = 0.0f;
 			initialTouchYDisposition = 0.0f;
 			this._moveX = 0;

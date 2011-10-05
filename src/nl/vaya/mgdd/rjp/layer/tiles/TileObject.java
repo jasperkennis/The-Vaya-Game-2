@@ -30,6 +30,7 @@ public class TileObject {
 		_sprites = new ArrayList<Bitmap>();
 		
 		for (Bitmap sprite : sprites){
+			Log.i("log_tag", "sprite added..");
 			addSprite(sprite);
 		}
 	}
