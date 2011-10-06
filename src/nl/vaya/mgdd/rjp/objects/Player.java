@@ -180,10 +180,8 @@ public class Player {
 	
 	public int getScreenX(int startX, int winWidth){
 		if(startX >= 0){
-			//Log.i("log_tag", "Links scherm");
 			return _xPos-startX;
 		}else if(startX <= (((winWidth/_screenTilesX)*40)-winWidth)*-1){
-			//Log.i("log_tag", "Rechts scherm");
 			return _xPos+startX-(startX-((((winWidth/_screenTilesX)*40)-winWidth)*-1));
 		}else{
 			return winWidth/2;
@@ -224,17 +222,16 @@ public class Player {
 				if(objects.get(i).onPos(x,y)){
 					Log.i("log_tag", "HIT ON OBJECT");
 					army = objects.get(i);
-					
-					// Tell the server at which index the item has been fetched.
+					objects.remove(i);
 					GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
 				}
 			}
 		}else{
 			army.MoveTo(x, y);
 			Log.i("log_tag", "MOVE TO X Y");
+			objects.add(army);
+			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army._xPos + ",\"y\": " + army._yPos + "}");
 			army = null;
-			// Tell the server at which coord an item has been dropped.
-			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + x + ",\"y\": " + y + "}");
 		}
 	}
 	
