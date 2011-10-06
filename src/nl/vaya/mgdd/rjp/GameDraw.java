@@ -38,8 +38,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 3;
+	protected int motionDetectionArea = 1;
 
+	protected int _maxSpeed = 20;
 	protected int _moveX = 0;
 	protected int _moveY = 0;
 
@@ -97,15 +98,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			 * Send position and orientation back to server, in
 			 * a separate tread to prevent blocking the loop
 			 */
-			Log.i("log_tag", "Start thread 1");
+			
 			communicatorSendThread =  new SenderThread(new SenderRunnable() {
 				@Override
 				public void run(String my_position_json) {
 			        GameDraw.getCommunicator().sendMessage(my_position_json);
 			      }
 			    });
-			Log.i("log_tag", "End thread 1");
-			Log.i("log_tag", "Start thread 2");
+			
 			communicatorReceiveThread = new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -114,7 +114,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			});
 			
 			communicatorReceiveThread.start();
-			Log.i("log_tag", "End thread 2");
+			
 		}
 		_once = 1;
 	}
@@ -123,14 +123,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected void onDraw(Canvas canvas) {
 
 		if (gameReady) {
-			
-			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
-	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
-	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
-	    	my_position_json += "}}";
-	    	
-			communicatorSendThread.run(my_position_json);
 			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
@@ -167,6 +159,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
+			
+			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + ",";
+	    	my_position_json += "\"state\": " + objects.getYou().getState() + "";
+	    	my_position_json += "}}";
+	    	
+			communicatorSendThread.run(my_position_json);
+			
 		}else{
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK);
@@ -229,7 +231,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	public void respond(String message) {
 		try {
-			Log.i("game_server", message );
 			
 			incommingParser = new JSONObject(message);
 			
