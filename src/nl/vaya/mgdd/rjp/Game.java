@@ -49,6 +49,7 @@ public class Game extends Activity implements OnClickListener {
 			case R.id.nextscreenButton:
 				Intent i = new Intent(this, GameActivity.class);
 				startActivity(i);
+				finish();
 			break;
 		}
 	}
