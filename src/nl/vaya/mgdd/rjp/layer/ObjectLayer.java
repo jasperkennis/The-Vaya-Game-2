@@ -1,6 +1,9 @@
 package nl.vaya.mgdd.rjp.layer;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
@@ -21,7 +24,7 @@ import android.util.Log;
 
 public class ObjectLayer {
 
-	protected ArrayList<Enemy> _enemies;
+	protected HashMap<String,Enemy> _enemies;
 	protected ArrayList<GameObject> _objects;
 	protected ArrayList<GameObject> _floorObjects;
 	protected ArrayList<ThrowingObject> _throwingObjects;
@@ -48,14 +51,17 @@ public class ObjectLayer {
 	protected Bitmap handdoek;
 	protected Bitmap building1;
 	
+	protected int _numTilesWidth;
+	protected int _numTilesHeight;
+	
 	protected Context context;
 	
-	public ObjectLayer(Context context, int winWidth, int winHeight){
+	public ObjectLayer(Context context, int winWidth, int winHeight, int tilesW, int tilesH){
 		context = context;
 		_objects = new ArrayList<GameObject>();
 		_floorObjects = new ArrayList<GameObject>();
 		_throwingObjects = new ArrayList<ThrowingObject>();
-		_enemies = new ArrayList<Enemy>();
+		_enemies = new HashMap<String,Enemy>();
 		_winWidth = winWidth;
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1);
@@ -200,7 +206,12 @@ public class ObjectLayer {
 		canvas.restore();
 		
 		//draw enemys
-		for(Enemy e:_enemies){
+		
+		Collection c = _enemies.values();
+		Iterator itr = c.iterator();
+		
+		while(itr.hasNext()){
+			Enemy e = (Enemy) itr.next();
 			canvas.save();
 	        canvas.rotate(180-e.getAngle(), e.getScreenX(_startX), e.getScreenY(_startY));
 			canvas.drawBitmap(e.getImage(), 
@@ -209,6 +220,17 @@ public class ObjectLayer {
 					null);
 			canvas.restore();
 		}
+		
+		
+		/*for(Enemy e:_enemies){
+			canvas.save();
+	        canvas.rotate(180-e.getAngle(), e.getScreenX(_startX), e.getScreenY(_startY));
+			canvas.drawBitmap(e.getImage(), 
+					new Rect(0, 0, e.getImage().getWidth(), e.getImage().getHeight()), 
+					new RectF(e.getScreenX(_startX)-((e.getImage().getWidth()*tileScaleX)/2), e.getScreenY(_startY)-((e.getImage().getHeight()*tileScaleY)/2), e.getScreenX(_startX) + ((e.getImage().getWidth()*tileScaleX)/2), e.getScreenY(_startY) + ((e.getImage().getHeight()*tileScaleY)/2)), 
+					null);
+			canvas.restore();
+		}*/
 		
 		for(GameObject o:_objects){
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
@@ -223,7 +245,7 @@ public class ObjectLayer {
 		return _you;
 	}
 	
-	public ArrayList<Enemy> getEnemy(){
+	public HashMap<String,Enemy> getEnemy(){
 		return _enemies;
 	}
 	
@@ -239,26 +261,42 @@ public class ObjectLayer {
 		ThrowingObject _throwable = new ThrowingObject(context, x, y);
 		_throwingObjects.add(_throwable);
 	}
-
+	
 
 	public void handleEnemies(JSONArray players, String playerId) {
 		for(int i = 0; i < players.length() ; i++){
 			JSONObject _player = players.optJSONObject(i);
 			try{
-				Log.i("received_players", _player.toString());
+				//Log.i("received_players", _player.toString());
 				try {
 					if(!_player.getString("player").equals(playerId)){
-						Log.i("received_players", "Draw a player!!!");
+						Log.i("received_players", "Update enemy!!!");
+						createOrUpdateEnemy(_player);
 					} else {
-						Log.i("received_players", "No need to draw yourself.");
+						//Log.i("received_players", "No need to draw yourself.");
 					}
 				} catch (JSONException e) {
-					Log.i("received_players", "Unable to read playerid.");
+					//i("received_players", "Unable to read playerid.");
 					e.printStackTrace();
 				}
 			} finally {
-				Log.i("received_players", "Failed to read player.");
+				//Log.i("received_players", "Failed to read player.");
 			}
+		}
+	}
+	
+	private void createOrUpdateEnemy(JSONObject player){
+		try {
+			if( _enemies.get( player.getString("player") ).equals(null) ){
+				Enemy newEnemy = new Enemy(context);
+				newEnemy.setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), 1, _numTilesWidth, _numTilesHeight);
+				_enemies.put(player.getString("player"), newEnemy);
+			} else {
+				_enemies.get( player.getString("player") ).setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), 1, _numTilesWidth, _numTilesHeight);
+			}
+		} catch (JSONException e) {
+			Log.i("received_players", "Unable to read playerid.");
+			e.printStackTrace();
 		}
 	}
 }

@@ -89,7 +89,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 		// Create Layers
 		floor = new FloorLayer(context, _winWith, _winHeight);
-		objects = new ObjectLayer(context, _winWith, _winHeight);
+		objects = new ObjectLayer(context, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight());
 		
 		final GameDraw _self = this;
 		
@@ -139,12 +139,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 					/ (32 * floor.getTileScaleX())) + (Math.floor(objects
 					.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
 			
-			for(Enemy enemy:objects.getEnemy()){
+			/*for(Enemy enemy:objects.getEnemy()){
 				enemy.setPlayerPos(100, 200, 180.0f, 1, floor.getNumTilesWidth(), floor.getNumTilesHeight());
 				if(enemy.checkCollision(youPos)){
 					objects.getYou().setBack();
 				}
-			}
+			}*/
 
 			// check collision
 			for (GameObject o : objects.getObjects()) {
@@ -228,9 +228,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			
 			incommingParser = new JSONObject(message);
 			
+			
 			if(incommingParser.getString("type").equals("positions")){
 				Log.i(log_tag,incommingParser.getJSONArray("positions") + "");
 				objects.handleEnemies(incommingParser.getJSONArray("positions"),playerId);
+				gameReady = true;
 			}
 			
 			/*
