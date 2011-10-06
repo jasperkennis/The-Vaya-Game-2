@@ -219,8 +219,10 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			this._moveY = 0;
 			return false;
 		default:
-			float x = event.getX() - initialTouchXDisposition;
-			float y = event.getY() - initialTouchYDisposition;
+			float x = ( event.getX() - initialTouchXDisposition );
+			float y = ( event.getY() - initialTouchXDisposition );
+			//x = (x > _maxSpeed) ? _maxSpeed : x;
+			//y = (y > _maxSpeed) ? _maxSpeed : y;
 			this._moveX = (int) Math.ceil(x / motionDetectionArea);
 			this._moveY = (int) Math.ceil(y / motionDetectionArea);
 
@@ -238,55 +240,58 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		try {
-			
-			incommingParser = new JSONObject(message);
-			
-			
-			if(incommingParser.getString("type").equals("positions")){
-				//Log.i(log_tag,incommingParser.getJSONArray("positions") + "");
-				objects.handleEnemies(incommingParser.getJSONArray("positions"),playerId);
-			}
-			
-			/*
-			 *  Handle throwable object displacement
-			 */
-			if(incommingParser.getString("type").equals("player_dropped_obj")){
-				objects.addThrowable(incommingParser.getInt("x"), incommingParser.getInt("y"));
-				return;
-			}
-			
-			if(incommingParser.getString("type").equals("player_got_obj")){
-				objects.removeThrowable(incommingParser.getInt("index"));
-				return;
-			}
-			
-			// Handle directives
-			if(incommingParser.getString("type").equals("directive")){
-				if(incommingParser.getString("directive").equals("start")){
-					Log.i("game_server", "Starting the game!" );
-					gameReady = true;
+		if(message != null && message.charAt(0) != 0){
+			try {
+				
+				incommingParser = new JSONObject(message);
+				
+				
+				if(incommingParser.getString("type").equals("positions")){
+					//Log.i(log_tag,incommingParser.getJSONArray("positions") + "");
+					objects.handleEnemies(incommingParser.getJSONArray("positions"),playerId);
+				}
+				
+				/*
+				 *  Handle throwable object displacement
+				 */
+				if(incommingParser.getString("type").equals("player_dropped_obj")){
+					objects.addThrowable(incommingParser.getInt("x"), incommingParser.getInt("y"));
 					return;
 				}
+				
+				if(incommingParser.getString("type").equals("player_got_obj")){
+					objects.removeThrowable(incommingParser.getInt("index"));
+					return;
+				}
+				
+				// Handle directives
+				if(incommingParser.getString("type").equals("directive")){
+					if(incommingParser.getString("directive").equals("start")){
+						Log.i("game_server", "Starting the game!" );
+						gameReady = true;
+						return;
+					}
+				}
+				
+				// Handle player id
+				if(incommingParser.getString("type").equals("player_id")){
+					playerId = incommingParser.getString("id");
+					Log.i("game_server", "Player id has been set to: " + playerId  + "." );
+					return;
+				}
+				
+				// Handle messages
+				if(incommingParser.getString("type").equals("message")){
+					//Log.i("game_server", incommingParser.getString("message") );
+					this.logText.add(incommingParser.getString("message"));
+					return;
+				}
+				
+			} catch (JSONException e) {
+				Log.i("game_server", "Incomming message not parsable json. It was:" );
+				Log.i("game_server", message );
+				Log.i(log_tag,e.getMessage());
 			}
-			
-			// Handle player id
-			if(incommingParser.getString("type").equals("player_id")){
-				playerId = incommingParser.getString("id");
-				Log.i("game_server", "Player id has been set to: " + playerId  + "." );
-				return;
-			}
-			
-			// Handle messages
-			if(incommingParser.getString("type").equals("message")){
-				//Log.i("game_server", incommingParser.getString("message") );
-				this.logText.add(incommingParser.getString("message"));
-				return;
-			}
-			
-		} catch (JSONException e) {
-			Log.i("game_server", "Incomming message not parsable json. It was:" );
-			Log.i("game_server", message );
 		}
 	}
 	
