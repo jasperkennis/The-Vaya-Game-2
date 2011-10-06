@@ -74,8 +74,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		logText.add("Het spel is aan het laden...");
 		logText.add("Dit kan even duren..");
 		
-		//createCommunicator();
-		
 		setWillNotDraw(false);
 		setOnTouchListener(this);
 		setFocusable(true);
@@ -276,20 +274,10 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		}
 	}
 	
-	private static void createCommunicator(){
-		Log.i("server issues", "Constructing communicator now");
-		//if(communicator.equals(null)){
-			communicator = new Communicator();
-		//}
-		//Log.i(log_tag, "Past construction, beginning game object inizialization.");
-	}
-	
-	
 	public static Communicator getCommunicator(){
-		/*if(communicator.equals(null)){
-			createCommunicator();
-			return communicator;
-		}*/
+		if(communicator == null){
+			communicator = new Communicator();
+		}
 		return communicator;
 	}
 }
