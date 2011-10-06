@@ -46,7 +46,7 @@ public class GameObject {
 		if(startY < -3340)
 			startY = -3340;
 		
-		Log.i("log_tag", "Y "+startY+" X "+startX);
+		//Log.i("log_tag", "Y "+startY+" X "+startX);
 		
 		RectF dest =  new RectF(getMostLeft()*32*scaleX+startX, getMostTop()*32*scaleY+startY, (getMostLeft()*32*scaleX)+(_squaresWidth*32*scaleX)+startX, getMostTop()*32*scaleY+(_squaresHeight*32*scaleY)+startY);
 		return dest;
