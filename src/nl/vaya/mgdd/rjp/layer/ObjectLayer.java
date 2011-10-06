@@ -6,16 +6,21 @@ import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.Player;
 import nl.vaya.mgdd.rjp.objects.ThrowingObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class ObjectLayer {
 
-	protected ArrayList<Enemy> _enemys;
+	protected ArrayList<Enemy> _enemies;
 	protected ArrayList<GameObject> _objects;
 	protected ArrayList<GameObject> _floorObjects;
 	protected ArrayList<ThrowingObject> _throwingObjects;
@@ -49,11 +54,11 @@ public class ObjectLayer {
 		_objects = new ArrayList<GameObject>();
 		_floorObjects = new ArrayList<GameObject>();
 		_throwingObjects = new ArrayList<ThrowingObject>();
-		_enemys = new ArrayList<Enemy>();
+		_enemies = new ArrayList<Enemy>();
 		_winWidth = winWidth;
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1);
-		//_enemys.add(new Enemy(context, "sjaak", 2));
+		//_enemies.add(new Enemy(context, "sjaak", 2));
 		_throwingObjects.add(new ThrowingObject(context,10,10));
 		
 		makeObjects(context);
@@ -194,7 +199,7 @@ public class ObjectLayer {
 		canvas.restore();
 		
 		//draw enemys
-		for(Enemy e:_enemys){
+		for(Enemy e:_enemies){
 			canvas.save();
 	        canvas.rotate(180-e.getAngle(), e.getScreenX(_startX), e.getScreenY(_startY));
 			canvas.drawBitmap(e.getImage(), 
@@ -218,7 +223,7 @@ public class ObjectLayer {
 	}
 	
 	public ArrayList<Enemy> getEnemy(){
-		return _enemys;
+		return _enemies;
 	}
 	
 	public ArrayList<ThrowingObject> getThrowingObjects(){
@@ -232,5 +237,17 @@ public class ObjectLayer {
 	public void addThrowable(int x, int y){
 		ThrowingObject _throwable = new ThrowingObject(context, x, y);
 		_throwingObjects.add(_throwable);
+	}
+
+
+	public void handleEnemies(JSONArray players) {
+		for(int i = 0; i < players.length() ; i++){
+			JSONObject _player = players.optJSONObject(i);
+			try{
+				Log.i("received_players", _player.toString());
+			} finally {
+				Log.i("received_players", "Failed to read player.");
+			}
+		}
 	}
 }

@@ -224,28 +224,13 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	public void respond(String message) {
 		try {
-			Log.i("game_server", message );
+			//Log.i("game_server", message );
 			
 			incommingParser = new JSONObject(message);
 			
-			// Handle directives
-			if(incommingParser.getString("type").equals("directive")){
-				if(incommingParser.getString("directive").equals("start")){
-					Log.i("game_server", "Starting the game!" );
-					gameReady = true;
-				}
-			}
-			
-			// Handle player id
-			if(incommingParser.getString("type").equals("player_id")){
-				playerId = incommingParser.getString("id");
-				Log.i("game_server", "Player id has been set to: " + playerId  + "." );
-			}
-			
-			// Handle messages
-			if(incommingParser.getString("type").equals("message")){
-				Log.i("game_server", incommingParser.getString("message") );
-				this.logText.add(incommingParser.getString("message"));
+			if(incommingParser.getString("type").equals("positions")){
+				Log.i(log_tag,incommingParser.getJSONArray("positions") + "");
+				objects.handleEnemies(incommingParser.getJSONArray("positions"));
 			}
 			
 			/*
@@ -253,11 +238,37 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			 */
 			if(incommingParser.getString("type").equals("player_dropped_obj")){
 				objects.addThrowable(incommingParser.getInt("x"), incommingParser.getInt("y"));
+				return;
 			}
 			
 			if(incommingParser.getString("type").equals("player_got_obj")){
 				objects.removeThrowable(incommingParser.getInt("index"));
+				return;
 			}
+			
+			// Handle directives
+			if(incommingParser.getString("type").equals("directive")){
+				if(incommingParser.getString("directive").equals("start")){
+					Log.i("game_server", "Starting the game!" );
+					gameReady = true;
+					return;
+				}
+			}
+			
+			// Handle player id
+			if(incommingParser.getString("type").equals("player_id")){
+				playerId = incommingParser.getString("id");
+				Log.i("game_server", "Player id has been set to: " + playerId  + "." );
+				return;
+			}
+			
+			// Handle messages
+			if(incommingParser.getString("type").equals("message")){
+				Log.i("game_server", incommingParser.getString("message") );
+				this.logText.add(incommingParser.getString("message"));
+				return;
+			}
+			
 		} catch (JSONException e) {
 			Log.i("game_server", "Incomming message not parsable json. It was:" );
 			Log.i("game_server", message );

@@ -58,8 +58,6 @@ public class Communicator implements MessageResponder {
 		} catch (IOException e) {
 			Log.i(log_tag, "Not receiving line.");
 			e.printStackTrace();
-		} finally {
-			Log.i(log_tag, "Failed to read, ignoring that if possible.");
 		}
 	}
 
