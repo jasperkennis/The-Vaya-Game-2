@@ -237,7 +237,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			if(incommingParser.getString("type").equals("positions")){
 				//Log.i(log_tag,incommingParser.getJSONArray("positions") + "");
 				objects.handleEnemies(incommingParser.getJSONArray("positions"),playerId);
-				//gameReady = true;
 			}
 			
 			/*
@@ -281,7 +280,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			Log.i("game_server", message );
 		}
 	}
-	
 	
 	public static Communicator getCommunicator(){
 		if(communicator == null){
