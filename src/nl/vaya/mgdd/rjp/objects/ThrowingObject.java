@@ -34,7 +34,7 @@ public class ThrowingObject {
 	public ThrowingObject(Context c, int x, int y){
 		//_xPos = x;
 		//_yPos = y;
-		SetPos(3,3);
+		SetPos(8,8);
 		_context = c;
 		createImages();
 	}
@@ -55,8 +55,14 @@ public class ThrowingObject {
 	}
 	
 	public void MoveTo(int x, int y){
+		x--;
+		y++;
 		int newX = (int) Math.ceil((x-this._startX)/(this.width*this._scaleX));
 		int newY = (int) Math.ceil((y-this._startY)/(this.height*this._scaleY));
+		this._xPos = (int) (newX*(this.width*this._scaleX));
+		this._yPos = (int) (newY*(this.width*this._scaleX));
+		Log.i("log_tag", "Set banaan to pos x:"+newX+" y:"+newY );
+		/*
 		while((newX*(this._scaleX*this.width) != this._xPos) || (newY*(this._scaleY*this.height) != this._yPos)){
 			if(newX*(this._scaleX*this.width) > this._xPos){
 				this._xPos++;
@@ -69,7 +75,7 @@ public class ThrowingObject {
 			}else if(newY*(this._scaleY*this.height) < this._yPos){
 				this._yPos--;
 			}
-		}
+		}*/
 	}
 	
 	public void SetPos(int x, int y){
@@ -112,9 +118,9 @@ public class ThrowingObject {
 		this._startY = startY;
 		return new RectF(
 					this._xPos + startX, 
-					this._yPos + startY, 
-					this._xPos + (this.width*tileScaleX) + startX, 
-					this._yPos + (this.height*tileScaleY) + startY
+					this._yPos + startY - ((this.height*tileScaleY)/2), 
+					this._xPos + startX + (this.width*tileScaleX), 
+					this._yPos + startY + ((this.height*tileScaleY)/2)
 				);
 	}
 	

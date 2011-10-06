@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +16,7 @@ public class Game extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  
         
         setContentView(R.layout.main);
         
@@ -46,14 +45,10 @@ public class Game extends Activity implements OnClickListener {
     
     @Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 			case R.id.nextscreenButton:
-				Log.i("log_tag","1 hier");
 				Intent i = new Intent(this, GameActivity.class);
-				Log.i("log_tag","2 hier");
 				startActivity(i);
-				Log.i("log_tag","3 hier");
 			break;
 		}
 	}

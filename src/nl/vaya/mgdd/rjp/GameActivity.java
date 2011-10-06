@@ -3,7 +3,6 @@ package nl.vaya.mgdd.rjp;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,8 +14,6 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  
         
-        //setContentView(R.layout.help);
-        Log.i("log_tag", "Scherm 2 start.");
         setContentView(new GameDraw(this));
     }
     
