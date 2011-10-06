@@ -97,15 +97,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			 * Send position and orientation back to server, in
 			 * a separate tread to prevent blocking the loop
 			 */
-			Log.i("log_tag", "Start thread 1");
+			
 			communicatorSendThread =  new SenderThread(new SenderRunnable() {
 				@Override
 				public void run(String my_position_json) {
 			        GameDraw.getCommunicator().sendMessage(my_position_json);
 			      }
 			    });
-			Log.i("log_tag", "End thread 1");
-			Log.i("log_tag", "Start thread 2");
+			
 			communicatorReceiveThread = new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -114,7 +113,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			});
 			
 			communicatorReceiveThread.start();
-			Log.i("log_tag", "End thread 2");
+			
 		}
 		_once = 1;
 	}
