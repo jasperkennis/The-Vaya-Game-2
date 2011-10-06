@@ -66,7 +66,7 @@ public class ObjectLayer {
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1);
 		//_enemies.add(new Enemy(context, "sjaak", 2));
-		_throwingObjects.add(new ThrowingObject(context,10,10));
+		_throwingObjects.add(new ThrowingObject(context,300,300));
 		
 		makeObjects(context);
 	}
@@ -270,7 +270,7 @@ public class ObjectLayer {
 	public ArrayList<GameObject> getObjects(){
 		return _objects;
 	}
-	
+
 	public Player getYou(){
 		return _you;
 	}

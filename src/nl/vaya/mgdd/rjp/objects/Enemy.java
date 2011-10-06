@@ -28,6 +28,7 @@ public class Enemy {
 	protected ArrayList<Bitmap> _walking = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _swimming = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _running = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _crashing = new ArrayList<Bitmap>();
 	
 	protected Point _prevPoint = new Point();
 	
@@ -75,6 +76,12 @@ public class Enemy {
 				_context.getResources().getIdentifier("drawable/char_blue_run1", "drawable", _context.getPackageName()), opts));
 		_running.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_run2", "drawable", _context.getPackageName()), opts));
+		
+		//running
+		_crashing.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_val1", "drawable", _context.getPackageName()), opts));
+		_crashing.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_val2", "drawable", _context.getPackageName()), opts));
 		
 		//swimming
 		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
@@ -139,6 +146,11 @@ public class Enemy {
 				if(loopState >= _running.size())
 					loopState = 0;
 				this.current = _running.get(loopState);
+			break;
+			case 4:
+				if(loopState >= _crashing.size())
+					loopState = 0;
+				this.current = _crashing.get(loopState);
 			break;
 			default:
 				this.current = char_blue_1;

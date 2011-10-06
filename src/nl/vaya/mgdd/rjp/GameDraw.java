@@ -10,6 +10,7 @@ import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
+import nl.vaya.mgdd.rjp.objects.ThrowingObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -146,6 +147,13 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			// check collision
 			for (GameObject o : objects.getObjects()) {
 				if (o.findTile(youPos) && !o.canWalkTrough()) {
+					objects.getYou().setBack();
+				}
+			}
+			
+			// check collision
+			for (ThrowingObject to : objects.getThrowingObjects()) {
+				if (to.findTile(youPos)) {
 					objects.getYou().setBack();
 				}
 			}
