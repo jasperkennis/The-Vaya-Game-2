@@ -3,6 +3,7 @@ package nl.vaya.mgdd.rjp.objects;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 
 public class GameObject {
@@ -40,10 +41,13 @@ public class GameObject {
 	}
 	
 	public RectF getDestRect(float scaleX,float scaleY, int startX, int startY){
-		if(startX<-3200)
-			startX = -3200;
-		if(startY<-3200)
-			startY = -3200;
+		if(startX < -3193)
+			startX = -3193;
+		if(startY < -3340)
+			startY = -3340;
+		
+		Log.i("log_tag", "Y "+startY+" X "+startX);
+		
 		RectF dest =  new RectF(getMostLeft()*32*scaleX+startX, getMostTop()*32*scaleY+startY, (getMostLeft()*32*scaleX)+(_squaresWidth*32*scaleX)+startX, getMostTop()*32*scaleY+(_squaresHeight*32*scaleY)+startY);
 		return dest;
 	}
