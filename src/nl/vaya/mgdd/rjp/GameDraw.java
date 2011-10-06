@@ -124,14 +124,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 		if (gameReady) {
 			
-			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
-	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
-	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + "";
-	    	my_position_json += "}}";
-	    	
-			communicatorSendThread.run(my_position_json);
-			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
 					this._touchX, this._touchY, initialTouchXDisposition,
@@ -167,6 +159,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
 			objects.createObjects(canvas);
+			
+			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
+	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + ",";
+	    	my_position_json += "\"state\": " + objects.getYou().getState() + "";
+	    	my_position_json += "}}";
+	    	
+			communicatorSendThread.run(my_position_json);
+			
 		}else{
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK);
