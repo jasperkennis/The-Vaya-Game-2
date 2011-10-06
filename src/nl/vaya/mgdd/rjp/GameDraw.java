@@ -10,6 +10,7 @@ import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
+import nl.vaya.mgdd.rjp.objects.ThrowingObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,7 +94,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			
 			logText = new ArrayList<String>();
 			logText.add("Het spel is aan het laden...");
-			logText.add("Dit kan even duren..");
 			/*
 			 * Send position and orientation back to server, in
 			 * a separate tread to prevent blocking the loop
@@ -147,6 +147,13 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			for (GameObject o : objects.getObjects()) {
 				if (o.findTile(youPos) && !o.canWalkTrough()) {
 					objects.getYou().setBack();
+				}
+			}
+			
+			// check collision
+			for (ThrowingObject to : objects.getThrowingObjects()) {
+				if (to.findTile(youPos)) {
+					objects.getYou().fall();
 				}
 			}
 			
@@ -232,7 +239,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		if(  message != null ){
+
+		if(  message != null  ){
 			try {
 				
 				incommingParser = new JSONObject(message);
@@ -274,7 +282,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				
 				// Handle messages
 				if(incommingParser.getString("type").equals("message")){
-					//Log.i("game_server", incommingParser.getString("message") );
+					Log.i("game_server", incommingParser.getString("message") );
 					this.logText.add(incommingParser.getString("message"));
 					return;
 				}

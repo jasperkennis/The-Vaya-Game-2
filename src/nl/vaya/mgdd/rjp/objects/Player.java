@@ -30,12 +30,15 @@ public class Player {
 	protected ArrayList<Bitmap> _walking = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _swimming = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _running = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _crashing = new ArrayList<Bitmap>();
 	
 	protected Point _prevPoint = new Point();
 	
 	protected ThrowingObject army = null;
 	
 	protected Context _context;
+	
+	protected int buzzTime = 0;
 	
 	public Player(Context context){
 		_context = context;
@@ -80,6 +83,12 @@ public class Player {
 		_running.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_run2", "drawable", _context.getPackageName()), opts));
 		
+		//crash
+		_crashing.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_val1", "drawable", _context.getPackageName()), opts));
+		_crashing.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_val2", "drawable", _context.getPackageName()), opts));
+		
 		//swimming
 		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_swim1", "drawable", _context.getPackageName()), opts));
@@ -92,6 +101,8 @@ public class Player {
 	}
 	
 	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
+		
+		if(buzzTime == 0){
 			_prevPoint.x = this._xPos;
 			_prevPoint.y = this._yPos;
 			
@@ -121,6 +132,9 @@ public class Player {
 				_yPos = ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY);
 		
 			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
+		}else{
+			buzzTime--;
+		}
 	}
 	
 	
@@ -170,6 +184,11 @@ public class Player {
 					loopState = 0;
 				this.current = _running.get(loopState);
 			break;
+			case 4:
+				if(loopState >= _crashing.size())
+					loopState = 0;
+				this.current = _crashing.get(loopState);
+			break;
 			default:
 				this.current = char_blue_1;
 			break;
@@ -195,6 +214,11 @@ public class Player {
 			return _yPos+startY-(startY-((((winHeight/_screenTilesY)*40)-winHeight)*-1));
 		else
 			return winHeight/2;
+	}
+	
+	public void fall(){
+		buzzTime = 100;
+		this.state = 4;
 	}
 	
 	public void giveSubGround(int floorState){

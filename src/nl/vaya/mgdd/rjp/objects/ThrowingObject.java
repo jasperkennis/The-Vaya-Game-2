@@ -32,9 +32,7 @@ public class ThrowingObject {
 	protected int _startY = 0;
 	
 	public ThrowingObject(Context c, int x, int y){
-		//_xPos = x;
-		//_yPos = y;
-		SetPos(8,8);
+		SetPos(x,y);
 		_context = c;
 		createImages();
 	}
@@ -79,8 +77,8 @@ public class ThrowingObject {
 	}
 	
 	public void SetPos(int x, int y){
-		this._xPos = (int) (x*(this._scaleX*this.width));
-		this._yPos = (int) (y*(this._scaleY*this.height));
+		this._xPos = x;
+		this._yPos = y;
 	}
 	
 	public void SetState(int s){
@@ -145,6 +143,12 @@ public class ThrowingObject {
 	
 	public void dropped(){
 		this.puckedUp = false;
+	}
+	
+	public Boolean findTile(int tilePos){
+		int y = (int)Math.floor(tilePos/40);
+		int x = tilePos - (y*40);
+		return onPos(x,y);
 	}
 	
 }
