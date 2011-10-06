@@ -38,8 +38,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 3;
+	protected int motionDetectionArea = 1;
 
+	protected int _maxSpeed = 20;
 	protected int _moveX = 0;
 	protected int _moveY = 0;
 
@@ -230,7 +231,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	public void respond(String message) {
 		try {
-			Log.i("game_server", message );
 			
 			incommingParser = new JSONObject(message);
 			
