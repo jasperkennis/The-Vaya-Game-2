@@ -213,6 +213,10 @@ public class Player {
 		return this._yPos;
 	}
 	
+	public int getState(){
+		return this.state;
+	}
+	
 	public void addPickThrow(int x,int y, ArrayList<ThrowingObject> objects){
 		if(army == null){
 			for( int i = 0 ; i < objects.size() ; i++) {
