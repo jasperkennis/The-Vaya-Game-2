@@ -207,30 +207,18 @@ public class ObjectLayer {
 		
 		//draw enemys
 		
-		Collection c = _enemies.values();
-		Iterator itr = c.iterator();
+		Collection<Enemy> c = _enemies.values();
+		Iterator<Enemy> itr = c.iterator();
 		
 		while(itr.hasNext()){
-			Enemy e = (Enemy) itr.next();
 			canvas.save();
-	        canvas.rotate(180-e.getAngle(), e.getScreenX(_startX), e.getScreenY(_startY));
-			canvas.drawBitmap(e.getImage(), 
-					new Rect(0, 0, e.getImage().getWidth(), e.getImage().getHeight()), 
-					new RectF(e.getScreenX(_startX)-((e.getImage().getWidth()*tileScaleX)/2), e.getScreenY(_startY)-((e.getImage().getHeight()*tileScaleY)/2), e.getScreenX(_startX) + ((e.getImage().getWidth()*tileScaleX)/2), e.getScreenY(_startY) + ((e.getImage().getHeight()*tileScaleY)/2)), 
+	        canvas.rotate(180-itr.next().getAngle(), itr.next().getScreenX(_startX), itr.next().getScreenY(_startY));
+			canvas.drawBitmap(itr.next().getImage(), 
+					new Rect(0, 0, itr.next().getImage().getWidth(), itr.next().getImage().getHeight()), 
+					new RectF(itr.next().getScreenX(_startX)-((itr.next().getImage().getWidth()*tileScaleX)/2), itr.next().getScreenY(_startY)-((itr.next().getImage().getHeight()*tileScaleY)/2), itr.next().getScreenX(_startX) + ((itr.next().getImage().getWidth()*tileScaleX)/2), itr.next().getScreenY(_startY) + ((itr.next().getImage().getHeight()*tileScaleY)/2)), 
 					null);
 			canvas.restore();
 		}
-		
-		
-		/*for(Enemy e:_enemies){
-			canvas.save();
-	        canvas.rotate(180-e.getAngle(), e.getScreenX(_startX), e.getScreenY(_startY));
-			canvas.drawBitmap(e.getImage(), 
-					new Rect(0, 0, e.getImage().getWidth(), e.getImage().getHeight()), 
-					new RectF(e.getScreenX(_startX)-((e.getImage().getWidth()*tileScaleX)/2), e.getScreenY(_startY)-((e.getImage().getHeight()*tileScaleY)/2), e.getScreenX(_startX) + ((e.getImage().getWidth()*tileScaleX)/2), e.getScreenY(_startY) + ((e.getImage().getHeight()*tileScaleY)/2)), 
-					null);
-			canvas.restore();
-		}*/
 		
 		for(GameObject o:_objects){
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
