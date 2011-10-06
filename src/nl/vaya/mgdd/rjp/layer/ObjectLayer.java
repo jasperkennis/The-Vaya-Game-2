@@ -8,6 +8,7 @@ import nl.vaya.mgdd.rjp.objects.Player;
 import nl.vaya.mgdd.rjp.objects.ThrowingObject;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -240,11 +241,21 @@ public class ObjectLayer {
 	}
 
 
-	public void handleEnemies(JSONArray players) {
+	public void handleEnemies(JSONArray players, String playerId) {
 		for(int i = 0; i < players.length() ; i++){
 			JSONObject _player = players.optJSONObject(i);
 			try{
 				Log.i("received_players", _player.toString());
+				try {
+					if(!_player.getString("player").equals(playerId)){
+						Log.i("received_players", "Draw a player!!!");
+					} else {
+						Log.i("received_players", "No need to draw yourself.");
+					}
+				} catch (JSONException e) {
+					Log.i("received_players", "Unable to read playerid.");
+					e.printStackTrace();
+				}
 			} finally {
 				Log.i("received_players", "Failed to read player.");
 			}
