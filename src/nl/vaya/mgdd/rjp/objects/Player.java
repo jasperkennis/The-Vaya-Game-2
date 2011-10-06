@@ -38,6 +38,8 @@ public class Player {
 	
 	protected Context _context;
 	
+	protected int buzzTime = 0;
+	
 	public Player(Context context){
 		_context = context;
 		this._type = 0;
@@ -99,6 +101,9 @@ public class Player {
 	}
 	
 	public void setPlayerPos(int x, int y, int winWidth, int winHeight, int tilesX, int tilesY, float touchX, float touchY, float basePointX, float basePointY){
+		
+		if(buzzTime > 0){
+			buzzTime--;
 			_prevPoint.x = this._xPos;
 			_prevPoint.y = this._yPos;
 			
@@ -128,6 +133,7 @@ public class Player {
 				_yPos = ((winHeight/_screenTilesY)*40)-(winHeight/_screenTilesY);
 		
 			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
+		}
 	}
 	
 	
@@ -207,6 +213,11 @@ public class Player {
 			return _yPos+startY-(startY-((((winHeight/_screenTilesY)*40)-winHeight)*-1));
 		else
 			return winHeight/2;
+	}
+	
+	public void fall(){
+		buzzTime = 100;
+		this.state = 4;
 	}
 	
 	public void giveSubGround(int floorState){

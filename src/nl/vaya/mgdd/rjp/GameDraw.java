@@ -39,7 +39,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 1;
+	protected int motionDetectionArea = 3;
 
 	protected int _maxSpeed = 20;
 	protected int _moveX = 0;
@@ -94,7 +94,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			
 			logText = new ArrayList<String>();
 			logText.add("Het spel is aan het laden...");
-			logText.add("Dit kan even duren..");
 			/*
 			 * Send position and orientation back to server, in
 			 * a separate tread to prevent blocking the loop
@@ -154,7 +153,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			// check collision
 			for (ThrowingObject to : objects.getThrowingObjects()) {
 				if (to.findTile(youPos)) {
-					objects.getYou().setBack();
+					objects.getYou().fall();
 				}
 			}
 			
@@ -240,7 +239,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		if(message != null && message.charAt(0) != 0){
+		if(message != null && message.charAt(0) == "{".toCharArray()[0]){
+		//if(message != null){
+					
 			try {
 				
 				incommingParser = new JSONObject(message);
@@ -282,7 +283,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				
 				// Handle messages
 				if(incommingParser.getString("type").equals("message")){
-					//Log.i("game_server", incommingParser.getString("message") );
+					Log.i("game_server", incommingParser.getString("message") );
 					this.logText.add(incommingParser.getString("message"));
 					return;
 				}
