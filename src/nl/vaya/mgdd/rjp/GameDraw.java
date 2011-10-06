@@ -66,13 +66,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected String playerId;
 	
 	protected ArrayList<String> logText;
+	
+	protected int _once = 0;
 
 	public GameDraw(Context context) {
 		super(context);
-		
-		logText = new ArrayList<String>();
-		logText.add("Het spel is aan het laden...");
-		logText.add("Dit kan even duren..");
 		
 		setWillNotDraw(false);
 		setOnTouchListener(this);
@@ -90,26 +88,35 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		objects = new ObjectLayer(context, _winWith, _winHeight, floor.getNumTilesWidth(), floor.getNumTilesHeight());
 		
 		final GameDraw _self = this;
-		
-		/*
-		 * Send position and orientation back to server, in
-		 * a separate tread to prevent blocking the loop
-		 */
-		communicatorSendThread =  new SenderThread(new SenderRunnable() {
-			@Override
-			public void run(String my_position_json) {
-		        GameDraw.getCommunicator().sendMessage(my_position_json);
-		      }
-		    });
-		
-		communicatorReceiveThread = new Thread(new Runnable(){
-			@Override
-			public void run(){
-				GameDraw.getCommunicator().recieveMessages(_self);
-			}
-		});
-		communicatorReceiveThread.start();
-		
+		if(_once == 0){
+			
+			logText = new ArrayList<String>();
+			logText.add("Het spel is aan het laden...");
+			logText.add("Dit kan even duren..");
+			/*
+			 * Send position and orientation back to server, in
+			 * a separate tread to prevent blocking the loop
+			 */
+			Log.i("log_tag", "Start thread 1");
+			communicatorSendThread =  new SenderThread(new SenderRunnable() {
+				@Override
+				public void run(String my_position_json) {
+			        GameDraw.getCommunicator().sendMessage(my_position_json);
+			      }
+			    });
+			Log.i("log_tag", "End thread 1");
+			Log.i("log_tag", "Start thread 2");
+			communicatorReceiveThread = new Thread(new Runnable(){
+				@Override
+				public void run(){
+					GameDraw.getCommunicator().recieveMessages(_self);
+				}
+			});
+			
+			communicatorReceiveThread.start();
+			Log.i("log_tag", "End thread 2");
+		}
+		_once = 1;
 	}
 
 	@Override
@@ -222,7 +229,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	public void respond(String message) {
 		try {
-			//Log.i("game_server", message );
+			Log.i("game_server", message );
 			
 			incommingParser = new JSONObject(message);
 			
@@ -264,7 +271,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			
 			// Handle messages
 			if(incommingParser.getString("type").equals("message")){
-				Log.i("game_server", incommingParser.getString("message") );
+				//Log.i("game_server", incommingParser.getString("message") );
 				this.logText.add(incommingParser.getString("message"));
 				return;
 			}
@@ -278,6 +285,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	public static Communicator getCommunicator(){
 		if(communicator == null){
+			Log.i("log_tag", "Creating Communicator");
 			communicator = new Communicator();
 		}
 		return communicator;
