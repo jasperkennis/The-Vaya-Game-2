@@ -268,7 +268,7 @@ public class ObjectLayer {
 					e.printStackTrace();
 				}
 			} finally {
-				//Log.i("received_players", "Failed to read player.");
+				Log.i("received_players", "Failed to read player.");
 			}
 		}
 	}
@@ -277,10 +277,10 @@ public class ObjectLayer {
 		try {
 			if( _enemies.get( player.getString("player")) == null ){
 				Enemy newEnemy = new Enemy(_context);
-				newEnemy.setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), 1, _numTilesWidth, _numTilesHeight);
+				newEnemy.setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), player.getInt("state"), _numTilesWidth, _numTilesHeight);
 				_enemies.put(player.getString("player"), newEnemy);
 			} else {
-				_enemies.get( player.getString("player") ).setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), 1, _numTilesWidth, _numTilesHeight);
+				_enemies.get( player.getString("player") ).setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), player.getInt("state"), _numTilesWidth, _numTilesHeight);
 			}
 		} catch (JSONException e) {
 			Log.i("received_players", "Unable to read playerid.");
