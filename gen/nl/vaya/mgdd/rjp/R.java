@@ -41,29 +41,31 @@ public final class R {
         public static final int hoekrechtsonder=0x7f02001b;
         public static final int hoekrechtsonder2=0x7f02001c;
         public static final int icon=0x7f02001d;
-        public static final int palmboom=0x7f02001e;
-        public static final int parasol=0x7f02001f;
-        public static final int parasol2=0x7f020020;
-        public static final int sand=0x7f020021;
-        public static final int sprites=0x7f020022;
-        public static final int steen1=0x7f020023;
-        public static final int steen2=0x7f020024;
-        public static final int totaal=0x7f020025;
-        public static final int totaal2=0x7f020026;
-        public static final int water=0x7f020027;
-        public static final int water2=0x7f020028;
-        public static final int zandrechtboven=0x7f020029;
-        public static final int zandrechtboven2=0x7f02002a;
-        public static final int zandrechtlinks=0x7f02002b;
-        public static final int zandrechtlinks2=0x7f02002c;
-        public static final int zandrechtonder=0x7f02002d;
-        public static final int zandrechtonder2=0x7f02002e;
-        public static final int zandrechtrechts=0x7f02002f;
-        public static final int zandrechtrechts2=0x7f020030;
+        public static final int logo=0x7f02001e;
+        public static final int palmboom=0x7f02001f;
+        public static final int parasol=0x7f020020;
+        public static final int parasol2=0x7f020021;
+        public static final int sand=0x7f020022;
+        public static final int sprites=0x7f020023;
+        public static final int steen1=0x7f020024;
+        public static final int steen2=0x7f020025;
+        public static final int totaal=0x7f020026;
+        public static final int totaal2=0x7f020027;
+        public static final int water=0x7f020028;
+        public static final int water2=0x7f020029;
+        public static final int zandrechtboven=0x7f02002a;
+        public static final int zandrechtboven2=0x7f02002b;
+        public static final int zandrechtlinks=0x7f02002c;
+        public static final int zandrechtlinks2=0x7f02002d;
+        public static final int zandrechtonder=0x7f02002e;
+        public static final int zandrechtonder2=0x7f02002f;
+        public static final int zandrechtrechts=0x7f020030;
+        public static final int zandrechtrechts2=0x7f020031;
     }
     public static final class id {
-        public static final int exit=0x7f060001;
-        public static final int nextscreenButton=0x7f060000;
+        public static final int exit=0x7f060002;
+        public static final int logo_image=0x7f060000;
+        public static final int nextscreenButton=0x7f060001;
     }
     public static final class layout {
         public static final int help=0x7f030000;
