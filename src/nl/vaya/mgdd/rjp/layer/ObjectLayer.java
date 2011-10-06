@@ -287,7 +287,7 @@ public class ObjectLayer {
 	
 	private void createOrUpdateEnemy(JSONObject player){
 		try {
-			if( _enemies.get( player.getString("player") ) == null ){
+			if( _enemies.get( player.getString("player")) == null ){
 				Enemy newEnemy = new Enemy(_context);
 				newEnemy.setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), 1, _numTilesWidth, _numTilesHeight);
 				_enemies.put(player.getString("player"), newEnemy);
