@@ -276,6 +276,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	public static Communicator getCommunicator(){
 		if(communicator == null){
+			Log.i("Server trouble.", "constructing the communicator");
 			communicator = new Communicator();
 		}
 		return communicator;

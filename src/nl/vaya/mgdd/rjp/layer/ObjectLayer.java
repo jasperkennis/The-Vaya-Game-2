@@ -54,10 +54,10 @@ public class ObjectLayer {
 	protected int _numTilesWidth;
 	protected int _numTilesHeight;
 	
-	protected Context context;
+	protected Context _context;
 	
 	public ObjectLayer(Context context, int winWidth, int winHeight, int tilesW, int tilesH){
-		context = context;
+		_context = context;
 		_objects = new ArrayList<GameObject>();
 		_floorObjects = new ArrayList<GameObject>();
 		_throwingObjects = new ArrayList<ThrowingObject>();
@@ -258,7 +258,7 @@ public class ObjectLayer {
 	}
 	
 	public void addThrowable(int x, int y){
-		ThrowingObject _throwable = new ThrowingObject(context, x, y);
+		ThrowingObject _throwable = new ThrowingObject(_context, x, y);
 		_throwingObjects.add(_throwable);
 	}
 	
@@ -287,8 +287,8 @@ public class ObjectLayer {
 	
 	private void createOrUpdateEnemy(JSONObject player){
 		try {
-			if( _enemies.get( player.getString("player") ).equals(null) ){
-				Enemy newEnemy = new Enemy(context);
+			if( _enemies.get( player.getString("player") ) == null ){
+				Enemy newEnemy = new Enemy(_context);
 				newEnemy.setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), 1, _numTilesWidth, _numTilesHeight);
 				_enemies.put(player.getString("player"), newEnemy);
 			} else {
