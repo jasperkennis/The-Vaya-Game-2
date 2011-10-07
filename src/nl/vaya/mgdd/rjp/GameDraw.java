@@ -240,7 +240,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		if(  message != null   ){
+		if(  message != null  ){
 			try {
 				
 				incommingParser = new JSONObject(message);
