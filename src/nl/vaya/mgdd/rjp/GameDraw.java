@@ -39,7 +39,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 3;
+	protected int motionDetectionArea = 6;
 
 	protected int _maxSpeed = 20;
 	protected int _moveX = 0;
@@ -63,13 +63,13 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	protected String log_tag = "game_server";
 
-	protected boolean gameReady = false;
+	protected boolean gameReady = false; //false for server on
 	
 	protected String playerId;
 	
 	protected ArrayList<String> logText;
 	
-	protected int _once = 0;
+	protected int _once = 0; // 0 for server on
 
 	public GameDraw(Context context) {
 		super(context);
@@ -153,6 +153,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			// check collision
 			for (ThrowingObject to : objects.getThrowingObjects()) {
 				if (to.findTile(youPos)) {
+					objects.getYou().setBack();
 					objects.getYou().fall();
 				}
 			}
@@ -174,7 +175,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	    	my_position_json += "\"state\": " + objects.getYou().getState() + "";
 	    	my_position_json += "}}";
 	    	
-			communicatorSendThread.run(my_position_json);
+			communicatorSendThread.run(my_position_json); //uncomment for server on
 			
 		}else{
 			Paint paint = new Paint();
@@ -239,7 +240,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	 */
 	@Override
 	public void respond(String message) {
-		if(  message != null  ){
+		if(  message != null   ){
 			try {
 				
 				incommingParser = new JSONObject(message);

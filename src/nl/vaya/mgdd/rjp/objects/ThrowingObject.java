@@ -31,7 +31,11 @@ public class ThrowingObject {
 	protected int _startX = 0;
 	protected int _startY = 0;
 	
-	public ThrowingObject(Context c, int x, int y){
+	public ThrowingObject(Context c, int x, int y, float tileScaleX, float tileScaleY, int startX, int startY){
+		_scaleX = tileScaleX;
+		_scaleY = tileScaleY;
+		_startX = startX;
+		_startY = startY;
 		SetPos(x,y);
 		_context = c;
 		createImages();
@@ -53,13 +57,13 @@ public class ThrowingObject {
 	}
 	
 	public void MoveTo(int x, int y){
-		x--;
-		y++;
+		//x--;
+		//y++;
 		int newX = (int) Math.ceil((x-this._startX)/(this.width*this._scaleX));
 		int newY = (int) Math.ceil((y-this._startY)/(this.height*this._scaleY));
-		this._xPos = (int) (newX*(this.width*this._scaleX));
-		this._yPos = (int) (newY*(this.width*this._scaleX));
-		Log.i("log_tag", "Set banaan to pos x:"+newX+" y:"+newY );
+		this._xPos = (int) (x*(this.width*this._scaleX))+_startX;
+		this._yPos = (int) (y*(this.width*this._scaleX))+_startY;
+		//Log.i("log_tag", "Set banaan to pos x:"+x+" y:"+y );
 		/*
 		while((newX*(this._scaleX*this.width) != this._xPos) || (newY*(this._scaleY*this.height) != this._yPos)){
 			if(newX*(this._scaleX*this.width) > this._xPos){
@@ -77,8 +81,9 @@ public class ThrowingObject {
 	}
 	
 	public void SetPos(int x, int y){
-		this._xPos = x;
-		this._yPos = y;
+		this._xPos = (int)  (x*(this.width*this._scaleX));
+		this._yPos = (int) (y*(this.height*this._scaleY));
+		//Log.i("log_tag", "set x y of throwing object to: x:"+_xPos+" y:"+_yPos);
 	}
 	
 	public void SetState(int s){
@@ -114,24 +119,29 @@ public class ThrowingObject {
 		this._scaleY = tileScaleY;
 		this._startX = startX;
 		this._startY = startY;
+		
+		//Log.i("log_tag", "Draw on x:"+_xPos+" and y:"+_yPos);
+		
 		return new RectF(
-					this._xPos + startX, 
-					this._yPos + startY - ((this.height*tileScaleY)/2), 
-					this._xPos + startX + (this.width*tileScaleX), 
-					this._yPos + startY + ((this.height*tileScaleY)/2)
+					this._xPos+_startX, 
+					this._yPos+_startY + (this.height*tileScaleY), 
+					this._xPos+_startX + (this.width*tileScaleX), 
+					this._yPos+_startY + (this.height*tileScaleY)*2
 				);
 	}
 	
 	public boolean onPos(int x, int y){
-		int touchX = (int) Math.floor((x-_startX)/(this.width*this._scaleX));
-		int touchY = (int) Math.floor((y-_startY)/(this.height*this._scaleY));
+		//int touchX = (int) Math.floor((x-_startX)/(this.width*this._scaleX));
+		//int touchY = (int) Math.floor((y-_startY)/(this.height*this._scaleY));
 		
 		int objectX = (int) Math.floor((this._xPos)/(this.width*this._scaleX));
 		int objectY = (int) Math.floor((this._yPos)/(this.height*this._scaleY));
 		
-		Log.i("log_tag", "touch x:"+touchX+" & y:"+touchY+" en object x:"+objectX+" y:"+objectY);
+		objectY++;
 		
-	if(touchX == objectX && touchY == objectY)
+		Log.i("log_tag", "touch x:"+x+" & y:"+y+" en object x:"+objectX+" y:"+objectY);
+		
+	if(x == objectX && y == objectY)
 			return true;
 		else
 			return false;
