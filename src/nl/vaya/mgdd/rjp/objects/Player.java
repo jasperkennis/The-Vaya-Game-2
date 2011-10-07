@@ -16,6 +16,12 @@ public class Player {
 	protected int _yPos;
 	protected float _angle = 0;
 	
+	protected int _winWidth;
+	protected int _winHeight;
+	
+	protected int _startX;
+	protected int _startY;
+	
 	protected int _screenTilesX;
 	protected int _screenTilesY;
 	
@@ -143,6 +149,7 @@ public class Player {
 			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
 		}else{
 			buzzTime--;
+			Log.i("log_tag", "buzzy left frames :"+buzzTime);
 		}
 	}
 	
@@ -207,6 +214,8 @@ public class Player {
 	}
 	
 	public int getScreenX(int startX, int winWidth){
+		this._startX = startX;
+		this._winWidth = winWidth;
 		if(startX >= 0){
 			return _xPos-startX;
 		}else if(startX <= (((winWidth/_screenTilesX)*40)-winWidth)*-1){
@@ -217,6 +226,8 @@ public class Player {
 	}
 	
 	public int getScreenY(int startY, int winHeight){
+		this._startY = startY;
+		this._winHeight = winHeight;
 		if(startY >= 0)
 			return _yPos-startY;
 		else if( startY <= (((winHeight/_screenTilesY)*40)-winHeight)*-1)
@@ -226,7 +237,7 @@ public class Player {
 	}
 	
 	public void fall(){
-		buzzTime = 100;
+		buzzTime = 20;
 		this.state = 4;
 	}
 	
@@ -249,21 +260,27 @@ public class Player {
 	}
 	
 	public void addPickThrow(int x,int y, ArrayList<ThrowingObject> objects){
+		
+		int mapx = (int) Math.floor(((x-_startX)/((_winWidth/_screenTilesX))));
+		int mapy = (int) Math.floor(((y-_startY)/((_winHeight/_screenTilesY))));
+		
+		Log.i("log_tag", "hit on pos x:"+mapx+" y:"+mapy);
+		
 		if(army == null){
 			for( int i = 0 ; i < objects.size() ; i++) {
 			//for(ThrowingObject to:objects){
-				if(objects.get(i).onPos(x,y)){
+				if(objects.get(i).onPos(mapx,mapy)){
 					Log.i("log_tag", "HIT ON OBJECT");
 					army = objects.get(i);
 					objects.remove(i);
-					GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
+					//GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
 				}
 			}
 		}else{
-			army.MoveTo(x, y);
+			army.SetPos(mapx, mapy);
 			Log.i("log_tag", "MOVE TO X Y");
 			objects.add(army);
-			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army._xPos + ",\"y\": " + army._yPos + "}");
+			//GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army._xPos + ",\"y\": " + army._yPos + "}");
 			army = null;
 		}
 	}

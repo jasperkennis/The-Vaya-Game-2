@@ -54,6 +54,8 @@ public class ObjectLayer {
 	protected int _numTilesWidth;
 	protected int _numTilesHeight;
 	
+	protected int _onceAfterRun = 0;
+	
 	protected Context _context;
 	
 	public ObjectLayer(Context context, int winWidth, int winHeight, int tilesW, int tilesH){
@@ -66,7 +68,7 @@ public class ObjectLayer {
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1, 20, 20);
 		//_enemies.add(new Enemy(context, "sjaak", 2));
-		_throwingObjects.add(new ThrowingObject(context,300,300));
+		
 		
 		makeObjects(context);
 	}
@@ -76,7 +78,7 @@ public class ObjectLayer {
 		
 		_objectPositionArray = new int[] {
 				/* Level one; normal level! */
-				/*0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -115,9 +117,9 @@ public class ObjectLayer {
 		        0, 0, 0, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0*/
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 				/* Level two, race level!*/
-				0, 0, 6, 0, 6, 0, 6, 6, 0, 0, 6, 6, 6, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				/*0, 0, 6, 0, 6, 0, 6, 6, 0, 0, 6, 6, 6, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 6, 0, 6, 0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 6, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -156,7 +158,7 @@ public class ObjectLayer {
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0*/
 		};
 		
 		_objectItemBuildArray = new ArrayList<int[]>();
@@ -265,6 +267,18 @@ public class ObjectLayer {
 		for(GameObject o:_objects){
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
+		
+		if(_onceAfterRun == 0){
+			_throwingObjects.add(new ThrowingObject(_context,10,10, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,20,10, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,30,10, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,10,20, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,10,30, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,22,22, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,18,10, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,33,16, tileScaleX,tileScaleY, _startX, _startY));
+		}
+		_onceAfterRun = 1;
 	}
 	
 	public ArrayList<GameObject> getObjects(){
@@ -288,7 +302,7 @@ public class ObjectLayer {
 	}
 	
 	public void addThrowable(int x, int y){
-		ThrowingObject _throwable = new ThrowingObject(_context, x, y);
+		ThrowingObject _throwable = new ThrowingObject(_context, x, y, tileScaleX,tileScaleY, _startX, _startY);
 		_throwingObjects.add(_throwable);
 	}
 	
