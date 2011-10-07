@@ -218,8 +218,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			this._moveY = 0;
 			return false;
 		default:
-			float x = ( event.getX() - initialTouchXDisposition );
-			float y = ( event.getY() - initialTouchXDisposition );
+			float x = event.getX() - initialTouchXDisposition;
+			float y = event.getY() - initialTouchXDisposition;
 			//x = (x > _maxSpeed) ? _maxSpeed : x;
 			//y = (y > _maxSpeed) ? _maxSpeed : y;
 			this._moveX = (int) Math.ceil(x / motionDetectionArea);

@@ -64,7 +64,7 @@ public class ObjectLayer {
 		_enemies = new HashMap<String,Enemy>();
 		_winWidth = winWidth;
 		_winHeight = winHeight;
-		_you = new Player(context, "remi", 1);
+		_you = new Player(context, "remi", 1, 20, 20);
 		//_enemies.add(new Enemy(context, "sjaak", 2));
 		_throwingObjects.add(new ThrowingObject(context,300,300));
 		
