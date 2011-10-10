@@ -280,7 +280,7 @@ public class Player {
 			army.SetPos(mapx, mapy);
 			Log.i("log_tag", "MOVE TO X Y");
 			objects.add(army);
-			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army._xPos + ",\"y\": " + army._yPos + "}");
+			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army.getXPos() + ",\"y\": " + army.getYPos() + "}");
 			army = null;
 		}
 	}
