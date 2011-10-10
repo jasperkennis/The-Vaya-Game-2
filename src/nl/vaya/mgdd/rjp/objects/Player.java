@@ -67,6 +67,15 @@ public class Player {
 		createBodyImages();
 	}
 	
+	public Player(Context context,String name, int type, int x, int y){
+		_context = context;
+		this._type = type;
+		this._name = name;
+		createBodyImages();
+		_xPos = x;
+		_yPos = y;
+	}
+	
 	protected void createBodyImages(){
 		//Set bitmap options
 		BitmapFactory.Options opts = new BitmapFactory.Options();
