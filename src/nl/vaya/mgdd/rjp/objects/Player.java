@@ -281,6 +281,7 @@ public class Player {
 			Log.i("log_tag", "MOVE TO X Y");
 			objects.add(army);
 			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army.getXPos() + ",\"y\": " + army.getYPos() + "}");
+			Log.i("log_tag", "NEW THROW POS x: "+army.getXPos()+" y: "+army.getYPos());
 			army = null;
 		}
 	}
