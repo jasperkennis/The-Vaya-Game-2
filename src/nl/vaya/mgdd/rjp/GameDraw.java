@@ -249,10 +249,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				
 				incommingParser = new JSONObject(message);
 				
-				/*if(incommingParser.getString("type").equals("positions")){
+				
+				if(incommingParser.getString("type").equals("positions")){
 					//Log.i(log_tag,incommingParser.getJSONArray("positions") + "");
 					objects.handleEnemies(incommingParser.getJSONArray("positions"),playerId);
-				}*/
+				}
 				
 				/*
 				 *  Handle throwable object displacement
