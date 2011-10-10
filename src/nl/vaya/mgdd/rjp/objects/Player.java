@@ -73,7 +73,7 @@ public class Player {
 		this._name = name;
 		createBodyImages();
 		_xPos = x;
-		_xPos = y;
+		_yPos = y;
 	}
 	
 	protected void createBodyImages(){
