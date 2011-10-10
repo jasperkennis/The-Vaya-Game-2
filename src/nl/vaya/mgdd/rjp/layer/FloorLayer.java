@@ -1,7 +1,5 @@
 package nl.vaya.mgdd.rjp.layer;
 
-import java.util.ArrayList;
-
 import nl.vaya.mgdd.rjp.layer.tiles.TileObject;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class FloorLayer {
 	
@@ -215,9 +214,11 @@ public class FloorLayer {
 	public int getSubGround(int x, int y){
 		int xHokje = (int)(x/(this.tileScaleX*32));
 		int yHokje = (int)(y/(this.tileScaleY*32));
-		
-		xHokje = 1;
-		yHokje = 1;
+		Log.i("log_tag", "subground = x "+xHokje+" y "+yHokje);
+		if(xHokje > (_winWidth/_numTilesWidth)*40 || yHokje > (_winHeight/_numTilesHeight)*40){
+			xHokje = 0;
+			yHokje = 0;
+		}
 		
 		return _tilePositionArray[(yHokje*40)+xHokje];
 	}
