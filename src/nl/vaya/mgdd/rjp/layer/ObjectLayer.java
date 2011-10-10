@@ -250,7 +250,6 @@ public class ObjectLayer {
 		canvas.restore();
 		
 		//draw enemys
-
 		Collection<Enemy> c = _enemies.values();
 		Iterator<Enemy> itr = c.iterator();
 		
@@ -334,10 +333,10 @@ public class ObjectLayer {
 		try {
 			if( _enemies.get( player.getString("player")) == null ){
 				Enemy newEnemy = new Enemy(_context);
-				newEnemy.setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), player.getInt("state"), _numTilesWidth, _numTilesHeight);
+				newEnemy.setPlayerPos((int)(player.getInt("x")*tileScaleX), (int)(player.getInt("y")*tileScaleY), player.getInt("angle"), player.getInt("state"), _numTilesWidth, _numTilesHeight);
 				_enemies.put(player.getString("player"), newEnemy);
 			} else {
-				_enemies.get( player.getString("player") ).setPlayerPos(player.getInt("x"), player.getInt("y"), player.getInt("angle"), player.getInt("state"), _numTilesWidth, _numTilesHeight);
+				_enemies.get( player.getString("player") ).setPlayerPos((int)(player.getInt("x")*tileScaleX), (int)(player.getInt("y")*tileScaleY), player.getInt("angle"), player.getInt("state"), _numTilesWidth, _numTilesHeight);
 			}
 		} catch (JSONException e) {
 			Log.i("received_players", "Unable to read playerid.");
