@@ -264,14 +264,14 @@ public class Player {
 					Log.i("log_tag", "HIT ON OBJECT");
 					army = objects.get(i);
 					objects.remove(i);
-					//GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
+					GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_obj\", \"index\" : " + i + "}");
 				}
 			}
 		}else{
 			army.SetPos(mapx, mapy);
 			Log.i("log_tag", "MOVE TO X Y");
 			objects.add(army);
-			//GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army._xPos + ",\"y\": " + army._yPos + "}");
+			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army._xPos + ",\"y\": " + army._yPos + "}");
 			army = null;
 		}
 	}

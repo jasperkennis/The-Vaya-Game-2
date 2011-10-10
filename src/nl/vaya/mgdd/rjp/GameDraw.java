@@ -39,18 +39,18 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 6;
+	protected int motionDetectionArea = 10;
 
 	protected int _maxSpeed = 20;
 	protected int _moveX = 0;
 	protected int _moveY = 0;
 
-	// protected float _angle = 0;
+	protected float _angle = 0;
 	protected float _touchX = 0;
 	protected float _touchY = 0;
 
-	protected int _startX = -240;
-	protected int _startY = -40;
+	protected int _startX = 0;
+	protected int _startY = 0;
 	
 	protected int _downTime = 0;
 
@@ -200,8 +200,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	public boolean onTouch(View v, MotionEvent event) {	
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			initialTouchXDisposition = event.getX(0);
-			initialTouchYDisposition = event.getY(0);
+			initialTouchXDisposition = event.getX();
+			initialTouchYDisposition = event.getY();
 			_downTime++;
 			return true;
 		case MotionEvent.ACTION_POINTER_2_DOWN:
@@ -210,7 +210,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			return true;
 		case MotionEvent.ACTION_UP:
 			if(_downTime < 5){
-				objects.getYou().addPickThrow((int)event.getX(0),(int)event.getY(0), objects.getThrowingObjects());
+				objects.getYou().addPickThrow((int)event.getX(),(int)event.getY(), objects.getThrowingObjects());
 			}
 			_downTime = 0;
 			initialTouchXDisposition = 0.0f;
@@ -219,15 +219,15 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			this._moveY = 0;
 			return false;
 		default:
-			float x = ( event.getX() - initialTouchXDisposition );
-			float y = ( event.getY() - initialTouchXDisposition );
+			float x = event.getX() - initialTouchXDisposition ;
+			float y = event.getY() - initialTouchXDisposition ;
 			//x = (x > _maxSpeed) ? _maxSpeed : x;
 			//y = (y > _maxSpeed) ? _maxSpeed : y;
 			this._moveX = (int) Math.ceil(x / motionDetectionArea);
 			this._moveY = (int) Math.ceil(y / motionDetectionArea);
 
-			this._touchX = event.getX(0);
-			this._touchY = event.getY(0);
+			this._touchX = event.getX();
+			this._touchY = event.getY();
 
 			return true;
 		}
