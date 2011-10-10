@@ -267,7 +267,7 @@ public class ObjectLayer {
 		for(GameObject o:_objects){
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
-		
+
 		if(_onceAfterRun == 0){
 			_throwingObjects.add(new ThrowingObject(_context,10,10, tileScaleX,tileScaleY, _startX, _startY));
 			_throwingObjects.add(new ThrowingObject(_context,20,10, tileScaleX,tileScaleY, _startX, _startY));
