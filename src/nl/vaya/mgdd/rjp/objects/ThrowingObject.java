@@ -86,6 +86,14 @@ public class ThrowingObject {
 		//Log.i("log_tag", "set x y of throwing object to: x:"+_xPos+" y:"+_yPos);
 	}
 	
+	public int getXPos(){
+		return (int)(_xPos/((this.width*this._scaleX)));
+	}
+	
+	public int getYPos(){
+		return (int)(_yPos/((this.height*this._scaleY)));
+	}
+	
 	public void SetState(int s){
 		this.state = s;
 	}
