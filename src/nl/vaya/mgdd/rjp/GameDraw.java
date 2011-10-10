@@ -126,13 +126,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		if (gameReady) {
 			
 			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-	    	my_position_json += "\"x\": " + objects.getYou().getXPos() + ",";
-	    	my_position_json += "\"y\": " + objects.getYou().getYPos() + ",";
+	    	my_position_json += "\"x\": " + (int)(objects.getYou().getXPos()/floor.getTileScaleX()) + ",";
+	    	my_position_json += "\"y\": " + (int)(objects.getYou().getYPos()/floor.getTileScaleY()) + ",";
 	    	my_position_json += "\"angle\": " + objects.getYou().getAngle() + ",";
 	    	my_position_json += "\"state\": " + objects.getYou().getState() + "";
 	    	my_position_json += "}}";
 	    	
+	    	Log.i("log_tag", "x: "+objects.getYou().getXPos()+" y: "+objects.getYou().getYPos()+" scaleX: "+floor.getTileScaleX()+" scaleY: "+floor.getTileScaleX());
+	    	
 			communicatorSendThread.run(my_position_json); //uncomment for server on
+			
 			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
