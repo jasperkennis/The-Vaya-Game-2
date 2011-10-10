@@ -250,16 +250,17 @@ public class ObjectLayer {
 		canvas.restore();
 		
 		//draw enemys
-		
+
 		Collection<Enemy> c = _enemies.values();
 		Iterator<Enemy> itr = c.iterator();
 		
 		while(itr.hasNext()){
+			Enemy next_enemy = itr.next();
 			canvas.save();
-	        canvas.rotate(180-itr.next().getAngle(), itr.next().getScreenX(_startX), itr.next().getScreenY(_startY));
-			canvas.drawBitmap(itr.next().getImage(), 
-					new Rect(0, 0, itr.next().getImage().getWidth(), itr.next().getImage().getHeight()), 
-					new RectF(itr.next().getScreenX(_startX)-((itr.next().getImage().getWidth()*tileScaleX)/2), itr.next().getScreenY(_startY)-((itr.next().getImage().getHeight()*tileScaleY)/2), itr.next().getScreenX(_startX) + ((itr.next().getImage().getWidth()*tileScaleX)/2), itr.next().getScreenY(_startY) + ((itr.next().getImage().getHeight()*tileScaleY)/2)), 
+	        canvas.rotate(180-next_enemy.getAngle(), next_enemy.getScreenX(_startX), next_enemy.getScreenY(_startY));
+			canvas.drawBitmap(next_enemy.getImage(), 
+					new Rect(0, 0, next_enemy.getImage().getWidth(), next_enemy.getImage().getHeight()), 
+					new RectF(next_enemy.getScreenX(_startX)-((next_enemy.getImage().getWidth()*tileScaleX)/2), next_enemy.getScreenY(_startY)-((next_enemy.getImage().getHeight()*tileScaleY)/2), next_enemy.getScreenX(_startX) + ((next_enemy.getImage().getWidth()*tileScaleX)/2), next_enemy.getScreenY(_startY) + ((next_enemy.getImage().getHeight()*tileScaleY)/2)), 
 					null);
 			canvas.restore();
 		}
@@ -267,7 +268,7 @@ public class ObjectLayer {
 		for(GameObject o:_objects){
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
-		
+
 		if(_onceAfterRun == 0){
 			_throwingObjects.add(new ThrowingObject(_context,10,10, tileScaleX,tileScaleY, _startX, _startY));
 			_throwingObjects.add(new ThrowingObject(_context,20,10, tileScaleX,tileScaleY, _startX, _startY));

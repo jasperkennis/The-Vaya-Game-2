@@ -213,9 +213,10 @@ public class FloorLayer {
 	}
 	
 	public int getSubGround(int x, int y){
-		int xHokje = (int)(x/(this.tileScaleX*32));
-		int yHokje = (int)(y/(this.tileScaleY*32));
-		
+		//int xHokje = (int)(x/(this.tileScaleX*32));
+		//int yHokje = (int)(y/(this.tileScaleY*32));
+		int xHokje = 1;
+		int yHokje = 1;
 		return _tilePositionArray[(yHokje*40)+xHokje];
 	}
 	
