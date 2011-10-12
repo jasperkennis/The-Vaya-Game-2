@@ -147,7 +147,7 @@ public class ThrowingObject {
 		
 		objectY++;
 		
-		Log.i("log_tag", "touch x:"+x+" & y:"+y+" en object x:"+objectX+" y:"+objectY);
+		//Log.i("log_tag", "touch x:"+x+" & y:"+y+" en object x:"+objectX+" y:"+objectY);
 		
 	if(x == objectX && y == objectY)
 			return true;
