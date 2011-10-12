@@ -57,7 +57,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	protected static Communicator communicator = null;
 	protected Thread communicatorReceiveThread;
 	protected SenderThread communicatorSendThread;
-	protected Thread fpsThread;
 	protected String my_position_json;
 	
 	protected JSONObject incommingParser;
@@ -68,7 +67,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	protected boolean drawing = true;
 	protected long now = 0;
 	protected long lastDraw = 0;
-	protected int fps = 30;
+	protected int fps = 1;
 	protected int sampleTime = 0;
 	protected boolean draw = false;
 	
@@ -128,23 +127,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 				}
 			});
 			
-			fpsThread = new Thread(new Runnable(){
-				@Override
-				public void run(){
-					
-					_self.setLastDrawnToNow();
-					while(drawing == true){
-						_self.setNow();
-						if( ( _self.getNow() - _self.getLastDraw() ) > sampleTime ){
-							//synchronized (_self){
-								_self.setDraw(true);
-								_self.draw(_canvas);
-							//}
-						}
-					}
-				}
-			});
-			
 			communicatorReceiveThread.start();
 			
 		}
@@ -152,20 +134,19 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	}
 
 	@Override
-	protected synchronized void onDraw(Canvas canvas) {
-		Log.i("draw log","Draw called");
-
+	protected void onDraw(Canvas canvas) {
 		
 		/**
+		 * Turn below part on for fps try-outs
 		 * Unfortunately, due to dependency on canvas, fps can only be initialized here
 		 */
-		if(_canvas == null){
+		/*if(_canvas == null){
 			_canvas = canvas;
 			drawing = true;
 			lastDraw = System.currentTimeMillis();
 			_cycle = new GameCycle();
 			_cycle.doInBackground(this);
-		}
+		}*/
 		
 		if (gameReady) {
 			
@@ -238,14 +219,13 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 			}
 			
 		}
-		
-		if(!drawing || draw){ // Ensure a drawing cycle before an fps has been established.
-			Log.i("draw log","Completing draw.");
-			setDraw(false);
+
+		if(!drawing){ // Ensure a drawing cycle before an fps has been established.
 			invalidate();
-			setLastDrawnToNow();
-			Log.i("draw log","Draw complete.");
 		}
+		setDraw(false);
+		setLastDrawnToNow();
+		Log.i("draw log","Draw complete.");
 	}
 
 	@Override
@@ -392,14 +372,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 
 	@Override
 	public void ftpCycle() {
-		// _self.setLastDrawnToNow();
-		while(drawing == true){
+		while(drawing){
 			setNow();
 			if( ( getNow() - getLastDraw() ) > sampleTime ){
-				//synchronized (_self){
+				Log.i("draw log",( getNow() - getLastDraw() ) + "");
+				
+				Log.i("draw log","Draw call start");
+				synchronized (this){
 					setDraw(true);
-					draw(_canvas);
-				//}
+					onDraw(_canvas);
+				}
+				Log.i("draw log","Draw call complete.");
 			}
 		}
 		
