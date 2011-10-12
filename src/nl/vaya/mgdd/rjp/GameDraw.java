@@ -127,12 +127,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			fpsThread = new Thread(new Runnable(){
 				@Override
 				public void run(){
+					
+					_self.lastDraw = System.currentTimeMillis();
+					Log.i(log_tag, _self.lastDraw + "");
 					while(drawing == true){
 						now = System.currentTimeMillis();
-						if(now > lastDraw + sampleTime){
-							Log.i(log_tag, "Last draw was: " + lastDraw + ", while now is: " + now + ", so I need to draw!");
+						if(sampleTime > now - _self.lastDraw){
+							//Log.i(log_tag, "Last draw was: " + _self.lastDraw + ", while now is: " + now + ", and the sample time is: " + sampleTime + " so I need to draw!");
 							_self.draw(_canvas);
 							lastDraw = now;
+							Log.i(log_tag, _self.lastDraw + "");
 						}
 					}
 				}
@@ -154,6 +158,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		if(_canvas == null){
 			_canvas = canvas;
 			drawing = true;
+			lastDraw = System.currentTimeMillis();
 			fpsThread.start();
 		}
 		
