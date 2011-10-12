@@ -128,15 +128,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				@Override
 				public void run(){
 					
-					_self.lastDraw = System.currentTimeMillis();
-					Log.i(log_tag, _self.lastDraw + "");
+					_self.setLastDrawnToNow();
+					Log.i(log_tag, _self.getLastDraw() + "");
 					while(drawing == true){
-						now = System.currentTimeMillis();
-						if(sampleTime > now - _self.lastDraw){
-							//Log.i(log_tag, "Last draw was: " + _self.lastDraw + ", while now is: " + now + ", and the sample time is: " + sampleTime + " so I need to draw!");
+						_self.setNow();
+						if( ( _self.getNow() - _self.getLastDraw() ) > sampleTime ){
+							Log.i(log_tag, ( _self.getNow() - _self.getLastDraw() ) + "");
 							_self.draw(_canvas);
-							lastDraw = now;
-							Log.i(log_tag, _self.lastDraw + "");
+							_self.setLastDrawnToNow();
 						}
 					}
 				}
@@ -350,5 +349,25 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	
 	public Canvas getCanvas(){
 		return _canvas;
+	}
+	
+	private void setLastDraw(long n){
+		lastDraw = n;
+	}
+	
+	private void setLastDrawnToNow(){
+		setLastDraw( System.currentTimeMillis() );
+	}
+	
+	private long getLastDraw(){
+		return lastDraw;
+	}
+	
+	private void setNow(){
+		now = System.currentTimeMillis();
+	}
+	
+	private long getNow(){
+		return now;
 	}
 }
