@@ -8,7 +8,6 @@ import nl.vaya.mgdd.rjp.connection.SenderRunnable;
 import nl.vaya.mgdd.rjp.connection.SenderThread;
 import nl.vaya.mgdd.rjp.layer.FloorLayer;
 import nl.vaya.mgdd.rjp.layer.ObjectLayer;
-import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.ThrowingObject;
 
@@ -57,6 +56,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected static Communicator communicator = null;
 	protected Thread communicatorReceiveThread;
 	protected SenderThread communicatorSendThread;
+	protected Thread fpsThread;
 	protected String my_position_json;
 	
 	protected JSONObject incommingParser;
@@ -64,12 +64,20 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	protected String log_tag = "game_server";
 
 	protected boolean gameReady = false; //false for server on
+	protected boolean drawing = true;
+	protected long now = 0;
+	protected long lastDraw = 0;
+	protected int fps = 30;
+	protected int sampleTime = 0;
 	
 	protected String playerId;
 	
 	protected ArrayList<String> logText;
 	
 	protected int _once = 0; // 0 for server on
+	
+	protected Canvas _canvas = null;
+	//protected GameThread _gameThread;
 
 	public GameDraw(Context context) {
 		
@@ -80,6 +88,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 
+		sampleTime = 1000 / fps;
+		
 		Display display = ((WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
@@ -114,6 +124,20 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 				}
 			});
 			
+			fpsThread = new Thread(new Runnable(){
+				@Override
+				public void run(){
+					while(drawing == true){
+						now = System.currentTimeMillis();
+						if(now > lastDraw + sampleTime){
+							Log.i(log_tag, "Last draw was: " + lastDraw + ", while now is: " + now + ", so I need to draw!");
+							_self.draw(_canvas);
+							lastDraw = now;
+						}
+					}
+				}
+			});
+			
 			communicatorReceiveThread.start();
 			
 		}
@@ -123,6 +147,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 	@Override
 	protected void onDraw(Canvas canvas) {
 
+		
+		/**
+		 * Unfortunately, due to dependency on canvas, fps can only be initialized here
+		 */
+		if(_canvas == null){
+			_canvas = canvas;
+			drawing = true;
+			fpsThread.start();
+		}
+		
 		if (gameReady) {
 			
 			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
@@ -197,7 +231,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			
 		}
 		
-		invalidate();
+		if(!drawing){ // Ensure a drawing cycle before an fps has been established.
+			invalidate();
+		}
 	}
 
 	@Override
@@ -305,5 +341,9 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			communicator = new Communicator();
 		}
 		return communicator;
+	}
+	
+	public Canvas getCanvas(){
+		return _canvas;
 	}
 }
