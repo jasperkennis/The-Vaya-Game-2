@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -338,6 +340,23 @@ public class ObjectLayer {
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
 		
+		if(this._you.hasThrowObject() != null){
+			canvas.drawRect(new RectF(_winWidth-(32*tileScaleX),0,_winWidth,32*tileScaleY), 
+					new Paint(Color.BLACK));
+			canvas.drawBitmap(this._you.hasThrowObject().getImage(), 
+					new Rect(0, 0, 32, 32), 
+					new RectF(_winWidth-(32*tileScaleX),0,_winWidth,32*tileScaleY), 
+					null);
+		}
+		if(this._you.hasWinningObject() != null){
+			canvas.drawRect(new RectF(0,0,32*tileScaleX,32*tileScaleY), 
+					new Paint(Color.BLACK));
+			canvas.drawBitmap(this._you.hasWinningObject().getImage(), 
+					new Rect(0, 0, 32, 32), 
+					new RectF(0,0,32*tileScaleX,32*tileScaleY), 
+					null);
+		}
+		
 		if(this._you.checkWinnState() && _playing){
 			_playing = false;
 			AlertDialog alertDialog = new AlertDialog.Builder(_context).create();  
@@ -361,6 +380,42 @@ public class ObjectLayer {
 			_throwingObjects.add(new ThrowingObject(_context,22,22, tileScaleX,tileScaleY, _startX, _startY));
 			_throwingObjects.add(new ThrowingObject(_context,18,10, tileScaleX,tileScaleY, _startX, _startY));
 			_throwingObjects.add(new ThrowingObject(_context,33,16, tileScaleX,tileScaleY, _startX, _startY));
+			
+			_throwingObjects.add(new ThrowingObject(_context,4,6, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,7, 8, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,4,10, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,8,13, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,8,16, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,5,19, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,4,21, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,5,27, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,12,34, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,18,36, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,23,34, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,30,32, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,35,31, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,32,26, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,32,20, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,35,6, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,29,5, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,23,8, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,12,6, tileScaleX,tileScaleY, _startX, _startY));
+			
+			_throwingObjects.add(new ThrowingObject(_context,11,27, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,13,24, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,13,16, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,11,15, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,19,14, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,24,15, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,29,15, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,29,18, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,28,25, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,26,29, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,20,27, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,13,26, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,17,22, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,18,24, tileScaleX,tileScaleY, _startX, _startY));
+			_throwingObjects.add(new ThrowingObject(_context,23,29, tileScaleX,tileScaleY, _startX, _startY));
 			
 			_suncream = new WinningObject(_context,20,20, tileScaleX,tileScaleY, _startX, _startY);
 			

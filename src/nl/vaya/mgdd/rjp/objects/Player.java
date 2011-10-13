@@ -391,4 +391,18 @@ public class Player {
 		}
 	}
 	
+	public ThrowingObject hasThrowObject(){
+		if(this.army != null)
+			return this.army;
+		else
+			return null;
+	}
+	
+	public WinningObject hasWinningObject(){
+		if(this._winningObject != null)
+			return this._winningObject;
+		else
+			return null;
+	}
+	
 }
