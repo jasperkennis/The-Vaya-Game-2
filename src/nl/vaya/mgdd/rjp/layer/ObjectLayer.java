@@ -340,8 +340,14 @@ public class ObjectLayer {
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
 		
+		Paint p = new Paint(Color.GRAY);
+		p.setAlpha(100);
 		if(this._you.hasThrowObject() != null){
 			canvas.drawRect(new RectF(_winWidth-(32*tileScaleX),0,_winWidth,32*tileScaleY), 
+					p);
+			canvas.drawRect(new RectF(_winWidth-(34*tileScaleX),32*tileScaleY,_winWidth,34*tileScaleY), 
+					new Paint(Color.BLACK));
+			canvas.drawRect(new RectF(_winWidth-(34*tileScaleX),0,_winWidth-(32*tileScaleX),34*tileScaleY), 
 					new Paint(Color.BLACK));
 			canvas.drawBitmap(this._you.hasThrowObject().getImage(), 
 					new Rect(0, 0, 32, 32), 
@@ -350,6 +356,10 @@ public class ObjectLayer {
 		}
 		if(this._you.hasWinningObject() != null){
 			canvas.drawRect(new RectF(0,0,32*tileScaleX,32*tileScaleY), 
+					p);
+			canvas.drawRect(new RectF(0,32*tileScaleY,(34*tileScaleX),34*tileScaleY), 
+					new Paint(Color.BLACK));
+			canvas.drawRect(new RectF((32*tileScaleX),0,(34*tileScaleX),34*tileScaleY), 
 					new Paint(Color.BLACK));
 			canvas.drawBitmap(this._you.hasWinningObject().getImage(), 
 					new Rect(0, 0, 32, 32), 
