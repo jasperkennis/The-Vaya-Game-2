@@ -25,10 +25,14 @@ public class Enemy {
 	protected int loopState = 0;
 	protected Bitmap current;
 	protected Bitmap char_blue_1;
+	protected Bitmap char_blue_Suncream;
 	protected ArrayList<Bitmap> _walking = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _swimming = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _running = new ArrayList<Bitmap>();
 	protected ArrayList<Bitmap> _crashing = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _walkingSuncream = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _swimmingSuncream = new ArrayList<Bitmap>();
+	protected ArrayList<Bitmap> _runningSuncream = new ArrayList<Bitmap>();
 	
 	protected Point _prevPoint = new Point();
 	
@@ -65,6 +69,9 @@ public class Enemy {
 		char_blue_1 = BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue", "drawable", _context.getPackageName()), opts);
 		
+		char_blue_Suncream = BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_suncream", "drawable", _context.getPackageName()), opts);		
+		
 		//walking
 		_walking.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_loop1", "drawable", _context.getPackageName()), opts));
@@ -90,6 +97,26 @@ public class Enemy {
 				_context.getResources().getIdentifier("drawable/char_blue_swim2", "drawable", _context.getPackageName()), opts));
 		_swimming.add(BitmapFactory.decodeResource(_context.getResources(),
 				_context.getResources().getIdentifier("drawable/char_blue_swim3", "drawable", _context.getPackageName()), opts));
+		
+		//walking with suncream
+		_walkingSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_loop1_suncream", "drawable", _context.getPackageName()), opts));
+		_walkingSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_loop2_suncream", "drawable", _context.getPackageName()), opts));
+		
+		//running with suncream
+		_runningSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_run1_suncream", "drawable", _context.getPackageName()), opts));
+		_runningSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_run2_suncream", "drawable", _context.getPackageName()), opts));
+		
+		//swimming with suncream
+		_swimmingSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_swim1_suncream", "drawable", _context.getPackageName()), opts));
+		_swimmingSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_swim2_suncream", "drawable", _context.getPackageName()), opts));
+		_swimmingSuncream.add(BitmapFactory.decodeResource(_context.getResources(),
+				_context.getResources().getIdentifier("drawable/char_blue_swim3_suncream", "drawable", _context.getPackageName()), opts));
 		
 		
 	}
@@ -132,26 +159,44 @@ public class Enemy {
 	public Bitmap getImage(){
 		loopState ++;
 		switch(this.state){
-			case 1:
-				if(loopState >= _walking.size())
-					loopState = 0;
-				this.current = _walking.get(loopState);
-			break;
-			case 2:
-				if(loopState >= _swimming.size())
-					loopState = 0;
-				this.current = _swimming.get(loopState);
-			break;
-			case 3:
-				if(loopState >= _running.size())
-					loopState = 0;
-				this.current = _running.get(loopState);
-			break;
-			case 4:
-				if(loopState >= _crashing.size())
-					loopState = 0;
-				this.current = _crashing.get(loopState);
-			break;
+		case 1:
+			if(loopState >= _walking.size())
+				loopState = 0;
+			this.current = _walking.get(loopState);
+		break;
+		case 11:
+			if(loopState >= _walkingSuncream.size())
+				loopState = 0;
+			this.current = _walkingSuncream.get(loopState);
+		break;
+		case 2:
+			if(loopState >= _swimming.size())
+				loopState = 0;
+			this.current = _swimming.get(loopState);
+		break;
+		case 12:
+			if(loopState >= _swimmingSuncream.size())
+				loopState = 0;
+			this.current = _swimmingSuncream.get(loopState);
+		break;
+		case 3:
+			if(loopState >= _running.size())
+				loopState = 0;
+			this.current = _running.get(loopState);
+		break;
+		case 13:
+			if(loopState >= _runningSuncream.size())
+				loopState = 0;
+			this.current = _runningSuncream.get(loopState);
+		break;
+		case 4:
+			if(loopState >= _crashing.size())
+				loopState = 0;
+			this.current = _crashing.get(loopState);
+		break;
+		case 10:
+			this.current = char_blue_Suncream;
+		break;
 			default:
 				this.current = char_blue_1;
 			break;

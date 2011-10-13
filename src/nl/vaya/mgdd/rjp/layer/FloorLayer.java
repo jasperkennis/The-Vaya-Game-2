@@ -369,7 +369,6 @@ public class FloorLayer {
 		_updateDelay++;
 		if(_updateDelay == 5){
 			for(int i = 0; i < _tiles.length; i++){
-				Log.i("log_tag", "TileNr:"+i);
 				_tiles[i].update();
 			}
 			_updateDelay = 0;

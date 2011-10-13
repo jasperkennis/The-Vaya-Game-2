@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import nl.vaya.mgdd.rjp.FinActivity;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.Player;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -64,6 +66,8 @@ public class ObjectLayer {
 	protected int _onceAfterRun = 0;
 	
 	protected Context _context;
+	
+	protected boolean _playing = true;
 	
 	public ObjectLayer(Context context, int winWidth, int winHeight, int tilesW, int tilesH){
 		_context = context;
@@ -332,6 +336,20 @@ public class ObjectLayer {
 		
 		for(GameObject o:_objects){
 			canvas.drawBitmap(o.getImage(), o.getStartRect(), o.getDestRect(tileScaleX,tileScaleY, _startX, _startY), null);
+		}
+		
+		if(this._you.checkWinnState() && _playing){
+			_playing = false;
+			AlertDialog alertDialog = new AlertDialog.Builder(_context).create();  
+		    alertDialog.setTitle("GEFELICITEERD!");  
+		    alertDialog.setMessage("Je hebt het spel gewonnen! Ga de uitdaging nogmaals aan.");  
+		    alertDialog.setButton("Terug naar het hoofdscherm.", new DialogInterface.OnClickListener() {  
+		      public void onClick(DialogInterface dialog, int which) { 
+		        return;  
+		    } });   
+		    alertDialog.show();
+		    
+		    //TODO: ADD a action to the server that this player has won the game.
 		}
 
 		if(_onceAfterRun == 0){

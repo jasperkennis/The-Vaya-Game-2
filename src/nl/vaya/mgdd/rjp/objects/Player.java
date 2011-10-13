@@ -328,7 +328,7 @@ public class Player {
 	}
 	
 	public int getState(){
-		return this.state;
+		return this.state+this.plusState;
 	}
 	
 	public void pickUpWinningObject(WinningObject object){
@@ -341,9 +341,19 @@ public class Player {
 		plusState = 0;
 		int mapx = (int) Math.floor(((this._xPos-_startX)/((_winWidth/_screenTilesX))));
 		int mapy = (int) Math.floor(((this._yPos-_startY)/((_winHeight/_screenTilesY))));
-		_winningObject.SetPos(mapx+_dropX, mapy+_dropY);
 		_winningObject.dropped();
+		Log.i("log_tag", "winning object dropped on x:"+_winningObject._xPos+" y:"+_winningObject._yPos);
 		_winningObject = null;
+	}
+	
+	public boolean checkWinnState(){
+		int mapx = (int) Math.floor(((this._xPos)/((_winWidth/_screenTilesX))));
+		int mapy = (int) Math.floor(((this._yPos)/((_winHeight/_screenTilesY))));
+		Log.i("log_tag", "x1:"+mapx+" x2:"+this.getSpanPoint().x+" y1:"+mapy+" y2:"+this.getSpanPoint().y);
+		if(this._winningObject != null && mapx == this.getSpanPoint().x && mapy == this.getSpanPoint().y){
+			return true;
+		}
+		return false;
 	}
 	
 	public void setSpanPoint(Point p){

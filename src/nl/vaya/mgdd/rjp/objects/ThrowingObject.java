@@ -161,6 +161,7 @@ public class ThrowingObject {
 	
 	public void dropped(){
 		this.puckedUp = false;
+		this.SetPos(20, 20);
 	}
 	
 	public Boolean findTile(int tilePos){
