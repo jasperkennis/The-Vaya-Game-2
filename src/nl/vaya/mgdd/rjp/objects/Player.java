@@ -186,7 +186,6 @@ public class Player {
 			this._angle = (float) Math.toDegrees( Math.atan2( basePointX-touchX, basePointY-touchY ) )+180;
 		}else{
 			buzzTime--;
-			Log.i("log_tag", "buzzy left frames :"+buzzTime);
 		}
 	}
 	
@@ -212,7 +211,6 @@ public class Player {
 		
 		this._xPos = this._prevPoint.x;
 		this._yPos = this._prevPoint.y;
-		Log.i("log_tag", "HIT HIT HIT HIT");
 	}
 	
 	public int getStartX(int winWidth){
@@ -335,21 +333,19 @@ public class Player {
 		plusState = 10;
 		_winningObject = object;
 		_winningObject.picked();
+		GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_win_obj\"}");
 	}
 	
 	public void DropWinningObject(){
 		plusState = 0;
-		int mapx = (int) Math.floor(((this._xPos-_startX)/((_winWidth/_screenTilesX))));
-		int mapy = (int) Math.floor(((this._yPos-_startY)/((_winHeight/_screenTilesY))));
 		_winningObject.dropped();
-		Log.i("log_tag", "winning object dropped on x:"+_winningObject._xPos+" y:"+_winningObject._yPos);
 		_winningObject = null;
+		GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_win_obj\"}");
 	}
 	
 	public boolean checkWinnState(){
 		int mapx = (int) Math.floor(((this._xPos)/((_winWidth/_screenTilesX))));
 		int mapy = (int) Math.floor(((this._yPos)/((_winHeight/_screenTilesY))));
-		Log.i("log_tag", "x1:"+mapx+" x2:"+this.getSpanPoint().x+" y1:"+mapy+" y2:"+this.getSpanPoint().y);
 		if(this._winningObject != null && mapx == this.getSpanPoint().x && mapy == this.getSpanPoint().y){
 			return true;
 		}
@@ -369,8 +365,6 @@ public class Player {
 		int mapx = (int) Math.floor(((x-_startX)/((_winWidth/_screenTilesX))));
 		int mapy = (int) Math.floor(((y-_startY)/((_winHeight/_screenTilesY))));
 		
-		Log.i("log_tag", "hit on pos x:"+mapx+" y:"+mapy);
-		
 		if(army == null){
 			for( int i = 0 ; i < objects.size() ; i++) {
 			//for(ThrowingObject to:objects){
@@ -386,7 +380,6 @@ public class Player {
 			Log.i("log_tag", "MOVE TO X Y");
 			objects.add(army);
 			GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_obj\", \"x\": " + army.getXPos() + ",\"y\": " + army.getYPos() + "}");
-			Log.i("log_tag", "NEW THROW POS x: "+army.getXPos()+" y: "+army.getYPos());
 			army = null;
 		}
 	}

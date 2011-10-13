@@ -91,8 +91,6 @@ public class WinningObject {
 		this._startX = startX;
 		this._startY = startY;
 		
-		//Log.i("log_tag", "Draw on x:"+_xPos+" and y:"+_yPos);
-		
 		return new RectF(
 					this._xPos+_startX, 
 					this._yPos+_startY + (this.height*tileScaleY), 
