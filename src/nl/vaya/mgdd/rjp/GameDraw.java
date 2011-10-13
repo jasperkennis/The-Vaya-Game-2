@@ -19,15 +19,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 
-public class GameDraw extends View implements OnTouchListener, MessageResponder, FTPController {
+public class GameDraw extends SurfaceView implements OnTouchListener, MessageResponder {
 
 	protected FloorLayer floor;
 	protected ObjectLayer objects;
@@ -57,7 +57,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	protected static Communicator communicator = null;
 	protected Thread communicatorReceiveThread;
 	protected SenderThread communicatorSendThread;
-	protected Thread fpsThread;
 	protected String my_position_json;
 	
 	protected JSONObject incommingParser;
@@ -65,23 +64,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	protected String log_tag = "game_server";
 
 	protected boolean gameReady = false; //false for server on
-	protected boolean drawing = true;
-	protected long now = 0;
-	protected long lastDraw = 0;
-	protected int fps = 30;
-	protected int sampleTime = 0;
-	protected boolean draw = false;
 	
 	protected String playerId;
 	
 	protected ArrayList<String> logText;
 	
 	protected int _once = 0; // 0 for server on
-	
-	protected Canvas _canvas = null;
-	
-	protected GameCycle _cycle;
-	//protected GameThread _gameThread;
 
 	public GameDraw(Context context) {
 		
@@ -92,7 +80,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 
-		sampleTime = 1000 / fps;
+		//sampleTime = 1000 / fps;
 		
 		Display display = ((WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -128,23 +116,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 				}
 			});
 			
-			fpsThread = new Thread(new Runnable(){
-				@Override
-				public void run(){
-					
-					_self.setLastDrawnToNow();
-					while(drawing == true){
-						_self.setNow();
-						if( ( _self.getNow() - _self.getLastDraw() ) > sampleTime ){
-							//synchronized (_self){
-								_self.setDraw(true);
-								_self.draw(_canvas);
-							//}
-						}
-					}
-				}
-			});
-			
 			communicatorReceiveThread.start();
 			
 		}
@@ -152,20 +123,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	}
 
 	@Override
-	protected synchronized void onDraw(Canvas canvas) {
-		Log.i("draw log","Draw called");
-
-		
-		/**
-		 * Unfortunately, due to dependency on canvas, fps can only be initialized here
-		 */
-		if(_canvas == null){
-			_canvas = canvas;
-			drawing = true;
-			lastDraw = System.currentTimeMillis();
-			_cycle = new GameCycle();
-			_cycle.doInBackground(this);
-		}
+	protected void onDraw(Canvas canvas) {
 		
 		if (gameReady) {
 			
@@ -238,14 +196,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 			}
 			
 		}
-		
-		if(!drawing || draw){ // Ensure a drawing cycle before an fps has been established.
-			Log.i("draw log","Completing draw.");
-			setDraw(false);
+
+		//if(!drawing){ // Ensure a drawing cycle before an fps has been established.
 			invalidate();
-			setLastDrawnToNow();
-			Log.i("draw log","Draw complete.");
-		}
+		//}
+		Log.i("draw log","Draw complete.");
 	}
 
 	@Override
@@ -351,57 +306,5 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 			communicator = new Communicator();
 		}
 		return communicator;
-	}
-	
-	public Canvas getCanvas(){
-		return _canvas;
-	}
-	
-	private void setLastDraw(long n){
-		lastDraw = n;
-	}
-	
-	private void setLastDrawnToNow(){
-		setLastDraw( System.currentTimeMillis() );
-	}
-	
-	private long getLastDraw(){
-		return lastDraw;
-	}
-	
-	private void setNow(){
-		now = System.currentTimeMillis();
-	}
-	
-	private long getNow(){
-		return now;
-	}
-	
-	private void setDraw(boolean v){
-		draw = v;
-	}
-	
-	private class GameCycle extends AsyncTask<FTPController,Object,Object> {
-
-		protected Object doInBackground(FTPController... callBacks) {
-			callBacks[0].ftpCycle();
-			return null;
-		}
-		
-	}
-
-	@Override
-	public void ftpCycle() {
-		// _self.setLastDrawnToNow();
-		while(drawing == true){
-			setNow();
-			if( ( getNow() - getLastDraw() ) > sampleTime ){
-				//synchronized (_self){
-					setDraw(true);
-					draw(_canvas);
-				//}
-			}
-		}
-		
 	}
 }
