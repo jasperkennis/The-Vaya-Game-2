@@ -9,12 +9,15 @@ import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.Player;
 import nl.vaya.mgdd.rjp.objects.ThrowingObject;
+import nl.vaya.mgdd.rjp.objects.WinningObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -28,6 +31,7 @@ public class ObjectLayer {
 	protected ArrayList<GameObject> _objects;
 	protected ArrayList<GameObject> _floorObjects;
 	protected ArrayList<ThrowingObject> _throwingObjects;
+	protected WinningObject _suncream = null;
 	
 	protected Player _you;
 	protected int _startX;
@@ -63,6 +67,7 @@ public class ObjectLayer {
 		_objects = new ArrayList<GameObject>();
 		_floorObjects = new ArrayList<GameObject>();
 		_throwingObjects = new ArrayList<ThrowingObject>();
+		
 		_enemies = new HashMap<String,Enemy>();
 		_winWidth = winWidth;
 		_winHeight = winHeight;
@@ -239,6 +244,8 @@ public class ObjectLayer {
 		for(ThrowingObject o:_throwingObjects){
 			canvas.drawBitmap(o.getImage(), o.getSrc(), o.getDest(tileScaleX,tileScaleY, _startX, _startY), null);
 		}
+		if(_suncream != null && !_suncream.isPicked())
+		canvas.drawBitmap(_suncream.getImage(), _suncream.getSrc(), _suncream.getDest(tileScaleX,tileScaleY, _startX, _startY), null);
 		
 		
 		Rect src = new Rect(0, 0, _you.getImage().getWidth(), _you.getImage().getHeight());
@@ -277,6 +284,17 @@ public class ObjectLayer {
 			_throwingObjects.add(new ThrowingObject(_context,22,22, tileScaleX,tileScaleY, _startX, _startY));
 			_throwingObjects.add(new ThrowingObject(_context,18,10, tileScaleX,tileScaleY, _startX, _startY));
 			_throwingObjects.add(new ThrowingObject(_context,33,16, tileScaleX,tileScaleY, _startX, _startY));
+			
+			_suncream = new WinningObject(_context,20,20, tileScaleX,tileScaleY, _startX, _startY);
+			
+			AlertDialog alertDialog = new AlertDialog.Builder(_context).create();  
+		    alertDialog.setTitle("Oei het is erg heet!");  
+		    alertDialog.setMessage("Zoek de zonnenbrand en breng deze terug naar je spawn plek.");  
+		    alertDialog.setButton("Oke", new DialogInterface.OnClickListener() {  
+		      public void onClick(DialogInterface dialog, int which) {  
+		        return;  
+		    } });   
+		    alertDialog.show();
 		}
 		_onceAfterRun = 1;
 	}
@@ -287,6 +305,10 @@ public class ObjectLayer {
 
 	public Player getYou(){
 		return _you;
+	}
+	
+	public WinningObject getWinningObject(){
+		return _suncream;
 	}
 	
 	public HashMap<String,Enemy> getEnemy(){

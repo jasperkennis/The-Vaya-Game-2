@@ -1,6 +1,7 @@
 package nl.vaya.mgdd.rjp;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import nl.vaya.mgdd.rjp.connection.Communicator;
 import nl.vaya.mgdd.rjp.connection.MessageResponder;
@@ -19,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Display;
@@ -29,8 +31,12 @@ import android.view.WindowManager;
 
 public class GameDraw extends View implements OnTouchListener, MessageResponder, FTPController {
 
+	protected boolean _firstDraw = true;
+	
 	protected FloorLayer floor;
 	protected ObjectLayer objects;
+	
+	protected ArrayList<Point> _spawnPoints;
 
 	protected int _winWith;
 	protected int _winHeight;
@@ -86,6 +92,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	public GameDraw(Context context) {
 		
 		super(context);
+		
+		//Create spawnpoints
+		_spawnPoints = new ArrayList<Point>();
+		_spawnPoints.add(new Point(32,35));
+		_spawnPoints.add(new Point(4,36));
+		_spawnPoints.add(new Point(31,3));
+		_spawnPoints.add(new Point(5,5));
+		
 		
 		setWillNotDraw(false);
 		setOnTouchListener(this);
@@ -159,16 +173,16 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 		/**
 		 * Unfortunately, due to dependency on canvas, fps can only be initialized here
 		 */
-		if(_canvas == null){
+		/*if(_canvas == null){
 			_canvas = canvas;
 			drawing = true;
 			lastDraw = System.currentTimeMillis();
 			_cycle = new GameCycle();
 			_cycle.doInBackground(this);
-		}
+		}*/
+		
 		
 		if (gameReady) {
-			
 			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
 	    	my_position_json += "\"x\": " + (int)(objects.getYou().getXPos()/floor.getTileScaleX()) + ",";
 	    	my_position_json += "\"y\": " + (int)(objects.getYou().getYPos()/floor.getTileScaleY()) + ",";
@@ -178,6 +192,12 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	    	
 			communicatorSendThread.run(my_position_json); //uncomment for server on
 			
+			if(_firstDraw){
+				Random randomGenerator = new Random();
+				int spanInt = randomGenerator.nextInt(_spawnPoints.size());
+				objects.getYou().setSpanPoint(_spawnPoints.get(spanInt));
+				floor.setSpanPoint(_spawnPoints.get(spanInt));
+			}
 			
 			objects.getYou().setPlayerPos(_moveX, _moveY, _winWith, _winHeight,
 					floor.getNumTilesWidth(), floor.getNumTilesHeight(),
@@ -213,6 +233,11 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 				}
 			}
 			
+			// check collision
+			if (objects.getWinningObject() != null && !objects.getWinningObject().isPicked() && objects.getWinningObject().findTile(youPos)) {
+				objects.getYou().pickUpWinningObject(objects.getWinningObject());
+			}
+			
 			this._startX = objects.getYou().getStartX(_winWith);
 			this._startY = objects.getYou().getStartY(_winHeight);
 			floor.setStartX(this._startX, this._startY);
@@ -221,8 +246,17 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 			floor.createFloor(canvas);
 			objects.setTileScaleX(floor.getTileScaleX());
 			objects.setTileScaleY(floor.getTileScaleY());
-			objects.createObjects(canvas);
 			
+			
+			if(_firstDraw){
+				objects.getYou().setPlayerPos((int)(objects.getYou().getSpanPoint().x*(32*floor.getTileScaleX())), (int)(objects.getYou().getSpanPoint().y*(32*floor.getTileScaleY())), _winWith, _winHeight,
+						floor.getNumTilesWidth(), floor.getNumTilesHeight(),
+						this._touchX, this._touchY, initialTouchXDisposition,
+						initialTouchYDisposition);
+			}
+			_firstDraw = false;
+			
+			objects.createObjects(canvas);
 		}else{
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK);
@@ -239,13 +273,14 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 			
 		}
 		
-		if(!drawing || draw){ // Ensure a drawing cycle before an fps has been established.
+		/*if(!drawing || draw){ // Ensure a drawing cycle before an fps has been established.
 			Log.i("draw log","Completing draw.");
 			setDraw(false);
 			invalidate();
 			setLastDrawnToNow();
 			Log.i("draw log","Draw complete.");
-		}
+		}*/
+		invalidate();
 	}
 
 	@Override
