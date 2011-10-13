@@ -54,6 +54,9 @@ public class ObjectLayer {
 	protected Bitmap steen2;
 	protected Bitmap handdoek;
 	protected Bitmap building1;
+	protected Bitmap building2;
+	protected Bitmap building3;
+	protected Bitmap stoep;
 	
 	protected int _numTilesWidth;
 	protected int _numTilesHeight;
@@ -72,8 +75,6 @@ public class ObjectLayer {
 		_winWidth = winWidth;
 		_winHeight = winHeight;
 		_you = new Player(context, "remi", 1, 20, 20);
-		//_enemies.add(new Enemy(context, "sjaak", 2));
-		
 		
 		makeObjects(context);
 	}
@@ -84,6 +85,46 @@ public class ObjectLayer {
 		_objectPositionArray = new int[] {
 				/* Level one; normal level! */
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3, 6, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 1, 3, 0, 0, 0, 0, 2, 0, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0, 2, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 4, 5, 0, 0, 4, 0, 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 4, 2, 0, 4, 0, 2, 3, 0, 0, 5, 0, 5, 0, 2, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3, 0, 1, 0, 0, 0, 0, 2, 5, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 3, 0, 6, 0, 0, 0, 0, 0, 0, 6, 0, 1, 1, 3, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 0, 0, 4, 5, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 1, 1, 0, 0, 3, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 2, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 10, 0, 8, 7, 0, 0, 9, 0, 8, 7, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 0, 0, 0, 0, 8, 2, 0, 0, 0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 8, 5, 0, 0, 0, 0, 5, 8, 2, 10, 0, 0, 0, 0, 0, 1, 0, 3, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 8, 0, 2, 0, 0, 2, 0, 8, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 4, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 1, 0, 1, 0, 3, 0, 0, 0, 0, 2, 10, 0, 8, 0, 0, 0, 0, 0, 0, 8, 9, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 8, 8, 8, 8, 0, 2, 0, 0, 2, 0, 8, 8, 8, 8, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 9, 0, 8, 5, 0, 0, 0, 0, 5, 8, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 7, 0, 0, 8, 9, 0, 10, 0, 8, 7, 0, 0, 0, 0, 0, 2, 4, 1, 0, 3, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8, 0, 0, 0, 0, 8, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 4, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 5, 3, 1, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 3, 5, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 0, 1, 1, 0, 3, 0, 0, 5, 0, 0, 2, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 3, 5, 0, 3, 0, 0, 1, 0, 0, 4, 0, 0, 0, 6, 1, 1, 0, 0, 0, 5, 4, 1, 3, 0, 1, 4, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 2, 4, 0, 0, 0, 1, 1, 3, 2, 4, 0, 0, 0, 0, 0, 4, 0, 2, 0, 0, 1, 1, 1, 0, 3, 0, 0, 6, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+				/*0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -123,7 +164,7 @@ public class ObjectLayer {
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-				/* Level two, race level!*/
+				*//* Level two, race level!*/
 				/*0, 0, 6, 0, 6, 0, 6, 6, 0, 0, 6, 6, 6, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        0, 6, 0, 6, 0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		        6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -167,14 +208,17 @@ public class ObjectLayer {
 		};
 		
 		_objectItemBuildArray = new ArrayList<int[]>();
-		_objectItemBuildArray.add(new int[]{1}); // Handdoek Object 1
-		_objectItemBuildArray.add(new int[]{1}); // Palm Object 2
-		_objectItemBuildArray.add(new int[]{1}); // Parasol 1 Object 
-		_objectItemBuildArray.add(new int[]{1}); // Parasol 2 Object
-		_objectItemBuildArray.add(new int[]{1}); // Steen 1 Object
-		_objectItemBuildArray.add(new int[]{1}); // Steen 2 Object
+		_objectItemBuildArray.add(new int[]{0}); // 1 Handdoek Object 1
+		_objectItemBuildArray.add(new int[]{0}); // 2 Palm Object 2
+		_objectItemBuildArray.add(new int[]{0}); // 3 Parasol 1 Object 
+		_objectItemBuildArray.add(new int[]{0}); // 4 Parasol 2 Object
+		_objectItemBuildArray.add(new int[]{0}); // 5 Steen 1 Object
+		_objectItemBuildArray.add(new int[]{0}); // 6 Steen 2 Object
 		
-		_objectItemBuildArray.add(new int[]{1,2,3,42,43}); // Huis Object
+		_objectItemBuildArray.add(new int[]{0,1,2,41,42}); // 7 Huis Object
+		_objectItemBuildArray.add(new int[]{0}); // 8 Voetpad
+		_objectItemBuildArray.add(new int[]{0,1,40,41}); // 9 Huis Object
+		_objectItemBuildArray.add(new int[]{0,1,40,41}); // 10 Huis Object
 		
 		//Set bitmap options
 		BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -194,7 +238,13 @@ public class ObjectLayer {
 		handdoek = BitmapFactory.decodeResource(context.getResources(),
 				context.getResources().getIdentifier("drawable/handdoek", "drawable", context.getPackageName()), opts);
 		building1 = BitmapFactory.decodeResource(context.getResources(),
-				context.getResources().getIdentifier("drawable/building1", "drawable", context.getPackageName()), opts);
+				context.getResources().getIdentifier("drawable/building_1", "drawable", context.getPackageName()), opts);
+		building2 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/building_2", "drawable", context.getPackageName()), opts);
+		building3 = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/building_3", "drawable", context.getPackageName()), opts);
+		stoep = BitmapFactory.decodeResource(context.getResources(),
+				context.getResources().getIdentifier("drawable/stoep1", "drawable", context.getPackageName()), opts);
 		
 		_bitmapArray = new ArrayList<Bitmap>();
 		_bitmapArray.add(handdoek);
@@ -203,15 +253,24 @@ public class ObjectLayer {
 		_bitmapArray.add(parasol2);
 		_bitmapArray.add(steen1);
 		_bitmapArray.add(steen2);
+		_bitmapArray.add(building3);
+		_bitmapArray.add(stoep);
+		_bitmapArray.add(building2);
 		_bitmapArray.add(building1);
 		
 		
 		for(int i = 0; i<_objectPositionArray.length; i++){
 			if(_objectPositionArray[i] !=0){
 				if(_objectPositionArray[i] == 7){
-					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]),i,3,2,false,_bitmapArray.get(_objectPositionArray[i]-1)));
+					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]-1),i,3,2,false,_bitmapArray.get(_objectPositionArray[i]-1)));
+				}else if(_objectPositionArray[i] == 9){
+					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]-1),i,2,2,false,_bitmapArray.get(_objectPositionArray[i]-1)));
+				}else if(_objectPositionArray[i] == 10){
+					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]-1),i,2,2,false,_bitmapArray.get(_objectPositionArray[i]-1)));
 				}else if(_objectPositionArray[i] == 1){
-					_floorObjects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]),i,1,1,true,_bitmapArray.get(_objectPositionArray[i]-1)));
+					_floorObjects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]-1),i,1,1,true,_bitmapArray.get(_objectPositionArray[i]-1)));
+				}else if(_objectPositionArray[i] == 8){
+					_floorObjects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]-1),i,1,1,true,_bitmapArray.get(_objectPositionArray[i]-1)));
 				}else{
 					_objects.add(new GameObject(_objectItemBuildArray.get(_objectPositionArray[i]-1),i,1,1,false,_bitmapArray.get(_objectPositionArray[i]-1)));
 				}
