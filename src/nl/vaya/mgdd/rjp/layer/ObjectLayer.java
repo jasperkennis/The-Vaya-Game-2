@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import nl.vaya.mgdd.rjp.GameDraw;
 import nl.vaya.mgdd.rjp.objects.Enemy;
 import nl.vaya.mgdd.rjp.objects.GameObject;
 import nl.vaya.mgdd.rjp.objects.Player;
@@ -366,8 +367,9 @@ public class ObjectLayer {
 		}
 		
 		if(this._you.checkWinnState() && _playing){
+			GameDraw.getCommunicator().sendMessage("{\"type\" : \"you_lose\"}");
 			_playing = false;
-			AlertDialog alertDialog = new AlertDialog.Builder(_context).create();  
+			AlertDialog alertDialog = new AlertDialog.Builder(_context).create();
 		    alertDialog.setTitle("GEFELICITEERD!");  
 		    alertDialog.setMessage("Je hebt het spel gewonnen! Ga de uitdaging nogmaals aan.");  
 		    alertDialog.setButton("Terug naar het hoofdscherm.", new DialogInterface.OnClickListener() {  
@@ -375,8 +377,6 @@ public class ObjectLayer {
 		        return;  
 		    } });   
 		    alertDialog.show();
-		    
-		    //TODO: ADD a action to the server that this player has won the game.
 		}
 
 		if(_onceAfterRun == 0){
@@ -499,5 +499,17 @@ public class ObjectLayer {
 			Log.i("received_players", "Unable to read playerid.");
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean getPlaying(){
+		return _playing;
+	}
+	
+	public Context getContext(){
+		return _context;
+	}
+	
+	public void setPlaying(boolean v){
+		_playing = v;
 	}
 }

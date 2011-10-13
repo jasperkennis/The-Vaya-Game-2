@@ -15,7 +15,9 @@ import nl.vaya.mgdd.rjp.objects.ThrowingObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -364,6 +366,21 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 					return;
 				}
 				
+				/*
+				 * Handle losing signal
+				 */
+				if(incommingParser.getString("type").equals("you_lose")){
+					objects.setPlaying(false);
+					AlertDialog alertDialog = new AlertDialog.Builder(objects.getContext()).create();
+				    alertDialog.setTitle("Helaas!");  
+				    alertDialog.setMessage("Je hebt het spel verloren! Ga de uitdaging nogmaals aan.");  
+				    alertDialog.setButton("Terug naar het hoofdscherm.", new DialogInterface.OnClickListener() {  
+				      public void onClick(DialogInterface dialog, int which) { 
+				        return;  
+				    } });   
+				    alertDialog.show();
+				}
+				
 				// Handle directives
 				if(incommingParser.getString("type").equals("directive")){
 					if(incommingParser.getString("directive").equals("start")){
@@ -396,7 +413,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 	
 	public static Communicator getCommunicator(){
 		if(communicator == null){
-			Log.i("log_tag", "Creating Communicator");
 			communicator = new Communicator();
 		}
 		return communicator;
