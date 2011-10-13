@@ -350,6 +350,20 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder,
 					return;
 				}
 				
+				
+				/*
+				 *  Handle winning object grab or drop
+				 */
+				if(incommingParser.getString("type").equals("player_dropped_win_obj")){
+					objects.getWinningObject().dropped();
+					return;
+				}
+				
+				if(incommingParser.getString("type").equals("player_got_win_obj")){
+					objects.getWinningObject().picked();
+					return;
+				}
+				
 				// Handle directives
 				if(incommingParser.getString("type").equals("directive")){
 					if(incommingParser.getString("directive").equals("start")){

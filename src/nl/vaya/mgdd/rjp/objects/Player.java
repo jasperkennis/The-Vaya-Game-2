@@ -335,15 +335,15 @@ public class Player {
 		plusState = 10;
 		_winningObject = object;
 		_winningObject.picked();
+		GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_got_win_obj\"}");
 	}
 	
 	public void DropWinningObject(){
 		plusState = 0;
-		int mapx = (int) Math.floor(((this._xPos-_startX)/((_winWidth/_screenTilesX))));
-		int mapy = (int) Math.floor(((this._yPos-_startY)/((_winHeight/_screenTilesY))));
 		_winningObject.dropped();
 		Log.i("log_tag", "winning object dropped on x:"+_winningObject._xPos+" y:"+_winningObject._yPos);
 		_winningObject = null;
+		GameDraw.getCommunicator().sendMessage("{\"type\" : \"player_dropped_win_obj\"}");
 	}
 	
 	public boolean checkWinnState(){
