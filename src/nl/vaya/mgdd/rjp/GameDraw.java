@@ -148,35 +148,13 @@ public class GameDraw extends View implements OnTouchListener,
 				}
 			});
 
-			fpsThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-
-					_self.setLastDrawnToNow();
-					while (drawing == true) {
-						_self.setNow();
-						if ((_self.getNow() - _self.getLastDraw()) > sampleTime) {
-							// synchronized (_self){
-							_self.setDraw(true);
-							_self.draw(_canvas);
-							// }
-						}
-					}
-				}
-			});
-
-			communicatorReceiveThread.start();
-
 		}
 		_once = 1;
 	}
 
 	@Override
 	protected synchronized void onDraw(Canvas canvas) {
-		//Log.i("draw log", getNow()+"");
-		//Log.i("draw log", getLastDraw()+"");
 		if ((getNow() - getLastDraw()) > sampleTime) {
-			//Log.i("draw log", "Draw called");
 
 			if (gameReady) {
 				my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
