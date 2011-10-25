@@ -47,7 +47,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 
 	protected float initialTouchXDisposition = 0;
 	protected float initialTouchYDisposition = 0;
-	protected int motionDetectionArea = 10;
+	protected int motionDetectionArea = 5;
 
 	protected int _maxSpeed = 20;
 	protected int _moveX = 0;
@@ -165,7 +165,6 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		 */
 
 		if (gameReady) {
-			setNow();
 			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
 			my_position_json += "\"x\": "
 					+ (int) (objects.getYou().getXPos() / floor.getTileScaleX())
@@ -190,7 +189,7 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 			}
 
 			if ((getNow() - getLastDraw()) > sampleTime) {
-				Log.i(log_tag, "writing");
+				//Log.i(log_tag, "writing");
 
 				objects.getYou().setPlayerPos(_moveX, _moveY, _winWith,
 						_winHeight, floor.getNumTilesWidth(),
@@ -438,12 +437,8 @@ public class GameDraw extends View implements OnTouchListener, MessageResponder 
 		return lastDraw;
 	}
 
-	private void setNow() {
-		now = System.currentTimeMillis();
-	}
-
 	private long getNow() {
-		return now;
+		return System.currentTimeMillis();
 	}
 
 	private void setDraw(boolean v) {
