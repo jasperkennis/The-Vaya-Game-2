@@ -175,7 +175,7 @@ public class GameDraw extends View implements OnTouchListener,
 	protected synchronized void onDraw(Canvas canvas) {
 		//Log.i("draw log", getNow()+"");
 		//Log.i("draw log", getLastDraw()+"");
-		if ((getNow() - getLastDraw()) > sampleTime) {
+		//if ((getNow() - getLastDraw()) > sampleTime) {
 			//Log.i("draw log", "Draw called");
 
 			if (gameReady) {
@@ -284,10 +284,13 @@ public class GameDraw extends View implements OnTouchListener,
 				}
 
 			}
-			setLastDrawnToNow();
-		}
-		
+			//setLastDrawnToNow();
+			
+		//}
+			//if ((getNow() - getLastDraw()) > sampleTime) {
 		invalidate();
+			//}
+		
 	}
 
 	@Override
