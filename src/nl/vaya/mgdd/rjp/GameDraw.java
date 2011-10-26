@@ -31,8 +31,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 
-public class GameDraw extends View implements OnTouchListener,
-		MessageResponder, FTPController {
+public class GameDraw extends View implements OnTouchListener, MessageResponder {
 
 	protected boolean _firstDraw = true;
 
@@ -97,8 +96,6 @@ public class GameDraw extends View implements OnTouchListener,
 
 		super(context);
 
-		setLastDrawnToNow();
-		
 		// Create spawnpoints
 		_spawnPoints = new ArrayList<Point>();
 		_spawnPoints.add(new Point(32, 35));
@@ -148,23 +145,6 @@ public class GameDraw extends View implements OnTouchListener,
 				}
 			});
 
-			fpsThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-
-					_self.setLastDrawnToNow();
-					while (drawing == true) {
-						_self.setNow();
-						if ((_self.getNow() - _self.getLastDraw()) > sampleTime) {
-							// synchronized (_self){
-							_self.setDraw(true);
-							_self.draw(_canvas);
-							// }
-						}
-					}
-				}
-			});
-
 			communicatorReceiveThread.start();
 
 		}
@@ -173,121 +153,129 @@ public class GameDraw extends View implements OnTouchListener,
 
 	@Override
 	protected synchronized void onDraw(Canvas canvas) {
-		//Log.i("draw log", getNow()+"");
-		//Log.i("draw log", getLastDraw()+"");
-		//if ((getNow() - getLastDraw()) > sampleTime) {
-			//Log.i("draw log", "Draw called");
 
-			if (gameReady) {
-				my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
-				my_position_json += "\"x\": "
-						+ (int) (objects.getYou().getXPos() / floor
-								.getTileScaleX()) + ",";
-				my_position_json += "\"y\": "
-						+ (int) (objects.getYou().getYPos() / floor
-								.getTileScaleY()) + ",";
-				my_position_json += "\"angle\": " + objects.getYou().getAngle()
-						+ ",";
-				my_position_json += "\"state\": " + objects.getYou().getState()
-						+ "";
-				my_position_json += "}}";
+		/**
+		 * Unfortunately, due to dependency on canvas, fps can only be
+		 * initialized here
+		 */
+		/*
+		 * if(_canvas == null){ _canvas = canvas; drawing = true; lastDraw =
+		 * System.currentTimeMillis(); _cycle = new GameCycle();
+		 * _cycle.doInBackground(this); }
+		 */
 
-				communicatorSendThread.run(my_position_json); // uncomment for
-																// server on
+		if (gameReady) {
+			setNow();
+			my_position_json = "{\"type\" : \"position_update\", \"position\" : {";
+			my_position_json += "\"x\": "
+					+ (int) (objects.getYou().getXPos() / floor.getTileScaleX())
+					+ ",";
+			my_position_json += "\"y\": "
+					+ (int) (objects.getYou().getYPos() / floor.getTileScaleY())
+					+ ",";
+			my_position_json += "\"angle\": " + objects.getYou().getAngle()
+					+ ",";
+			my_position_json += "\"state\": " + objects.getYou().getState()
+					+ "";
+			my_position_json += "}}";
 
-				if (_firstDraw) {
-					Random randomGenerator = new Random();
-					int spanInt = randomGenerator.nextInt(_spawnPoints.size());
-					objects.getYou().setSpanPoint(_spawnPoints.get(spanInt));
-					floor.setSpanPoint(_spawnPoints.get(spanInt));
-				}
+			communicatorSendThread.run(my_position_json); // uncomment for
+															// server on
+
+			if (_firstDraw) {
+				Random randomGenerator = new Random();
+				int spanInt = randomGenerator.nextInt(_spawnPoints.size());
+				objects.getYou().setSpanPoint(_spawnPoints.get(spanInt));
+				floor.setSpanPoint(_spawnPoints.get(spanInt));
+			}
+
+			if ((getNow() - getLastDraw()) > sampleTime) {
+				Log.i(log_tag, "writing");
 
 				objects.getYou().setPlayerPos(_moveX, _moveY, _winWith,
 						_winHeight, floor.getNumTilesWidth(),
 						floor.getNumTilesHeight(), this._touchX, this._touchY,
 						initialTouchXDisposition, initialTouchYDisposition);
-				objects.getYou().giveSubGround(
-						floor.getSubGround(objects.getYou().getXPos(), objects
-								.getYou().getYPos()));
-
-				int youPos = (int) ((int) Math.floor(objects.getYou().getXPos()
-						/ (32 * floor.getTileScaleX())) + (Math.floor(objects
-						.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
-
-				/*
-				 * for(Enemy enemy:objects.getEnemy()){ enemy.setPlayerPos(100,
-				 * 200, 180.0f, 1, floor.getNumTilesWidth(),
-				 * floor.getNumTilesHeight()); if(enemy.checkCollision(youPos)){
-				 * objects.getYou().setBack(); } }
-				 */
-
-				// check collision
-				for (GameObject o : objects.getObjects()) {
-					if (o.findTile(youPos) && !o.canWalkTrough()) {
-						objects.getYou().setBack();
-					}
-				}
-
-				// check collision
-				for (ThrowingObject to : objects.getThrowingObjects()) {
-					if (to.findTile(youPos)) {
-						objects.getYou().setBack();
-						objects.getYou().fall();
-					}
-				}
-
-				// check collision
-				if (objects.getWinningObject() != null
-						&& !objects.getWinningObject().isPicked()
-						&& objects.getWinningObject().findTile(youPos)) {
-					objects.getYou().pickUpWinningObject(
-							objects.getWinningObject());
-				}
-
-				this._startX = objects.getYou().getStartX(_winWith);
-				this._startY = objects.getYou().getStartY(_winHeight);
-				floor.setStartX(this._startX, this._startY);
-				objects.setStartX(this._startX, this._startY);
-				canvas.drawColor(Color.BLACK);
-				floor.createFloor(canvas);
-				objects.setTileScaleX(floor.getTileScaleX());
-				objects.setTileScaleY(floor.getTileScaleY());
-
-				if (_firstDraw) {
-					objects.getYou()
-							.setPlayerPos(
-									(int) (objects.getYou().getSpanPoint().x * (32 * floor
-											.getTileScaleX())),
-									(int) (objects.getYou().getSpanPoint().y * (32 * floor
-											.getTileScaleY())), _winWith,
-									_winHeight, floor.getNumTilesWidth(),
-									floor.getNumTilesHeight(), this._touchX,
-									this._touchY, initialTouchXDisposition,
-									initialTouchYDisposition);
-				}
-				_firstDraw = false;
-
-				objects.createObjects(canvas);
-			} else {
-				Paint paint = new Paint();
-				paint.setColor(Color.BLACK);
-				paint.setStyle(Style.FILL);
-				canvas.drawPaint(paint);
-
-				paint.setColor(Color.WHITE);
-				paint.setTextSize(12);
-				int i = 0;
-				for (String t : this.logText) {
-					canvas.drawText(t, 10, (25 * (this.logText.size() - i)),
-							paint);
-					i++;
-				}
-
 			}
-			//setLastDrawnToNow();
-			
-		//}
-			//if ((getNow() - getLastDraw()) > sampleTime) {
+
+			objects.getYou().giveSubGround(
+					floor.getSubGround(objects.getYou().getXPos(), objects
+							.getYou().getYPos()));
+
+			int youPos = (int) ((int) Math.floor(objects.getYou().getXPos()
+					/ (32 * floor.getTileScaleX())) + (Math.floor(objects
+					.getYou().getYPos() / (32 * floor.getTileScaleY())) * 40));
+
+			// check collision
+			for (GameObject o : objects.getObjects()) {
+				if (o.findTile(youPos) && !o.canWalkTrough()) {
+					objects.getYou().setBack();
+				}
+			}
+
+			// check collision
+			for (ThrowingObject to : objects.getThrowingObjects()) {
+				if (to.findTile(youPos)) {
+					objects.getYou().setBack();
+					objects.getYou().fall();
+				}
+			}
+
+			// check collision
+			if (objects.getWinningObject() != null
+					&& !objects.getWinningObject().isPicked()
+					&& objects.getWinningObject().findTile(youPos)) {
+				objects.getYou()
+						.pickUpWinningObject(objects.getWinningObject());
+			}
+
+			this._startX = objects.getYou().getStartX(_winWith);
+			this._startY = objects.getYou().getStartY(_winHeight);
+			floor.setStartX(this._startX, this._startY);
+			objects.setStartX(this._startX, this._startY);
+			canvas.drawColor(Color.BLACK);
+			floor.createFloor(canvas);
+			objects.setTileScaleX(floor.getTileScaleX());
+			objects.setTileScaleY(floor.getTileScaleY());
+
+			if (_firstDraw) {
+				objects.getYou()
+						.setPlayerPos(
+								(int) (objects.getYou().getSpanPoint().x * (32 * floor
+										.getTileScaleX())),
+								(int) (objects.getYou().getSpanPoint().y * (32 * floor
+										.getTileScaleY())), _winWith,
+								_winHeight, floor.getNumTilesWidth(),
+								floor.getNumTilesHeight(), this._touchX,
+								this._touchY, initialTouchXDisposition,
+								initialTouchYDisposition);
+			}
+
+			_firstDraw = false;
+
+			objects.createObjects(canvas);
+		} else {
+			Paint paint = new Paint();
+			paint.setColor(Color.BLACK);
+			paint.setStyle(Style.FILL);
+			canvas.drawPaint(paint);
+
+			paint.setColor(Color.WHITE);
+			paint.setTextSize(12);
+			int i = 0;
+			for (String t : this.logText) {
+				canvas.drawText(t, 10, (25 * (this.logText.size() - i)), paint);
+				i++;
+			}
+
+		}
+
+		/*
+		 * if(!drawing || draw){ // Ensure a drawing cycle before an fps has
+		 * been established. Log.i("draw log","Completing draw.");
+		 * setDraw(false); invalidate(); setLastDrawnToNow();
+		 * Log.i("draw log","Draw complete."); }
+		 */
 		invalidate();
 			//}
 		
@@ -320,8 +308,6 @@ public class GameDraw extends View implements OnTouchListener,
 		default:
 			float x = event.getX() - initialTouchXDisposition;
 			float y = event.getY() - initialTouchYDisposition;
-			// x = (x > _maxSpeed) ? _maxSpeed : x;
-			// y = (y > _maxSpeed) ? _maxSpeed : y;
 			this._moveX = (int) Math.ceil(x / motionDetectionArea);
 			this._moveY = (int) Math.ceil(y / motionDetectionArea);
 
@@ -460,7 +446,6 @@ public class GameDraw extends View implements OnTouchListener,
 	}
 
 	private long getNow() {
-		setNow();
 		return now;
 	}
 
@@ -473,21 +458,6 @@ public class GameDraw extends View implements OnTouchListener,
 		protected Object doInBackground(FTPController... callBacks) {
 			callBacks[0].ftpCycle();
 			return null;
-		}
-
-	}
-
-	@Override
-	public void ftpCycle() {
-		// _self.setLastDrawnToNow();
-		while (drawing == true) {
-			setNow();
-			if ((getNow() - getLastDraw()) > sampleTime) {
-				// synchronized (_self){
-				setDraw(true);
-				draw(_canvas);
-				// }
-			}
 		}
 
 	}
